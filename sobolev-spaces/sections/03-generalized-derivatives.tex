@@ -1,0 +1,86 @@
+\section{Обобщённые производные и пространства Соболева}
+
+\begin{warn}
+В присланных фотографиях нет начала темы: определения обобщённой (соболевской)
+производной $D^\alpha u$ и признаков 1--2 её существования. Ниже конспект
+продолжается с \textbf{признака~3}, помеченного в тетради кружком~\textcircled{\footnotesize 3}.
+Нумерация параграфов (\S1--\S5) здесь моя: в тетради параграфы этой темы идут
+без номеров.
+\end{warn}
+
+\subsection{Признак существования производной по Соболеву}
+
+\begin{theorem}[признак 3, существования производной по Соболеву]\label{thm:crit-deriv}
+Пусть
+\[
+  f_k \in \Lloc(\Om) \quad \forall k, \qquad
+  \exists\, D^\alpha f_k \in \Lloc(\Om) \quad \forall k,
+\]
+\[
+  f_k \to f \ \text{ в } \Lloc(\Om), \qquad
+  D^\alpha f_k \to g \ \text{ в } \Lloc(\Om) .
+\]
+Тогда
+\[
+  \exists\, D^\alpha f \in \Lloc(\Om): \qquad D^\alpha f = g .
+\]
+\end{theorem}
+
+\begin{proof}
+Пусть $\varphi \in C_0^\infty(\Om)$. По определению обобщённой производной для каждого $k$
+\[
+  \int\limits_\Om f_k\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_\Om D^\alpha f_k \cdot \varphi\, dx ,
+\]
+а так как $\varphi$ финитна, интегрирование идёт лишь по $\supp \varphi$:
+\[
+  \int\limits_{\supp \varphi} f_k\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_{\supp \varphi} D^\alpha f_k \cdot \varphi\, dx .
+\]
+
+\emph{Предел в левой части.}
+\begin{multline*}
+  \left| \int\limits_{\supp \varphi} f_k\, D^\alpha \varphi\, dx
+       - \int\limits_{\supp \varphi} f\, D^\alpha \varphi\, dx \right|
+  \le \int\limits_{\supp \varphi} |f_k - f|\cdot |D^\alpha \varphi|\, dx \\
+  \le \sup_{\R^n} |D^\alpha \varphi| \int\limits_{\supp \varphi} |f_k - f|\, dx
+  \xrightarrow[k \to \infty]{} 0 ,
+\end{multline*}
+поскольку $f_k \to f$ в $\Lloc(\Om)$, а $\supp \varphi \Subset \Om$ — компакт.
+
+\emph{Предел в правой части} получается аналогично:
+\[
+  \int\limits_{\supp \varphi} D^\alpha f_k \cdot \varphi\, dx
+  \xrightarrow[k \to \infty]{}
+  \int\limits_{\supp \varphi} g\, \varphi\, dx .
+\]
+
+Тогда перейдём к пределу:
+\[
+  \int\limits_{\supp \varphi} f\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_{\supp \varphi} g\, \varphi\, dx
+  \quad\Longrightarrow\quad
+  \int\limits_\Om f\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_\Om g\, \varphi\, dx ,
+\]
+то есть $g = D^\alpha f$ на $\Om$.
+\end{proof}
+
+\begin{idea}
+Признак позволяет получать обобщённые производные предельным переходом: достаточно
+подобрать удобную последовательность гладких (или просто более хороших) функций,
+сходящуюся вместе с производными. Сходимость нужна лишь локально, в $\Lloc$, —
+это самое слабое требование, какое ещё даёт результат.
+\end{idea}
+
+\begin{example}[$(|x|)' = \sgn x$]
+Знаем, что $(|x|)' = \sgn x$ — проверим это признаком.
+\end{example}
+
+Возьмём $f = |x|$ и последовательность $f_k$, совпадающую с $|x|$ вне
+$\left[-\tfrac1k, \tfrac1k\right]$ и сглаженную внутри этого отрезка.
+Тогда $f_k \to f$, а производные $f_k'$ — кусочно-линейные функции, переходящие
+от $-1$ к $1$ на $\left[-\tfrac1k, \tfrac1k\right]$, так что $f_k' \to \sgn x$.
+По признаку~\ref{thm:crit-deriv} получаем то же самое: $(|x|)' = \sgn x$.
+
+\inputfig{figures/fig-abs-x}

@@ -1,0 +1,32 @@
+% Рисунок из тетради: ступенька u и ядро omega_{1/2}.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.8cm},
+  width=7.2cm, height=4.2cm,
+  axis lines=middle,
+  xtick={-1,-0.5,0.5,1}, xticklabels={$-1$,$-\tfrac12$,$\tfrac12$,$1$},
+  samples=120, clip=false,
+]
+% --- ступенька u
+\nextgroupplot[xmin=-1.4,xmax=1.4,ymin=-0.25,ymax=1.5,ytick={1},yticklabels={$1$}]
+  \addplot[very thick, blue!60!black] coordinates {(-1.3,0) (0,0)};
+  \addplot[very thick, blue!60!black] coordinates {(0,1) (1.3,1)};
+  \addplot[only marks, mark=*, blue!60!black] coordinates {(0,1)};
+  \addplot[only marks, mark=o, blue!60!black] coordinates {(0,0)};
+  \node[anchor=south west] at (axis cs:0.7,1.0) {$u$};
+
+% --- ядро
+\nextgroupplot[xmin=-1.4,xmax=1.4,ymin=-0.35,ymax=2.1,ytick=\empty]
+  \addplot[very thick, red!70!black, domain=-0.5:0.5] {bump(x,0.5)};
+  \node[anchor=west] at (axis cs:0.62,1.55) {\footnotesize $\omega_{1/2}$};
+  \draw[dashed,gray] (axis cs:-0.5,0) -- (axis cs:-0.5,1.0);
+  \draw[dashed,gray] (axis cs: 0.5,0) -- (axis cs: 0.5,1.0);
+\end{groupplot}
+\end{tikzpicture}
+\caption{Слева: ступенька $u$ на $\Omega=(-1,1)$. Справа: ядро
+$\omega_\rho(x)=\tfrac1\rho\,\omega\!\left(\tfrac x\rho\right)$ при $\rho=\tfrac12$;
+носитель $[-\tfrac12,\tfrac12]$, высота в нуле $2Ce^{-1}\approx1{,}66$.}
+\label{fig:step-setup}
+\end{figure}

@@ -1,0 +1,164 @@
+\subsection{Усреднение функций, имеющих обобщённые производные}
+
+\begin{lemma}[Л1]\label{lem:avg-commute}
+Пусть $u \in \Lp{1}(\Om)$ и $\exists\, D^\alpha u \in \Lp{1}(\Om)$. Тогда
+\[
+  (D^\alpha u)_\rho(x) = \big(D^\alpha u_\rho\big)(x) ,
+\]
+где $x \in \Om_\rho$, $\dist(\dOm, x) > 0$, а $\rho$ таково, что
+$0 < \rho < \dist(\dOm, x)$.
+\end{lemma}
+
+\begin{idea}
+Усреднение и обобщённое дифференцирование коммутируют — но только вдали от границы:
+шар $\ball{x}{\rho}$ должен целиком лежать в $\Om$, иначе ядро «высунется» наружу,
+где $u$ не определена.
+\end{idea}
+
+\begin{proof}
+Проводим выкладку для $\partial/\partial x_i$; общий случай аналогичен.
+
+При фиксированном $x$ функция $y \mapsto \omega_\rho(x-y)$ обращается в нуль вне
+$\ball{x}{\rho}$, то есть финитна в $\Om$. Дифференцируя под знаком интеграла
+(свойство 3 усреднения),
+\[
+  \dd{u_\rho}{x_i}(x)
+  = \dd{}{x_i}\left( \int\limits_\Om \omega_\rho(x-y)\, u(y)\, dy \right)
+  = \int\limits_\Om \dd{}{x_i}\,\omega_\rho(x-y)\, u(y)\, dy .
+  \tag{$\ast\ast$}\label{eq:dstar}
+\]
+Далее, ядро зависит от разности, поэтому
+\[
+  \dd{}{x_i}\big(\omega_\rho(x-y)\big) = -\,\dd{}{y_i}\big(\omega_\rho(x-y)\big) ,
+\]
+и, подставляя это в \eqref{eq:dstar} и применяя определение обобщённой производной
+к пробной функции $\varphi \equiv \omega_\rho(x - \cdot)$,
+\[
+  \eqref{eq:dstar} = -\int\limits_\Om \dd{\omega_\rho(x-y)}{y_i}\, u(y)\, dy
+  = \int\limits_\Om \omega_\rho(x-y)\, \dd{u}{y_i}(y)\, dy
+  = \left( \dd{u}{x_i} \right)_{\!\rho}(x) .
+\]
+
+Для произвольного мультииндекса всё то же самое, только знак набегает $|\alpha|$ раз:
+\[
+  \boxed{\;D^\alpha_x\, \omega_\rho(x-y) = (-1)^{|\alpha|}\, D^\alpha_y\, \omega_\rho(x-y)\;}
+\]
+\end{proof}
+
+\begin{lemma}[Л2]\label{lem:avg-conv-loc}
+Пусть $1 \le p < \infty$, $u \in \Lp{p}(\Om)$ и $\exists\, D^\alpha u \in \Lp{p}(\Om)$.
+Тогда для любого $\Om' \Subset \Om$
+\[
+  u_\rho \to u \ \text{ в } \Lp{p}(\Om'), \qquad
+  D^\alpha u_\rho \to D^\alpha u \ \text{ в } \Lp{p}(\Om') .
+\]
+\end{lemma}
+
+\begin{warn}
+В тетради во второй строке заключения сначала было написано $\Lp{p}(\Om)$ — зачёркнуто
+и исправлено на $\Lp{p}(\Om')$. Сходимость именно локальная: около границы лемма~\ref{lem:avg-commute}
+неприменима.
+\end{warn}
+
+\begin{proof}
+Знаем, что $u_\rho \to u$ в $\Lp{p}(\Om)$ (теорема~\ref{thm:conv}), а значит и
+$u_\rho \to u$ в $\Lp{p}(\Om')$.
+
+Так же $(D^\alpha u)_\rho \to D^\alpha u$ в $\Lp{p}(\Om')$ — это та же теорема,
+применённая к функции $D^\alpha u \in \Lp{p}(\Om)$.
+
+Пусть $\dist(\Om', \dOm) = \rho_0 > 0$ и $0 < \rho < \rho_0$. Тогда по
+лемме~\ref{lem:avg-commute} в $\Om'$ выполнено $(D^\alpha u)_\rho = D^\alpha u_\rho$,
+откуда
+\[
+  D^\alpha u_\rho \to D^\alpha u \ \text{ в } \Lp{p}(\Om') . \qedhere
+\]
+\end{proof}
+
+\begin{lemma}[Л3]\label{lem:const}
+Пусть $u \in \Lloc(\Om)$, область $\Om$ не обязательно ограничена, и $Du = 0$
+(все обобщённые производные первого порядка равны нулю). Тогда $u = \mathrm{const}$
+почти всюду в $\Om$.
+\end{lemma}
+
+\begin{proof}
+\textbf{1) Случай $u \in \Lp{1}(\Om)$, $\Om$ ограничена.}
+
+Для $\eps > 0$ положим $\Om_\eps = \{x \in \Om \mid \dist(x, \dOm) > \eps\}$.
+По лемме~\ref{lem:avg-commute} при $0 < \rho < \eps$ в $\Om_\eps$
+\[
+  \left( \dd{u}{x_i} \right)_{\!\rho} = \dd{u_\rho}{x_i} ,
+  \qquad\text{причём}\qquad
+  \left( \dd{u}{x_i} \right)_{\!\rho}
+  = \int\limits_{\Om_\eps} \omega_\rho(x-y)\, \dd{u}{x_i}(y)\, dy = 0 ,
+\]
+так как $\partial u/\partial x_i = 0$. Значит, все частные производные гладкой функции
+$u_\rho$ в $\Om_\eps$ нулевые, и
+\[
+  u_\rho(x) = C(\rho) \quad \text{в } \Om_\eps ,
+\]
+поскольку $u_\rho$ — гладкая функция.
+
+\emph{Покажем, что $C(\rho) < \infty$.} По теореме~\ref{thm:norm}
+\[
+  |C(\rho)|\cdot \mu(\Om_\eps) = \int\limits_{\Om_\eps} |u_\rho|\, dx
+  \le \int\limits_\Om |u_\rho|\, dx \le \int\limits_\Om |u|\, dx < \infty ,
+\]
+откуда
+\[
+  |C(\rho)| \le \frac{1}{\mu(\Om_\eps)} \int\limits_\Om |u|\, dx < \infty .
+\]
+Пусть $C(\rho_k) \to C_0$ при $\rho \to 0$ (выбрали сходящуюся подпоследовательность).
+Тогда
+\begin{multline*}
+  \int\limits_{\Om_\eps} |u - C_0|\, dx
+  = \int\limits_{\Om_\eps} |u - C(\rho) + C(\rho) - C_0|\, dx \\
+  \le \int\limits_{\Om_\eps} |u - u_\rho|\, dx + \int\limits_{\Om_\eps} |C(\rho) - C_0|\, dx
+  \le \underbrace{\int\limits_{\Om_\eps} |u - u_\rho|\, dx}_{\to\, 0}
+    + \underbrace{|C(\rho) - C_0|\cdot \mu(\Om_\eps)}_{\to\, 0} \longrightarrow 0 ,
+\end{multline*}
+то есть $\int_{\Om_\eps} |u - C_0|\, dx = 0$, а значит $u = C_0$ п.\,в. в $\Om_\eps$.
+
+Положим $\eps = \tfrac1k$, то есть $\Om_\eps = \{x \in \Om \mid \dist(x,\dOm) > \tfrac1k\}$.
+Тогда $\mu\big(\Om_{1/k}[u \neq C_0]\big) = 0$ и
+\[
+  \Om[u \neq C_0] = \bigcup_{k \in \N} \Om_{1/k}[u \neq C_0]
+  \quad\Longrightarrow\quad u = C_0 \ \text{п.\,в. на } \Om .
+\]
+
+\textbf{2) Случай $u \in \Lloc(\Om)$, $\Om$ не обязательно ограничена.}
+
+Для любого $\Om' \Subset \Om$ имеем $u \in \Lp{1}(\Om')$, а для этого случая всё уже
+доказано, так что $u = \mathrm{const}$ в $\Om'$. Возьмём
+\[
+  \Om_k = \Big\{x \in \Om \ \Big|\ \dist(x, \dOm) > \tfrac1k \Big\} \cap \ball{0}{k},
+  \qquad \Om_k \Subset \Om, \qquad \Om = \bigcup_{k \in \N} \Om_k .
+\]
+Тогда $\mu\big(\Om_k[u \neq C_0]\big) = 0$, а
+\[
+  \Om[u \neq C_0] = \bigcup_{k=1}^{\infty} \Om_k[u \neq C_0]
+  \quad\Longrightarrow\quad \mu\big(\Om[u \neq C_0]\big) = 0 . \qedhere
+\]
+\end{proof}
+
+\begin{idea}
+Пересечение с шаром $\ball{0}{k}$ во втором пункте нужно именно потому, что $\Om$ может
+быть неограниченной: одно условие $\dist(x,\dOm) > 1/k$ компактности не даёт.
+\end{idea}
+
+\begin{theorem}[замена переменных]\label{thm:change-vars}
+Пусть $\Om, \Om' \subset \R^n$, а $\varphi : \Om' \to \Om$ — дифференцируемая биекция
+с непрерывными первыми производными и ненулевым якобианом. Пусть
+\[
+  u \in \Lloc(\Om), \qquad \exists\, \dd{u}{x_i} \in \Lloc(\Om), \quad i = \overline{1,n} .
+\]
+Тогда $v(y) = u(\varphi(y)) \in \Lloc(\Om')$ и $v$ имеет обобщённые производные
+из $\Lloc(\Om')$:
+\[
+  \dd{v}{y_i} = \sum_{k=1}^{n} \dd{u}{x_k}\big(\varphi(y)\big)\, \dd{\varphi_k(y)}{y_i} .
+\]
+\end{theorem}
+
+\begin{proof}
+\plusplus
+\end{proof}

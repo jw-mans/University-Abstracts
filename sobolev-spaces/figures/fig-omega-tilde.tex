@@ -1,0 +1,25 @@
+% Рисунок из тетради (критерий компактности, шаг 2): Ω ⊂⊂ Ω̃ и шар B(x,ρ).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick, fill=blue!3]
+    plot[smooth cycle, tension=0.8]
+      coordinates {(0,0) (2.8,1.1) (5.2,0.3) (5.8,-1.5) (3.6,-2.9) (1.0,-2.5) (-0.8,-1.1)};
+  \node at (5.0,-0.2) {$\widetilde{\Omega}$};
+
+  \draw[thick, fill=blue!9]
+    plot[smooth cycle, tension=0.85]
+      coordinates {(1.0,-0.3) (2.7,0.3) (4.0,-0.5) (3.7,-1.9) (2.0,-2.3) (0.9,-1.4)};
+  \node at (1.6,-1.9) {$\Omega$};
+
+  \draw[dashed, red!70!black] (2.9,-1.1) circle (0.6);
+  \filldraw (2.9,-1.1) circle (1.2pt);
+  \node[anchor=south, font=\footnotesize] at (2.9,-1.02) {$x$};
+  \draw[-{Latex[length=1.6mm]}] (2.9,-1.1) -- node[below, font=\tiny]{$\rho$} (3.5,-1.1);
+\end{tikzpicture}
+\caption{Область $\Omega$ погружается в большую ограниченную $\widetilde{\Omega}$.
+При $\rho < \dist(\Omega, \partial\widetilde{\Omega})$ шар $B(x,\rho)$ лежит
+в $\widetilde{\Omega}$ для каждого $x \in \Omega$, поэтому вес усреднения полный:
+$\int_{\widetilde{\Omega}} \omega_\rho(x-y)\,dy = 1$.}
+\label{fig:omega-tilde}
+\end{figure}

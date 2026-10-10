@@ -1,0 +1,320 @@
+\lecture{Лекция 5}{06.10.2026}
+
+\subsection{Определения и общие свойства пространств Соболева}
+
+\begin{definition}
+\textbf{Пространство Соболева} $\Wp{p}{\ell}(\Om)$, где $\ell \in \N$, $1 \le p \le \infty$,
+составляют функции, которые имеют обобщённые производные до порядка $\ell$ включительно
+и суммируемые вместе с этими производными со степенью $p$, то есть
+\[
+  u \in \Wp{p}{\ell}(\Om) \iff \exists\, D^\alpha u \in \Lp{p}(\Om)
+  \quad \forall\, |\alpha| \le \ell .
+\]
+\end{definition}
+
+\begin{remark}
+$\Wp{p}{0}(\Om) = \Lp{p}(\Om)$ по определению.
+\end{remark}
+
+\begin{definition}[норма в $\Wp{p}{\ell}$]
+\[
+  \norm{u}^{(1)}_{\Wp{p}{\ell}(\Om)}
+  = \sum_{|\alpha| \le \ell} \norm{D^\alpha u}_{\Lp{p}(\Om)} .
+\]
+Если $1 \le p < \infty$, то можно ввести ещё одну норму:
+\[
+  \norm{u}^{(2)}_{\Wp{p}{\ell}(\Om)}
+  = \left( \sum_{|\alpha| \le \ell} \int\limits_\Om |D^\alpha u|^p\, dx \right)^{1/p} .
+\]
+\end{definition}
+
+\begin{warn}
+В тетради обе нормы обозначены одинаково, $\norm{u}_{\Wp{p}{\ell}(\Om)}$, и дальше
+в доказательстве различаются припиской $\norm{u}^1$ и $\norm{u}^2$. Здесь они с самого
+начала помечены верхними индексами $(1)$ и $(2)$. Осторожно: в тетради
+\emph{сумма норм} обозначена как $\norm{u}^2$, а \emph{корень из суммы $p$-х степеней} —
+как $\norm{u}^1$; ниже сохранено именно это соответствие.
+\end{warn}
+
+\begin{proposition}\label{prop:norm-equiv}
+При $1 \le p \le \infty$ нормы эквивалентны: $\norm{u}^{(1)} \sim \norm{u}^{(2)}$.
+\end{proposition}
+
+\begin{proof}
+Надо указать $c_1, c_2$ такие, что
+\[
+  c_1 \norm{u}^{(1)} \le \norm{u}^{(2)} \le c_2 \norm{u}^{(1)}
+  \qquad \forall u \in \Wp{p}{\ell}(\Om) .
+\]
+
+\begin{reminder}[неравенства, которыми пользуемся]
+Минковского: $\displaystyle \left(\int |f+g|^p\right)^{1/p}
+\le \left(\int |f|^p\right)^{1/p} + \left(\int |g|^p\right)^{1/p}$.
+
+\smallskip
+Гёльдера: $\displaystyle \int fg\, dx
+\le \left(\int |f|^p dx\right)^{1/p} \left(\int |g|^q dx\right)^{1/q}$, в частности
+\[
+  \int\limits_\Om |D^\alpha u|\, dx
+  \le \left( \int\limits_\Om |D^\alpha u|^p\, dx \right)^{1/p}
+      \underbrace{\left( \int\limits_\Om 1^q\, dx \right)^{1/q}}_{=\,(\mu(\Om))^{1/q}},
+  \qquad \frac1p + \frac1q = 1 .
+\]
+\end{reminder}
+
+Обозначим
+\[
+  a_\alpha = \norm{D^\alpha u}_{\Lp{p}(\Om)} \ge 0 ,
+\]
+а через $N$ — число мультииндексов $|\alpha| \le \ell$. Тогда
+\[
+  \norm{u}^{(1)} = \left( \sum_{|\alpha| \le \ell} a_\alpha^p \right)^{1/p},
+  \qquad
+  \norm{u}^{(2)} = \sum_{|\alpha| \le \ell} a_\alpha ,
+  \qquad c_1 = 1, \quad c_2 = N^{1 - \frac1p} = N^{\frac1q} .
+\]
+
+\textbf{1) $c_1 \norm{u}^{(1)} \le \norm{u}^{(2)}$.} Положим
+$S = \sum_{|\alpha| \le \ell} a_\alpha = \norm{u}^{(2)}$. Тогда $a_\beta \le S$ для
+всех $\beta$ с $|\beta| \le \ell$, откуда
+\[
+  a_\beta^p = a_\beta \cdot a_\beta^{\,p-1} \le a_\beta\, S^{p-1}
+  \quad\Longrightarrow\quad
+  \sum_{|\beta| \le \ell} a_\beta^p \le S^{p-1} \underbrace{\sum_{|\beta| \le \ell} a_\beta}_{=\,S} = S^p ,
+\]
+то есть $\big(\norm{u}^{(1)}\big)^p \le \big(\norm{u}^{(2)}\big)^p$ и
+$\norm{u}^{(1)} \le \norm{u}^{(2)}$.
+
+\textbf{2) $\norm{u}^{(2)} \le N^{1-\frac1p} \norm{u}^{(1)}$.}
+При $p = 1$ показатель $N^{1-1/p} = N^0 = 1$, и неравенство тривиально. При $p > 1$
+берём сопряжённый показатель $q = \frac{p}{p-1} = \left(1 - \frac1p\right)^{-1}$
+и применяем Гёльдера к сумме:
+\[
+  \norm{u}^{(2)} = \sum_{|\alpha| \le \ell} a_\alpha \cdot 1
+  \le \left( \sum_{|\alpha| \le \ell} a_\alpha^p \right)^{1/p}
+      \left( \sum_{|\alpha| \le \ell} 1^q \right)^{1/q}
+  = \norm{u}^{(1)} \cdot N^{1/q} ,
+\]
+то есть $\norm{u}^{(2)} \le c_2 \norm{u}^{(1)}$.
+\end{proof}
+
+\begin{warn}
+На доске в пункте~2 написано «$p = 1 \Rightarrow q = 0$». Сопряжённый показатель при
+$p=1$ равен $\infty$, а не нулю; существенно здесь другое — что множитель
+$N^{1-1/p}$ при $p=1$ обращается в единицу.
+\end{warn}
+
+\begin{theorem}[Т1]\label{thm:w-banach}
+$\Wp{p}{\ell}(\Om)$ — банахово пространство.
+\end{theorem}
+
+\begin{proof}
+Докажем только для $1 \le p < \infty$.
+
+Пусть $\{u_n\} \subset \Wp{p}{\ell}(\Om)$ — фундаментальная последовательность:
+\[
+  \sum_{|\alpha| \le \ell} \norm{D^\alpha u_n - D^\alpha u_m}_{\Lp{p}(\Om)}
+  \xrightarrow[n,m \to \infty]{} 0
+\]
+\[
+  \iff \norm{D^\alpha u_n - D^\alpha u_m}_{\Lp{p}(\Om)} \xrightarrow[n,m \to \infty]{} 0
+  \quad \forall \alpha: |\alpha| \le \ell
+\]
+\[
+  \iff \{D^\alpha u_n\} \ \text{— фундаментальна в } \Lp{p}(\Om)
+  \quad \forall \alpha: |\alpha| \le \ell
+\]
+\[
+  \iff \forall \alpha: |\alpha| \le \ell \quad \exists\, u_\alpha \in \Lp{p}(\Om):
+  \quad D^\alpha u_n \to u_\alpha \ \text{ в } \Lp{p}(\Om) ,
+\]
+последнее — в силу полноты $\Lp{p}(\Om)$.
+
+Обозначим $u = u_0$ (предел самих $u_n$). Имеем
+\[
+  u_n \to u, \qquad D^\alpha u_n \to u_\alpha \quad \forall \alpha ,
+\]
+и по признаку существования обобщённой производной (теорема~\ref{thm:crit-deriv})
+\[
+  \exists\, D^\alpha u \in \Lp{p}(\Om): \quad D^\alpha u = u_\alpha .
+\]
+
+\begin{idea}
+Признак сформулирован для сходимости в $\Lloc$, а здесь сходимость идёт в $\Lp{p}(\Om)$.
+Это не мешает: на любом $\Om' \Subset \Om$ из сходимости в $\Lp{p}$ следует сходимость
+в $\Lp{1}(\Om')$ (неравенство Гёльдера на множестве конечной меры), то есть сходимость
+в $\Lloc(\Om)$. Именно это замечание и стоит на полях в тетради.
+\end{idea}
+
+Тогда $D^\alpha u_n \to D^\alpha u$ в $\Lp{p}(\Om)$ для всех $|\alpha| \le \ell$, что
+по определению нормы означает $u_n \to u$ в $\Wp{p}{\ell}(\Om)$.
+\end{proof}
+
+\subsubsection*{Пространства $\big[\Lp{p}(\Om)\big]^N$}
+
+\begin{idea}
+Цель конструкции — представить $\Wp{p}{\ell}(\Om)$ как подпространство прямой степени
+$\Lp{p}$, сопоставив функции набор всех её производных. Сепарабельность и рефлексивность
+тогда наследуются «сверху».
+\end{idea}
+
+Пусть $X$ — сепарабельное банахово пространство и
+\[
+  X^N = \{(x_1, x_2, \dots, x_N)\}, \qquad x_i \in X, \quad i = \overline{1,N} ,
+\]
+причём для вектора $\underline{x} = (x_1, \dots, x_N)$
+\[
+  \norm{\underline{x}}_{X^N} = \left( \sum_{i=1}^{N} \norm{x_i}_X^p \right)^{1/p},
+  \qquad 1 \le p < \infty .
+\]
+
+\begin{proposition}\label{prop:xn}
+Тогда $X^N$ — сепарабельное банахово пространство.
+\end{proposition}
+
+\begin{proof}
+\emph{Сепарабельность.} Пусть $\underline{x} = (x_1, \dots, x_N)$. Так как $X$
+сепарабельно, существует счётное всюду плотное $A \subset X$, и для любого $\eps > 0$
+найдутся номера $n_j$ с $a_{n_j} \in A$ такие, что
+\[
+  \norm{x_j - a_{n_j}}_X < \frac{\eps}{N^{1/p}} .
+\]
+Пусть $\underline{a} = (a_{n_1}, \dots, a_{n_N}) \in A^N$. Тогда
+\[
+  \norm{\underline{x} - \underline{a}}_{X^N}
+  = \Bigg( \sum_{j=1}^{N} \underbrace{\norm{x_j - a_{n_j}}_X^p}_{<\ \eps^p/N} \Bigg)^{1/p} < \eps .
+\]
+То есть для любых $\underline{x} \in X^N$ и $\eps > 0$ найдётся $\underline{a} \in A^N$
+с $\norm{\underline{x} - \underline{a}}_{X^N} < \eps$, а $A^N$ счётно.
+
+\emph{Полнота.} Пусть $\{\underline{x}^i\}$ — фундаментальная последовательность в $X^N$:
+\[
+  \norm{\underline{x}^i - \underline{x}^j}_{X^N}
+  = \left( \sum_{k=1}^{N} \norm{x_k^i - x_k^j}_X^p \right)^{1/p}
+  \xrightarrow[i,j \to \infty]{} 0
+  \iff \norm{x_k^i - x_k^j}_X \xrightarrow[i,j \to \infty]{} 0 \quad \forall k = \overline{1,N}
+\]
+\[
+  \iff \{x_k^i\}_{i=1}^{\infty} \ \text{— фундаментальна в } X \ \ \forall k
+  \iff x_k^i \xrightarrow[i \to \infty]{} x_k \in X \quad \forall k = \overline{1,N} .
+\]
+Положив $\underline{x}_0 = (x_1, \dots, x_N) \in X^N$, получаем
+$\underline{x}^i \to \underline{x}_0$ при $i \to \infty$.
+\end{proof}
+
+Применяем это к $X = \Lp{p}(\Om)$:
+\[
+  \big[\Lp{p}(\Om)\big]^N
+  = \big\{\underline{u} = (u_1, \dots, u_N) \ \big|\ u_i \in \Lp{p}(\Om) \big\} ,
+\]
+\[
+  \norm{\underline{u}}_{[\Lp{p}(\Om)]^N}
+  = \left( \sum_{i=1}^{N} \norm{u_i}^p_{\Lp{p}(\Om)} \right)^{1/p}
+  = \left( \sum_{i=1}^{N} \int\limits_\Om |u_i|^p\, dx \right)^{1/p},
+  \qquad 1 \le p < \infty .
+\]
+Пространство $\Lp{p}(\Om)$ полное и сепарабельное, поэтому $\big[\Lp{p}(\Om)\big]^N$
+тоже полное и сепарабельное.
+
+\begin{proposition}[сопряжённое пространство]\label{prop:dual}
+Пусть $1 < p < \infty$ и $p' = \frac{p}{p-1}$.
+\begin{enumerate}
+  \item Для любого $\underline{v} \in \big[\Lp{p'}(\Om)\big]^N$ формула
+        \[
+          \ell(\underline{u}) = \sum_{i=1}^{N} \int\limits_\Om u_i v_i\, dx ,
+          \qquad \underline{u} \in \big[\Lp{p}(\Om)\big]^N ,
+        \]
+        задаёт линейный ограниченный функционал
+        $\ell \in \big(\big[\Lp{p}(\Om)\big]^N\big)^*$, причём
+        \[
+          \norm{\ell}_{([\Lp{p}(\Om)]^N)^*} = \norm{\underline{v}}_{[\Lp{p'}(\Om)]^N} .
+        \]
+  \item Обратно, для любого функционала
+        $\ell \in \big(\big[\Lp{p}(\Om)\big]^N\big)^*$ существует единственный
+        $\underline{v} \in \big[\Lp{p'}(\Om)\big]^N$, для которого выполнены оба
+        равенства пункта~1.
+\end{enumerate}
+То есть существует изометрический изоморфизм
+\[
+  \big(\big[\Lp{p}(\Om)\big]^N\big)^* \simeq \big[\Lp{p'}(\Om)\big]^N .
+\]
+\end{proposition}
+
+\begin{proof}
+\plusplus
+\end{proof}
+
+\begin{corollary}
+Так как $(p')' = p$, то
+\[
+  \Big(\big(\big[\Lp{p}(\Om)\big]^N\big)^*\Big)^* \simeq \big[\Lp{p}(\Om)\big]^N ,
+\]
+то есть $\big[\Lp{p}(\Om)\big]^N$ рефлексивно.
+\end{corollary}
+
+\begin{theorem}[Т2]\label{thm:w-sep-refl}
+$\Wp{p}{\ell}(\Om)$ сепарабельно при $1 \le p < \infty$ и рефлексивно при $1 < p < \infty$.
+\end{theorem}
+
+\begin{proof}
+Пусть $N = \sum_{|\alpha| \le \ell} 1$ — число мультииндексов. Рассмотрим
+пространство $\big[\Lp{p}(\Om)\big]^N$ и положим
+\[
+  \overline{W} = \Big\{ \underline{u} \in \big[\Lp{p}(\Om)\big]^N
+  \ \Big|\ \underline{u} = (u_\alpha)_{|\alpha| \le \ell}:
+  \ \exists\, u \in \Wp{p}{\ell}(\Om), \ u_\alpha = D^\alpha u \Big\} .
+\]
+Нужно связать $\big[\Lp{p}(\Om)\big]^N$ и $\overline{W}$.
+
+\emph{Изоморфизм.} Пусть $u, v \in \Wp{p}{\ell}(\Om)$ и
+$u \leftrightarrow \underline{u} \in \overline{W}$,
+$v \leftrightarrow \underline{v} \in \overline{W}$. Тогда
+\[
+  a u + b v \in \Wp{p}{\ell}(\Om)
+  \qquad\longleftrightarrow\qquad
+  a \underline{u} + b \underline{v} \in \overline{W} ,
+\]
+то есть соответствие $\Wp{p}{\ell}(\Om) \leftrightarrow \overline{W}$ — биекция,
+сохраняющая линейные операции, а это и есть изоморфизм.
+
+\emph{Изометричность.}
+\[
+  \norm{\underline{u}}_{[\Lp{p}(\Om)]^N}
+  = \left( \sum_{|\alpha| \le \ell} \norm{u_\alpha}^p_{\Lp{p}(\Om)} \right)^{1/p}
+  = \left( \sum_{|\alpha| \le \ell} \norm{D^\alpha u}^p_{\Lp{p}(\Om)} \right)^{1/p}
+  = \norm{u}_{\Wp{p}{\ell}(\Om)} ,
+\]
+то есть изоморфизм изометрический.
+
+\emph{Подпространство.} $\Wp{p}{\ell}(\Om)$ банахово (теорема~\ref{thm:w-banach}),
+значит и $\overline{W}$ — банахово пространство. При этом
+$\overline{W} \subset \big[\Lp{p}(\Om)\big]^N$ — линейное многообразие, а линейное
+многообразие является подпространством тогда и только тогда, когда оно банахово
+относительно индуцированной нормы. Значит, $\overline{W}$ — подпространство
+в $\big[\Lp{p}(\Om)\big]^N$.
+
+Наконец, $\big[\Lp{p}(\Om)\big]^N$ сепарабельно и рефлексивно, а эти свойства
+наследуются подпространствами, поэтому $\overline{W}$ сепарабельно и рефлексивно.
+Вместе с $\overline{W} \simeq \Wp{p}{\ell}(\Om)$ это и даёт утверждение теоремы.
+\end{proof}
+
+\begin{theorem}[Т3, замена переменных в $\Wp{p}{1}$]\label{thm:w-change}
+Пусть $\varphi : \omega \to \Om$ — диффеоморфизм (все производные самого отображения
+и обратного ограничены), $|J(\varphi)| > 0$ на $\overline{\omega}$ и
+$\left| \dd{\varphi_k}{y_i} \right| \le \varkappa$ для некоторого числа $\varkappa$.
+Пусть $u \in \Wp{p}{1}(\Om)$ и $v(y) = u(\varphi(y))$. Тогда $v \in \Wp{p}{1}(\omega)$ и
+\[
+  \exists\, c_1, c_2 > 0: \qquad
+  c_1 \norm{u}_{\Wp{p}{1}(\Om)} \le \norm{v}_{\Wp{p}{1}(\omega)}
+  \le c_2 \norm{u}_{\Wp{p}{1}(\Om)} .
+\]
+\end{theorem}
+
+\begin{remark}
+Этот результат верен и для $\ell \in \N$, если потребовать побольше гладкости:
+$\varphi \in C^\ell$.
+\end{remark}
+
+\begin{proof}
+\plusplus
+\end{proof}

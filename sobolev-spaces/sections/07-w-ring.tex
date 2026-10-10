@@ -1,0 +1,207 @@
+\subsection{Пространства $\Wpz{p}{\ell}(\Om)$}
+
+\begin{definition}
+\[
+  \Wpz{p}{\ell}(\Om) = \mathrm{Cl}_{\Wp{p}{\ell}(\Om)}\big(C_0^\infty(\Om)\big)
+\]
+— замыкание финитных функций по норме $\Wp{p}{\ell}(\Om)$. То есть
+\[
+  u \in \Wpz{p}{\ell}(\Om) \iff u \in \Wp{p}{\ell}(\Om):
+  \ \exists\, \{u_n\} \subset C_0^\infty(\Om): \ u_n \xrightarrow[n \to \infty]{} u
+  \ \text{ в } \Wp{p}{\ell}(\Om) .
+\]
+\end{definition}
+
+\begin{remark}
+$\Wpz{p}{\ell}(\Om)$ — подпространство $\Wp{p}{\ell}(\Om)$, поэтому оно сепарабельно,
+рефлексивно и банахово при $1 < p < \infty$.
+\end{remark}
+
+\begin{proposition}[утв.\ 1: продолжение нулём]\label{prop:w0-ext}
+Пусть $u \in \Wpz{p}{\ell}(\Om)$, $\Om \subset \widetilde\Om$ и
+\[
+  \widetilde u = \begin{cases} u, & \text{в } \Om, \\ 0, & \text{в } \widetilde\Om \setminus \Om. \end{cases}
+\]
+Тогда $\widetilde u \in \Wpz{p}{\ell}(\widetilde\Om)$ и
+$\norm{u}_{\Wpz{p}{\ell}(\Om)} = \norm{\widetilde u}_{\Wpz{p}{\ell}(\widetilde\Om)}$.
+\end{proposition}
+
+\begin{proof}
+Из $u \in \Wpz{p}{\ell}(\Om)$ следует существование $\{u_n\} \subset C_0^\infty(\Om)$
+с $u_n \to u$ в $\Wp{p}{\ell}(\Om)$. Положим
+\[
+  \widetilde u_n = \begin{cases} u_n, & \text{в } \Om, \\ 0, & \text{в } \widetilde\Om \setminus \Om, \end{cases}
+  \qquad\Longrightarrow\qquad \widetilde u_n \in C_0^\infty(\widetilde\Om) ,
+\]
+что законно: носитель $u_n$ — компакт строго внутри $\Om$, поэтому продолжение нулём
+остаётся гладким. Так как
+\[
+  \norm{\widetilde u_n - \widetilde u_m}_{\Wp{p}{\ell}(\widetilde\Om)}
+  = \norm{u_n - u_m}_{\Wp{p}{\ell}(\Om)} ,
+\]
+то из фундаментальности $\{u_n\}$ в $\Wp{p}{\ell}(\Om)$ следует фундаментальность
+$\{\widetilde u_n\}$ в $\Wp{p}{\ell}(\widetilde\Om)$, а значит и в
+$\Wpz{p}{\ell}(\widetilde\Om)$. Последнее — банахово, поэтому
+\[
+  \exists\, \widetilde u \in \Wpz{p}{\ell}(\widetilde\Om):
+  \quad \widetilde u_n \to \widetilde u \ \text{ в } \Wpz{p}{\ell}(\widetilde\Om) .
+\]
+
+\emph{Вопрос: действительно ли $\widetilde u$ — это продолжение $u$ нулём?} Имеем
+\begin{align*}
+  \norm{\widetilde u_n - \widetilde u}_{\Wp{p}{\ell}(\widetilde\Om)}
+  &= \sum_{|\alpha| \le \ell}
+     \left( \int\limits_{\widetilde\Om} |D^\alpha(\widetilde u_n - \widetilde u)|^p\, dx \right)^{1/p}
+     \xrightarrow[n \to \infty]{} 0 , \\
+  \norm{\widetilde u_n - \widetilde u}_{\Wp{p}{\ell}(\widetilde\Om)}
+  &= \sum_{|\alpha| \le \ell}
+     \left( \int\limits_{\Om} |D^\alpha(u_n - \widetilde u)|^p\, dx
+          + \int\limits_{\widetilde\Om \setminus \Om} |D^\alpha \widetilde u|^p\, dx \right)^{1/p} .
+\end{align*}
+Отбрасывая второе слагаемое, получаем
+\[
+  \norm{\widetilde u_n - \widetilde u}_{\Wp{p}{\ell}(\widetilde\Om)}
+  \ge \sum_{|\alpha| \le \ell}
+      \left( \int\limits_{\Om} |D^\alpha(u_n - \widetilde u)|^p\, dx \right)^{1/p}
+  = \norm{u_n - \widetilde u}_{\Wp{p}{\ell}(\Om)} \longrightarrow 0 ,
+\]
+то есть $u_n \to \widetilde u$ в $\Wp{p}{\ell}(\Om)$. Но и $u_n \to u$ в
+$\Wp{p}{\ell}(\Om)$, значит $u = \widetilde u$ в $\Om$. Аналогично (отбрасывая, наоборот,
+первое слагаемое) получаем $\widetilde u = 0$ в $\widetilde\Om \setminus \Om$.
+\end{proof}
+
+\begin{proposition}[утв.\ 2: усреднения сходятся в норме $\Wp{p}{\ell}$]\label{prop:w0-avg}
+Пусть $u \in \Wpz{p}{\ell}(\Om)$. Тогда $u_\rho \to u$ в $\Wp{p}{\ell}(\Om)$ при $\rho \to 0$.
+\end{proposition}
+
+\begin{proof}
+Возьмём $\Om \Subset \widetilde\Om$ и $0 < \rho < \dist(\Om, \partial\widetilde\Om)$,
+положив $u = 0$ в $\widetilde\Om \setminus \Om$ (утверждение~\ref{prop:w0-ext}). Тогда
+\[
+  u_\rho(x) = \int\limits_{\widetilde\Om} \omega_\rho(x-y)\, u(y)\, dy
+            = \int\limits_{\Om} \omega_\rho(x-y)\, u(y)\, dy .
+\]
+Знаем, что $u_\rho \to u$ в $\Lp{p}(\widetilde\Om)$ (теорема~\ref{thm:conv}); здесь
+существенно, что $u = 0$ в $\widetilde\Om\setminus\Om$, то есть $u \in \Lp{p}(\widetilde\Om)$.
+
+Из леммы про усреднения (Л\ref{lem:avg-conv-loc})
+\[
+  D^\alpha u_\rho \xrightarrow[\rho \to 0]{} D^\alpha u \ \text{ в } \Lp{p}(\Om')
+  \qquad \forall\, \Om' \Subset \widetilde\Om ,
+\]
+в частности для $\Om' = \Om$. Итого
+\[
+  u_\rho \to u \ \text{ в } \Lp{p}(\Om), \qquad
+  D^\alpha u_\rho \to D^\alpha u \ \text{ в } \Lp{p}(\Om)
+  \quad\Longrightarrow\quad
+  u_\rho \to u \ \text{ в } \Wp{p}{\ell}(\Om) . \qedhere
+\]
+\end{proof}
+
+\begin{remark}
+Существенно, что $u \in \Wpz{p}{\ell}(\Om)$: для произвольной $u \in \Wp{p}{\ell}(\Om)$
+так получалось бы не всегда.
+\end{remark}
+
+\begin{idea}
+Причина — в утверждении~\ref{prop:w0-ext}: только для функций из $\Wpz{p}{\ell}$
+продолжение нулём не портит обобщённые производные, а значит усреднение можно брать
+по увеличенной области. У произвольной $u \in \Wp{p}{\ell}(\Om)$ продолжение нулём даёт
+скачок на границе, и у $D^\alpha u_\rho$ около $\dOm$ сходимости нет.
+\end{idea}
+
+\begin{proposition}[утв.\ 3: финитность достаточна]\label{prop:w0-supp}
+Пусть $u \in \Wp{p}{\ell}(\Om)$ и $\supp u \Subset \Om$. Тогда $u \in \Wpz{p}{\ell}(\Om)$.
+\end{proposition}
+
+\begin{proof}
+Надо предъявить $\{u_n\} \subset C_0^\infty(\Om)$ с $u_n \to u$ в $\Wp{p}{\ell}(\Om)$;
+возьмём в качестве них усреднения.
+
+Выберем $\Om'$ с $\supp u \Subset \Om' \Subset \Om$ и
+$0 < \rho < \dist(\supp u, \partial\Om')$. Тогда
+\[
+  u_\rho(x) = \int\limits_\Om \omega_\rho(x-y)\, u(y)\, dy
+            = \int\limits_{\supp u} \omega_\rho(x-y)\, u(y)\, dy \in C_0^\infty(\R^n) ,
+\]
+причём $u_\rho \equiv 0$ в $\Om \setminus \Om'$, то есть $u_\rho \in C_0^\infty(\Om)$.
+
+По лемме~\ref{lem:avg-conv-loc} $D^\alpha u_\rho \to D^\alpha u$ в $\Lp{p}(\Om')$ для всех
+$|\alpha| \le \ell$, а вне $\Om'$ обе части равны нулю: $D^\alpha u_\rho = D^\alpha u = 0$.
+Значит, $D^\alpha u_\rho \to D^\alpha u$ в $\Lp{p}(\Om)$, то есть $u_\rho \to u$
+в $\Wp{p}{\ell}(\Om)$, и по определению $u \in \Wpz{p}{\ell}(\Om)$.
+\end{proof}
+
+\subsubsection*{Пример: $\Wpz{p}{1}$ строго уже, чем $\Wp{p}{1}$}
+
+\begin{example}
+Пусть $\Om = (0,1)$ и $u \equiv 1$ на $\Om$. Тогда $u \in \Wp{p}{1}(\Om)$. Докажем,
+что $u \notin \Wpz{p}{1}(\Om)$.
+\end{example}
+
+\inputfig{figures/fig-unit-ext}
+
+\begin{proof}
+Пусть, от противного, $u \in \Wpz{p}{1}(\Om)$. Возьмём $\widetilde\Om = (-1,2)$. По
+утверждению~\ref{prop:w0-ext} продолжение нулём
+\[
+  \widetilde u = \begin{cases}
+    0, & x \in (-1, 0], \\
+    u, & x \in (0, 1), \\
+    0, & x \in [1, 2),
+  \end{cases}
+\]
+лежит в $\Wpz{p}{1}(\widetilde\Om) \subset \Wp{p}{1}(\widetilde\Om)$. Но тогда по
+теореме~\ref{thm:ac} функция $\widetilde u$ абсолютно непрерывна, а значит непрерывна —
+чего быть не может: у неё скачки в точках $0$ и $1$. Противоречие, следовательно
+$u \notin \Wpz{p}{1}(\Om)$.
+\end{proof}
+
+\subsubsection*{Интегрирование по частям}
+
+\begin{theorem}[интегрирование по частям]\label{thm:parts}
+Пусть $u \in \Wp{p}{\ell}(\Om)$, $v \in \Wpz{p^*}{\ell}(\Om)$, где
+$p^* = \frac{p}{p-1}$ и $1 < p < \infty$. Тогда
+\[
+  \int\limits_\Om D^\alpha u \cdot v\, dx
+  = (-1)^{|\alpha|} \int\limits_\Om u\, D^\alpha v\, dx ,
+  \qquad |\alpha| \le \ell .
+\]
+\end{theorem}
+
+\begin{proof}
+Возьмём $\{v_n\} \subset C_0^\infty(\Om)$ с $v_n \to v$ в $\Wp{p^*}{\ell}(\Om)$. Для
+каждого $v_n$ равенство верно по определению обобщённой производной (ведь
+$v_n \in C_0^\infty(\Om)$):
+\[
+  \int\limits_\Om D^\alpha u \cdot v_n\, dx
+  = (-1)^{|\alpha|} \int\limits_\Om u\, D^\alpha v_n\, dx .
+\]
+Перейдём в каждой части к пределу.
+
+\emph{Левая часть.} По неравенству Гёльдера
+\begin{multline*}
+  \left| \int\limits_\Om D^\alpha u \cdot v_n\, dx - \int\limits_\Om D^\alpha u \cdot v\, dx \right|
+  \le \int\limits_\Om |D^\alpha u| \cdot |v_n - v|\, dx \\
+  \le \left( \int\limits_\Om |D^\alpha u|^p\, dx \right)^{1/p}
+      \Bigg( \underbrace{\int\limits_\Om |v_n - v|^{p^*}\, dx}_{\to\, 0} \Bigg)^{1/p^*}
+  \xrightarrow[n \to \infty]{} 0 .
+\end{multline*}
+
+\emph{Правая часть.} Так же,
+\begin{multline*}
+  \left| \int\limits_\Om u\, D^\alpha v_n\, dx - \int\limits_\Om u\, D^\alpha v\, dx \right|
+  \le \int\limits_\Om |u| \cdot |D^\alpha v_n - D^\alpha v|\, dx \\
+  \le \left( \int\limits_\Om |u|^p\, dx \right)^{1/p}
+      \Bigg( \underbrace{\int\limits_\Om |D^\alpha v_n - D^\alpha v|^{p^*}\, dx}_{\to\, 0} \Bigg)^{1/p^*}
+  \longrightarrow 0 ,
+\end{multline*}
+поскольку $v_n \to v$ в $\Wp{p^*}{\ell}(\Om)$.
+\end{proof}
+
+\begin{idea}
+Финитность $v$ нужна ровно для того, чтобы не возникло граничных членов: у гладких
+финитных $v_n$ их нет по определению обобщённой производной, а предельный переход
+в $\Wp{p^*}{\ell}$ их не возвращает. Для произвольной $v \in \Wp{p^*}{\ell}(\Om)$ формула,
+вообще говоря, неверна — появляются следы на $\dOm$.
+\end{idea}

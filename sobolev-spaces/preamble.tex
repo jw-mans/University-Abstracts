@@ -1,0 +1,152 @@
+%  Преамбула конспекта «Соболевские пространства»
+%  Компилировать pdfLaTeX (кодировка utf8, шрифты T2A).
+
+% Latin Modern не имеет T2A-начертаний (нет t2almr.fd), поэтому кириллица идёт
+% через cm-super: семейство cmr в кодировке T2A.
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{geometry}
+\geometry{a4paper,margin=2.5cm}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,patterns,decorations.pathmorphing,decorations.pathreplacing,shapes.geometric,calc}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots,fillbetween}
+\pgfplotsset{compat=1.18}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={Соболевские пространства --- конспект}
+}
+
+%  Окружения для теорем
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}
+\newtheorem{proposition}[theorem]{Утверждение}
+\newtheorem{corollary}{Следствие}
+\newtheorem*{corollary*}{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{criterion}{Признак}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+\newtheorem{example}{Пример}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Замечание}
+\newtheorem*{reminder}{Напоминание}
+
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+%  Пометки конспекта
+%    \begin{idea} ... \end{idea}  — пояснения, которых не было на лекции
+%    \begin{warn} ... \end{warn} — неразборчиво / описка / требует сверки
+\newtcolorbox{idea}[1][]{
+  breakable,
+  enhanced,
+  colback=blue!4!white,
+  colframe=blue!45!black,
+  boxrule=0.4pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  title={Пояснение},
+  fonttitle=\bfseries\small,
+  coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-2pt},
+  boxed title style={colback=blue!45!black,boxrule=0pt,arc=1pt},
+  #1
+}
+
+\newtcolorbox{warn}[1][]{
+  breakable,
+  enhanced,
+  colback=orange!6!white,
+  colframe=orange!65!black,
+  boxrule=0.4pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  title={Сверить с записью},
+  fonttitle=\bfseries\small,
+  coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-2pt},
+  boxed title style={colback=orange!65!black,boxrule=0pt,arc=1pt},
+  #1
+}
+
+% Отметка начала лекции
+\newcommand{\lecture}[2]{%
+  \bigskip
+  \noindent\hfill\textit{\small #1\ifx\relax#2\relax\else, #2\fi}\\[-0.3em]
+  \noindent\rule{\textwidth}{0.4pt}
+  \medskip
+}
+
+%  Макросы
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Om}{\Omega}
+\newcommand{\clOm}{\overline{\Omega}}
+\newcommand{\dOm}{\partial\Omega}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\esssup}{\operatorname*{ess\,sup}}
+\newcommand{\Lp}[1]{L^{#1}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\Lpn}[2]{\norm{#1}_{L^{#2}(\Omega)}}
+\newcommand{\ball}[2]{B(#1,#2)}
+\newcommand{\unif}{\rightrightarrows}
+\newcommand{\Lloc}{L^1_{\mathrm{loc}}}
+\newcommand{\Wp}[2]{W_{#1}^{#2}}
+\newcommand{\Wpz}[2]{\mathring{W}_{#1}^{#2}}
+\newcommand{\sgn}{\operatorname{sign}}
+\newcommand{\dd}[2]{\frac{\partial #1}{\partial #2}}
+
+% Маркер «++ в кружке» из тетради: доказательство будет дописано позже
+% по записям прошлых семестров.
+\newcommand{\plusplus}{%
+  \tikz[baseline=(pp.base)]{%
+    \node[draw, ellipse, inner xsep=3pt, inner ysep=1pt, line width=0.4pt] (pp)
+      {\footnotesize $+\,+$};}%
+}
+
+%  Вспомогательные функции для рисунков
+%    sstep(t)      — гладкая «ступенька» 6t^5-15t^4+10t^3, склеенная с 0 и 1
+%    urho(x,rho)   — схематическое усреднение ступеньки u = 1_{[0,1)}
+%    bump(x,rho)   — ядро усреднения omega_rho в размерности n = 1
+\pgfmathdeclarefunction{sstep}{1}{%
+  \pgfmathparse{(#1<0) ? 0 : ((#1>1) ? 1 : (6*(#1)^5-15*(#1)^4+10*(#1)^3))}%
+}
+\pgfmathdeclarefunction{urho}{2}{%
+  \pgfmathparse{sstep((#1+#2)/(2*#2)) - sstep((#1-1+#2)/(2*#2))}%
+}
+% У края носителя 1-(x/rho)^2 -> 0, и деление 1/(...) переполняет pgfmath
+% (предел ~16384) ещё до вызова exp. Поэтому знаменатель зажат снизу через max:
+% показатель никогда не превосходит 15 по модулю, exp(-15) ~ 3e-7 — на графике ноль.
+\pgfmathdeclarefunction{bump}{2}{%
+  \pgfmathparse{(abs(#1)>=0.999*#2) ? 0 : (2.2523/#2)*exp(-1/max(1-((#1)/#2)^2,0.0667))}%
+}
+
+%  Быстрая сборка: \showfiguresfalse выключает все TikZ-рисунки.
+%  Нужно, когда бесплатный Overleaf не успевает в лимит времени.
+\newif\ifshowfigures
+\showfigurestrue
+
+\newcommand{\inputfig}[1]{%
+  \ifshowfigures
+    \input{#1}%
+  \else
+    \begin{center}\fbox{\small рисунок выключен: \texttt{\detokenize{#1}}}\end{center}%
+  \fi
+}

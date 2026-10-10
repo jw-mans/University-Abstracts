@@ -1,0 +1,775 @@
+\section{Усреднение функций}
+
+\subsection{Основные свойства}
+
+\subsubsection*{Ядро усреднения}
+
+\begin{definition}
+Пусть $n \in \N$, $x \in \R^n$. Положим
+\[
+  \omega(x) =
+  \begin{cases}
+    C\, e^{\frac{1}{|x|^2 - 1}}, & |x| < 1, \\[4pt]
+    0, & |x| \ge 1,
+  \end{cases}
+  \qquad
+  C = \left( \int\limits_{\ball{0}{1}} e^{\frac{1}{|x|^2 - 1}}\, dx \right)^{-1} .
+\]
+\end{definition}
+
+Здесь $|x| = \sqrt{x_1^2 + \dots + x_n^2}$, а $\ball{0}{1} = \{x : |x| < 1\}$ — открытый
+единичный шар. Константа $C$ подобрана так, что
+\[
+  \int\limits_{\R^n} \omega(x)\, dx = \int\limits_{\ball{0}{1}} \omega(x)\, dx = 1 .
+\]
+
+\begin{idea}
+\textbf{Почему $C$ определена корректно.} Подынтегральная функция непрерывна, положительна
+в шаре и не превосходит $e^{-1}$, а шар имеет конечный объём. Поэтому интеграл конечен
+и положителен.
+\end{idea}
+
+\textbf{Свойства $\omega$:}
+\begin{enumerate}
+  \item $\omega \ge 0$ на $\R^n$, причём $\omega > 0$ в $\ball{0}{1}$.
+  \item $\supp \omega = \overline{\ball{0}{1}}$ — компакт.
+  \item $\omega$ радиальна, то есть зависит только от $|x|$. В частности,
+        $\omega(-x) = \omega(x)$.
+  \item $\omega \in C^\infty(\R^n)$. Это видно из записи $\omega(x) = C\, g(|x|^2)$,
+        где $g(t) = e^{\frac{1}{t-1}}$ при $t < 1$ и $g(t) = 0$ при $t \ge 1$. Функция $g$
+        гладкая по тем же причинам, что и шапочка из введения, а
+        $|x|^2 = x_1^2+\dots+x_n^2$ — многочлен. Запись через $|x|^2$ удобна тем, что сама
+        норма $|x|$ в нуле не дифференцируема.
+  \item $\displaystyle\int_{\R^n} \omega\,dx = 1$.
+\end{enumerate}
+
+\begin{remark}[из тетради]
+Конкретный вид $\omega$ не важен: это просто бесконечно дифференцируемая финитная функция,
+и вместо неё можно взять \textbf{любую другую такую же}.
+\end{remark}
+
+\begin{idea}
+В доказательствах ниже используются только свойства 1, 2, 4 и 5: гладкость,
+неотрицательность, носитель в единичном шаре и интеграл, равный единице. Любое ядро
+с этими свойствами подходит.
+
+\medskip
+\textbf{Что это за объект.} $\omega$ — гладкая «плотность вероятности», сосредоточенная
+в единичном шаре. Свёртка функции с таким ядром заменяет значение функции в точке на
+взвешенное среднее по маленькой окрестности. Отсюда название — \textbf{усреднение}.
+\end{idea}
+
+\subsubsection*{Ядро с параметром $\rho$}
+
+\begin{definition}
+Пусть $\rho > 0$. Положим
+\[
+  \omega_\rho(x) = \rho^{-n}\, \omega\!\left(\frac{x}{\rho}\right),
+  \qquad \supp \omega_\rho = \overline{\ball{0}{\rho}} .
+\]
+\end{definition}
+
+\begin{warn}
+На доске и в тетради написано $\supp\omega_\rho = \ball{0}{\rho}$. Носитель — замкнутое
+множество, поэтому точнее писать $\overline{\ball{0}{\rho}}$. Для рассуждений это не важно.
+\end{warn}
+
+\textbf{Интеграл сохраняется:}
+\[
+  \int\limits_{\ball{0}{\rho}} \omega_\rho(x)\, dx
+  = \int\limits_{\ball{0}{\rho}} \rho^{-n}\, \omega\!\left(\frac{x}{\rho}\right) dx
+  \;\overset{\substack{y = x/\rho\\ dx = \rho^n dy}}{=}\;
+  \int\limits_{\ball{0}{1}} \rho^{-n}\, \omega(y)\, \rho^n\, dy = 1 .
+\]
+Замена $y = x/\rho$ переводит шар $\ball{0}{\rho}$ в $\ball{0}{1}$, а её якобиан равен $\rho^n$.
+
+Как и $\omega$, ядро $\omega_\rho$ гладкое, неотрицательное и радиальное.
+
+\inputfig{figures/fig-kernel-rho}
+
+\begin{idea}
+\textbf{Картинка: уменьшение $\rho$.} Аргумент $x/\rho$ сжимает шапочку до шара радиуса
+$\rho$, а множитель $\rho^{-n}$ поднимает её так, чтобы интеграл остался равным $1$.
+Чем меньше $\rho$, тем шапочка уже и выше: $\omega_\rho(0) = C e^{-1}\rho^{-n} \to \infty$.
+При $\rho \to 0$ вся «масса» собирается в нуле, то есть $\omega_\rho$ приближает
+дельта-функцию.
+\end{idea}
+
+\subsubsection*{Усреднение функции}
+
+Пусть $\Om \subset \R^n$ — открытое ограниченное множество (в тетради: «область»)
+и $u \in \Lp{1}(\Om)$.
+
+\begin{definition}
+Функция
+\[
+  u_\rho(x) = \int\limits_{\Om} \omega_\rho(x - y)\, u(y)\, dy
+\]
+называется \textbf{усреднением функции $u$ с параметром $\rho > 0$}.
+\end{definition}
+
+\begin{idea}
+При фиксированном $x$ функция $y \mapsto \omega_\rho(x-y)$ — шапочка с центром в точке $x$.
+Поэтому $u_\rho(x)$ — взвешенное среднее значений $u$ в $\rho$-окрестности точки $x$.
+По сути, $u_\rho = \omega_\rho * u$, где $u$ продолжена нулём вне $\Om$.
+\end{idea}
+
+\paragraph{Свойства усреднения.}
+
+\textbf{1) $u_\rho : \R^n \to \R$, то есть $u_\rho$ определена во всех точках $\R^n$.}
+Интеграл конечен, поскольку $\omega_\rho$ ограничена, а $u$ суммируема:
+$|\omega_\rho(x-y)\,u(y)| \le \big(\sup \omega_\rho\big)\, |u(y)|$.
+Подробнее об этом рассуждении — в отступлении ниже.
+
+\textbf{2) Интегрирование фактически идёт по $\Om \cap \ball{x}{\rho}$.}
+Поскольку $\supp_y\, \omega_\rho(x-y) = \overline{\ball{x}{\rho}}$,
+\[
+  u_\rho(x) = \int\limits_{\Om} \omega_\rho(x - y)\, u(y)\, dy
+            = \int\limits_{\Om \cap \ball{x}{\rho}} \omega_\rho(x - y)\, u(y)\, dy ,
+\]
+и, в частности,
+\[
+  u_\rho(x) = 0, \quad \text{если } \dist(x, \Om) \ge \rho .
+\]
+
+\inputfig{figures/fig-support}
+
+\begin{idea}
+\textbf{Картинка из тетради.} Вокруг $\Om$ нарисована пунктиром $\rho$-окрестность. Если шар
+$\ball{x}{\rho}$ целиком лежит внутри $\Om$, то это обычное усреднение. Если $x$ около
+границы, шар частично выходит наружу, и интегрирование идёт только по части шара внутри
+$\Om$; это всё равно что считать $u = 0$ вне $\Om$. Если $x$ дальше $\rho$ от $\Om$, шар
+с $\Om$ не пересекается, и $u_\rho(x) = 0$. Итог: \textbf{носитель $u_\rho$ лежит
+в замкнутой $\rho$-окрестности $\Om$}.
+\end{idea}
+
+\textbf{3) Гладкость: $u_\rho \in C^\infty(\R^n)$.} Интеграл «наследует» гладкость ядра
+$\omega_\rho$: подынтегральная функция гладкая по $x$ и суммируемая по $y$. Используется
+теорема о дифференцировании интеграла Лебега по параметру из курса анализа (как сказано
+на лекции, она была в конце 5-го семестра).
+
+\inputfig{figures/fig-smoothing}
+
+\begin{idea}
+\textbf{Подробнее.} Для любого мультииндекса $\alpha$
+\[
+  \big|D_x^\alpha\big[\omega_\rho(x-y)\,u(y)\big]\big|
+  = \big|(D^\alpha\omega_\rho)(x-y)\big|\,|u(y)|
+  \le \Big(\sup_{\R^n} |D^\alpha \omega_\rho|\Big)\, |u(y)| ,
+\]
+и правая часть — суммируемая мажоранта, не зависящая от $x$. Значит, дифференцировать
+можно под знаком интеграла:
+\[
+  D^\alpha u_\rho(x) = \int\limits_\Om (D^\alpha \omega_\rho)(x-y)\, u(y)\, dy ,
+\]
+и эти производные непрерывны. Все производные «падают» на ядро, поэтому $u$ может быть
+сколь угодно негладкой.
+
+\medskip
+\textbf{Картинка из тетради.} Изображён «рваный» график $u$, под ним маленькая шапочка,
+скользящая вдоль оси. В каждой точке значение $u_\rho$ — среднее $u$ под шапочкой.
+Поэтому $u_\rho$ сглаживает зубцы, и получается гладкая кривая.
+\end{idea}
+
+\subsubsection*{Отступление: мажорантный признак (вопрос с лекции)}
+
+\begin{criterion}
+Пусть $f, g$ измеримы на $E$, $|f| \le g$ на $E$ и $g$ суммируема. Тогда $f$ суммируема.
+\end{criterion}
+
+\begin{corollary*}
+Если $u \in \Lp{1}(E)$ и $v \in \Lp{\infty}(E)$, то $uv \in \Lp{1}(E)$.
+\end{corollary*}
+
+Действительно, $uv$ измерима и
+\[
+  |uv| \le |u| \cdot \norm{v}_{\Lp{\infty}(E)} \quad \text{п.\,в. на } E .
+\]
+Здесь $|u|$ суммируема, а $\norm{v}_{\Lp{\infty}(E)} = \esssup_E |v|$ — константа.
+Значит, $uv$ суммируема.
+
+\begin{idea}
+Именно этот признак работает в свойствах 1 и 3: $\omega_\rho$ и её производные ограничены
+(лежат в $\Lp{\infty}$), а $u \in \Lp{1}$.
+\end{idea}
+
+\subsubsection*{Теорема 1: усреднение не увеличивает норму в $\Lp{p}$}
+
+\begin{theorem}\label{thm:norm}
+Пусть $1 \le p \le \infty$, $u \in \Lp{p}(\Om)$. Тогда
+\[
+  \norm{u_\rho}_{\Lp{p}(\Om)} \le \norm{u}_{\Lp{p}(\Om)} .
+\]
+\end{theorem}
+
+\begin{idea}
+Так как $\Om$ ограничено, $\Lp{p}(\Om) \subset \Lp{1}(\Om)$ (по неравенству Гёльдера
+$\norm{u}_{\Lp{1}} \le |\Om|^{1-1/p}\norm{u}_{\Lp{p}}$). Поэтому усреднение $u_\rho$
+определено.
+
+\medskip
+\textbf{Смысл.} Взвешенное среднее не может быть «больше» исходной функции. Иначе говоря,
+оператор $u \mapsto u_\rho$ ограничен в $\Lp{p}$ и его норма не больше $1$.
+\end{idea}
+
+\textbf{Важное утверждение (используется во всех трёх случаях).} Для любого $x \in \R^n$
+\begin{equation}\label{eq:star}
+  \int\limits_{\Om} \omega_\rho(x - y)\, dy \le \int\limits_{\ball{x}{\rho}} \omega_\rho(x - y)\, dy = 1 .
+\end{equation}
+Неравенство верно, потому что $\omega_\rho \ge 0$ и
+$\int_\Om = \int_{\Om\cap \ball{x}{\rho}} \le \int_{\ball{x}{\rho}}$. Последний интеграл
+после замены $z = x - y$ превращается в $\int_{\ball{0}{\rho}}\omega_\rho(z)\,dz = 1$.
+
+Тот же результат верен, если интегрировать по $x$, а не по $y$:
+$\displaystyle\int_\Om \omega_\rho(x-y)\,dx \le 1$ при любом $y$.
+
+\begin{proof}
+\textbf{1$^\circ$. Случай $p = \infty$.}
+\[
+  |u_\rho(x)| \le \int\limits_\Om \omega_\rho(x - y)\, |u(y)|\, dy
+  \le \norm{u}_{\Lp{\infty}(\Om)} \int\limits_\Om \omega_\rho(x - y)\, dy
+  \overset{\eqref{eq:star}}{\le} \norm{u}_{\Lp{\infty}(\Om)} .
+\]
+На втором шаге вынесли $\esssup|u|$: $|u(y)| \le \norm{u}_{\Lp{\infty}}$ при почти всех $y$.
+Следовательно, $\norm{u_\rho}_{\Lp{\infty}(\Om)} \le \norm{u}_{\Lp{\infty}(\Om)}$.
+
+\begin{warn}
+На доске замена записана как $z = y - x$, а в тетради — как $z = x - y$. Удобнее второй
+вариант: при нём сразу $\omega_\rho(x-y) = \omega_\rho(z)$. При $z = y - x$ получается
+$\omega_\rho(-z)$, и нужно дополнительно сослаться на чётность ядра. Также в тетради
+в последнем интеграле написано $\omega(z)$ вместо $\omega_\rho(z)$ — это описка.
+\end{warn}
+
+\textbf{2$^\circ$. Случай $p = 1$.}
+\begin{multline*}
+  \int\limits_\Om |u_\rho(x)|\, dx
+  \le \int\limits_\Om dx \int\limits_\Om \omega_\rho(x - y)\, |u(y)|\, dy
+  \overset{\text{Фубини--Тонелли}}{=} \\
+  = \int\limits_\Om |u(y)|\, dy
+    \underbrace{\int\limits_\Om \omega_\rho(x - y)\, dx}_{\le 1 \text{ по } \eqref{eq:star}}
+  \le \int\limits_\Om |u(y)|\, dy .
+\end{multline*}
+Значит, $\norm{u_\rho}_{\Lp{1}(\Om)} \le \norm{u}_{\Lp{1}(\Om)}$.
+
+\begin{idea}
+Менять порядок интегрирования можно по \textbf{теореме Тонелли}: подынтегральная функция
+$\omega_\rho(x-y)|u(y)|$ неотрицательна, а для неотрицательных функций перестановка
+допустима без предварительной проверки суммируемости.
+\end{idea}
+
+\textbf{3$^\circ$. Случай $1 < p < \infty$.} Пусть $q$ — сопряжённый показатель:
+$\frac1p + \frac1q = 1$.
+
+\begin{reminder}[неравенство Гёльдера]
+Если $u \in \Lp{p}(\Om)$ и $v \in \Lp{q}(\Om)$, то $uv \in \Lp{1}(\Om)$ и
+\[
+  \int\limits_\Om |uv|\, dx \le \left(\int\limits_\Om |u|^p dx\right)^{1/p}
+                                \left(\int\limits_\Om |v|^q dx\right)^{1/q} .
+\]
+\end{reminder}
+
+Основной приём — разложить ядро на два множителя:
+$\omega_\rho = \omega_\rho^{1/q}\cdot\omega_\rho^{1/p}$, поскольку $\frac1q + \frac1p = 1$.
+Тогда по Гёльдеру
+\begin{multline*}
+  |u_\rho(x)| \le \int\limits_\Om \omega_\rho^{\frac1q}(x - y)\cdot \omega_\rho^{\frac1p}(x-y)\,|u(y)|\, dy \\
+  \le \left( \int\limits_\Om \omega_\rho(x - y)\, dy \right)^{\frac1q}
+      \left( \int\limits_\Om \omega_\rho(x - y)\, |u(y)|^p\, dy \right)^{\frac1p} .
+\end{multline*}
+Первая скобка не больше $1$ по \eqref{eq:star}. Возводя в степень $p$, получаем
+\[
+  |u_\rho(x)|^p \le \int\limits_\Om \omega_\rho(x - y)\, |u(y)|^p\, dy .
+\]
+Проинтегрируем по $x$ и снова применим Фубини--Тонелли и \eqref{eq:star}:
+\begin{multline*}
+  \norm{u_\rho}^p_{\Lp{p}(\Om)} = \int\limits_\Om |u_\rho(x)|^p dx
+  \le \int\limits_\Om dx \int\limits_\Om \omega_\rho(x-y)\,|u(y)|^p\,dy \\
+  = \int\limits_\Om |u(y)|^p\,dy \underbrace{\int\limits_\Om \omega_\rho(x-y)\,dx}_{\le 1}
+  \le \norm{u}^p_{\Lp{p}(\Om)} . \qquad\qedhere
+\end{multline*}
+\end{proof}
+
+\begin{idea}
+\textbf{Идея случая 3$^\circ$.} Он сводится к случаю $p = 1$, применённому к функции
+$|u|^p$. Разложение $\omega_\rho = \omega_\rho^{1/q}\omega_\rho^{1/p}$ нужно, чтобы
+«забрать» часть веса в каждый сомножитель Гёльдера. Фактически это неравенство Йенсена
+для выпуклой функции $t \mapsto |t|^p$ и вероятностной меры $\omega_\rho(x-y)\,dy$.
+\end{idea}
+
+\subsubsection*{Утверждение: равномерная сходимость на компактах}
+
+\begin{proposition}\label{prop:unif}
+Пусть $u \in C(\clOm)$, $K$ — компакт и $K \subset \Om$. Тогда
+\[
+  u_\rho \unif u \ \text{ на } K \quad \text{при } \rho \to 0 ,
+\]
+то есть $u_{\rho_k} \unif u$ на $K$ для любой последовательности $\rho_k > 0$, $\rho_k \to 0$.
+\end{proposition}
+
+\inputfig{figures/fig-compact}
+
+\begin{proof}
+\emph{Шаг 1: компакт отделён от границы.} Граница
+$\dOm = \clOm \setminus \Om = \clOm \cap (\complement\Om)$ — всегда замкнутое множество.
+Поскольку $\Om$ открыто, $\dOm \cap \Om = \varnothing$, а значит, $K \cap \dOm = \varnothing$.
+Расстояние между непересекающимися компактом и замкнутым множеством положительно:
+\[
+  d = \dist(K, \dOm) > 0 .
+\]
+
+\emph{Шаг 2: при малых $\rho$ шары не вылезают из $\Om$.} Пусть $\rho < d$ и $x \in K$.
+Тогда $\ball{x}{\rho} \subset \Om$, и поэтому
+\[
+  \int\limits_\Om \omega_\rho(x-y)\,dy
+  = \int\limits_{\Om \cap \ball{x}{\rho}} \omega_\rho(x-y)\,dy
+  = \int\limits_{\ball{x}{\rho}} \omega_\rho(x-y)\,dy = 1 .
+\]
+
+\begin{idea}
+Почему $\ball{x}{\rho} \subset \Om$: если бы какая-то точка $z \in \ball{x}{\rho}$ не лежала
+в $\Om$, то на отрезке $[x, z]$ нашлась бы точка границы $\dOm$ на расстоянии меньше
+$\rho < d$ от $x \in K$. Это противоречит определению $d$. Обратите внимание: здесь
+неравенство \eqref{eq:star} превращается в равенство. Около компакта усреднение берётся
+по полному шару.
+\end{idea}
+
+\emph{Шаг 3: оценка разности.} Пусть $x \in K$, $\rho < d$. Представим $u(x)$ как
+$u(x) \cdot 1$, заменив единицу интегралом из шага 2:
+\[
+  u(x) - u_\rho(x)
+  = u(x)\int\limits_\Om \omega_\rho(x-y)\,dy - \int\limits_\Om \omega_\rho(x-y)\,u(y)\,dy
+  = \int\limits_\Om \omega_\rho(x-y)\,\big(u(x) - u(y)\big)\,dy ,
+\]
+откуда
+\[
+  |u(x) - u_\rho(x)| \le \int\limits_{\ball{x}{\rho}} \omega_\rho(x-y)\,|u(x) - u(y)|\,dy .
+\]
+
+\emph{Шаг 4: равномерная непрерывность.} Возьмём $\eps > 0$. Найдётся $\delta > 0$ такое,
+что $|u(x) - u(y)| < \eps$ при $|x - y| < \delta$. При $\rho < \min(d, \delta)$ все
+$y \in \ball{x}{\rho}$ удовлетворяют $|x-y| < \delta$, поэтому
+\[
+  |u(x) - u_\rho(x)| \le \eps \int\limits_{\ball{x}{\rho}} \omega_\rho(x-y)\,dy = \eps
+  \qquad \text{для всех } x \in K .
+\]
+Оценка не зависит от $x \in K$, значит, сходимость равномерная.
+\end{proof}
+
+\begin{warn}
+В тетради написано «$u$ равномерно непрерывна на $K$». Этого недостаточно: точка $y$
+пробегает шар $\ball{x}{\rho}$ и может не лежать в $K$. Правильно так: $\Om$ ограничено,
+поэтому $\clOm$ — компакт, и $u \in C(\clOm)$ равномерно непрерывна на всём $\clOm$
+(теорема Кантора).
+\end{warn}
+
+\begin{idea}
+\textbf{Идея доказательства.} Вдали от границы усреднение — честное среднее по шару
+с полным весом $1$. Поэтому $u - u_\rho$ — среднее отклонений $u(x)-u(y)$ по маленькому
+шару, а по непрерывности эти отклонения малы.
+\end{idea}
+
+\begin{corollary*}
+Если $u \in C(\clOm)$, то $u_\rho(x) \to u(x)$ при $\rho \to 0$ для каждого $x \in \Om$.
+\end{corollary*}
+
+\begin{proof}
+Точка — это компакт: достаточно взять $K = \{x\}$.
+\end{proof}
+
+\subsubsection*{Теорема 2: сходимость усреднений в $\Lp{p}$}
+
+\begin{theorem}\label{thm:conv}
+Пусть $u \in \Lp{p}(\Om)$, $1 \le p < \infty$. Тогда
+\[
+  u_\rho \to u \ \text{ в } \Lp{p}(\Om) \quad \text{при } \rho \to 0 .
+\]
+\end{theorem}
+
+\begin{idea}
+\textbf{Почему $p < \infty$.} При $p = \infty$ теорема неверна. Все $u_\rho$ непрерывны,
+а равномерный предел непрерывных функций непрерывен, поэтому разрывную функцию
+(например, ступеньку из примера ниже) нельзя приблизить усреднениями в $\Lp{\infty}$.
+\end{idea}
+
+\begin{proof}
+Сначала докажем для непрерывных функций, затем перенесём на все $\Lp{p}$ по плотности.
+
+\textbf{1) Случай $u \in C(\clOm)$.} Возьмём компакт $K \subset \Om$ и разобьём
+$\Om = K \cup (\Om \setminus K)$:
+\[
+  \norm{u - u_\rho}^p_{\Lp{p}(\Om)}
+  = \int\limits_K |u - u_\rho|^p\,dx + \int\limits_{\Om\setminus K} |u - u_\rho|^p\,dx .
+\]
+Обозначим $M = \norm{u}_{C(\clOm)} = \norm{u}_{\Lp{\infty}(\Om)}$. По теореме~\ref{thm:norm}
+(случай $p=\infty$) $\norm{u_\rho}_{\Lp{\infty}(\Om)} \le M$, поэтому $|u - u_\rho| \le 2M$
+на $\Om$. Отсюда
+\[
+  \norm{u - u_\rho}^p_{\Lp{p}(\Om)}
+  \le \sup_K |u - u_\rho|^p \cdot \mu(K) + (2M)^p \cdot \mu(\Om \setminus K) .
+\]
+Дальше по данному $\eps > 0$:
+\begin{itemize}
+  \item \textbf{сначала выбираем $K$} так, чтобы $(2M)^p\,\mu(\Om\setminus K) < \eps/2$.
+        Это всегда возможно;
+  \item \textbf{затем выбираем $\rho$}: так как $u_\rho \unif u$ на $K$
+        (утверждение~\ref{prop:unif}), при всех достаточно малых $\rho$ выполнено
+        $\sup_K |u - u_\rho|^p\,\mu(K) < \eps/2$.
+\end{itemize}
+Итого $\norm{u - u_\rho}^p_{\Lp{p}} < \eps$ для всех достаточно малых $\rho$.
+
+\begin{idea}
+\textbf{Почему $K$ можно выбрать.} Возьмём
+$K_m = \{x \in \Om : \dist(x, \dOm) \ge \tfrac1m\}$. Это компакты (замкнуты и ограничены),
+$K_m \subset \Om$, они возрастают и в объединении дают $\Om$. Поскольку $\mu(\Om) < \infty$,
+по непрерывности меры $\mu(\Om \setminus K_m) \to 0$.
+
+\medskip
+\textbf{Порядок выбора важен:} $K$ выбирается раньше $\rho$ и от $\rho$ не зависит. Первое
+слагаемое контролируется равномерной сходимостью на фиксированном компакте, второе —
+малостью «каёмки» $\Om \setminus K$ около границы. Около границы сходимости может и не
+быть, но там мало меры.
+\end{idea}
+
+\textbf{2) Общий случай $u \in \Lp{p}(\Om)$.} Пусть $\eps > 0$. Непрерывные функции плотны
+в $\Lp{p}(\Om)$ при $1 \le p < \infty$, поэтому найдётся $g \in C(\clOm)$
+с $\norm{u - g}_{\Lp{p}} < \eps/4$. Вставим $g$ и $g_\rho$:
+\[
+  \norm{u - u_\rho}_{\Lp{p}} = \norm{(u - g) + (g - g_\rho) + (g_\rho - u_\rho)}_{\Lp{p}}
+  \le \norm{u - g}_{\Lp{p}} + \norm{g - g_\rho}_{\Lp{p}} + \norm{g_\rho - u_\rho}_{\Lp{p}} .
+\]
+Усреднение линейно по $u$, поэтому $g_\rho - u_\rho = (g - u)_\rho$. По теореме~\ref{thm:norm}
+$\norm{(g-u)_\rho}_{\Lp{p}} \le \norm{g - u}_{\Lp{p}}$. Значит,
+\[
+  \norm{u - u_\rho}_{\Lp{p}}
+  \le 2\underbrace{\norm{u - g}_{\Lp{p}}}_{< \eps/4}
+   + \underbrace{\norm{g - g_\rho}_{\Lp{p}}}_{< \eps/2 \text{ при малых } \rho} < \eps .
+\]
+Второе слагаемое мало при малых $\rho$ по пункту 1, применённому к $g$.
+\end{proof}
+
+\begin{idea}
+\textbf{Схема «$\eps/3$».} Это стандартный приём: (а) доказать сходимость на плотном классе
+хороших функций; (б) иметь \textbf{равномерную по $\rho$} оценку нормы операторов, здесь —
+теорему~\ref{thm:norm}. Тогда сходимость переносится на всё пространство. Теорема~\ref{thm:norm}
+нужна именно здесь: без неё слагаемое $\norm{g_\rho - u_\rho}$ нечем было бы контролировать.
+
+\medskip
+Плотность: из курса теории меры известно, что в $\Lp{p}(\Om)$, $1 \le p < \infty$, плотны
+даже непрерывные функции с компактным носителем в $\Om$. Продолженные нулём, они лежат
+в $C(\clOm)$.
+\end{idea}
+
+\subsubsection*{Пример: усреднение ступеньки}
+
+\begin{example}
+Пусть $n = 1$, $\Om = (-1, 1)$,
+\[
+  u(x) = \begin{cases} 0, & x < 0, \\ 1, & x \ge 0, \end{cases}
+  \qquad \rho \in \left\{1, \tfrac12, \tfrac14, \tfrac1{10}\right\}.
+\]
+Ядро: $\omega(x) = C e^{\frac{1}{x^2-1}}$ при $|x| < 1$ и $\omega(x) = 0$ при $|x| \ge 1$;
+$\omega_\rho(x) = \frac1\rho\,\omega\!\left(\frac x\rho\right)$.
+\end{example}
+
+\begin{warn}
+В тетради у $\omega$ пропущена нормирующая константа $C$. Для $n = 1$ получается
+$C \approx 2{,}25$, так как $\int_{-1}^1 e^{\frac{1}{x^2-1}}dx \approx 0{,}444$. Например,
+высота $\omega_{1/2}$ в нуле равна $2Ce^{-1} \approx 1{,}66$, а носитель — $[-\tfrac12, \tfrac12]$.
+\end{warn}
+
+\inputfig{figures/fig-step-setup}
+
+Поскольку $u = 0$ на $(-1,0)$,
+\[
+  u_\rho(x) = \int\limits_{-1}^{1} \omega_\rho(x - y)\,u(y)\,dy = \int\limits_0^1 \omega_\rho(x - y)\,dy .
+\]
+
+\begin{idea}
+\textbf{Как это посчитать.} После замены $z = x - y$ получаем
+$u_\rho(x) = \int_{x-1}^{x} \omega_\rho(z)\,dz = \Phi_\rho(x) - \Phi_\rho(x-1)$, где
+$\Phi_\rho(t) = \int_{-\infty}^t \omega_\rho$ — «гладкая ступенька»: $\Phi_\rho = 0$
+при $t \le -\rho$, $\Phi_\rho = 1$ при $t \ge \rho$, а на $[-\rho, \rho]$ она гладко растёт.
+Поэтому при $\rho \le \tfrac12$:
+
+\medskip
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+участок & значение $u_\rho(x)$ \\
+\midrule
+$x \le -\rho$ & $0$ \\
+$-\rho \le x \le \rho$ & гладко растёт от $0$ до $1$ (в точке $x=0$ равно $\tfrac12$) \\
+$\rho \le x \le 1-\rho$ & $1$ \\
+$1-\rho \le x \le 1+\rho$ & гладко убывает от $1$ до $0$ (в точке $x = 1$ равно $\tfrac12$) \\
+$x \ge 1+\rho$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{idea}
+
+\inputfig{figures/fig-step-mollified}
+
+\paragraph{Графики из тетради.}
+\begin{itemize}
+  \item \textbf{Сверху:} $u_\rho$ около скачка в нуле. Вместо разрыва — гладкий подъём
+        на отрезке $[-\rho, \rho]$, и чем меньше $\rho$, тем он круче.
+  \item \textbf{Снизу:} $u_\rho$ на всей прямой.
+        \begin{itemize}
+          \item При $\rho = \tfrac12$ — «горб»: подъём на $[-\tfrac12, \tfrac12]$, значение
+                $1$ ровно в точке $\tfrac12$, затем спуск до нуля к $x = \tfrac32$.
+          \item При $\rho = \tfrac14$ — «трапеция»: подъём на $[-\tfrac14, \tfrac14]$,
+                плато $u_\rho = 1$ на $[\tfrac14, \tfrac34]$, спуск на $[\tfrac34, \tfrac54]$.
+        \end{itemize}
+  \item При $\rho = 1$ функция $u_\rho$ вообще не достигает единицы: окно усреднения шире,
+        чем участок, где $u = 1$.
+\end{itemize}
+
+\begin{idea}
+\textbf{Что здесь видно.}
+\begin{itemize}
+  \item \textbf{Гладкость (свойство 3):} разрывная ступенька превратилась в бесконечно
+        гладкую функцию.
+  \item \textbf{Носитель (свойство 2):} $u_\rho$ «вылезает» за пределы $\Om$ на расстояние
+        $\rho$ (правый спуск заканчивается в $1 + \rho$). Спуск около $x = 1$ возникает
+        потому, что вне $\Om$ функция $u$ считается нулём.
+  \item \textbf{Сходимость в $\Lp{p}$ (теорема~\ref{thm:conv}):} $u_\rho$ отличается от $u$
+        только на отрезках длины порядка $\rho$ около $0$ и около $1$, и там
+        $|u - u_\rho| \le 1$. Поэтому $\norm{u - u_\rho}^p_{\Lp{p}(\Om)} \lesssim \rho \to 0$.
+  \item \textbf{Нет равномерной сходимости:} $u_\rho(0) = \tfrac12$ при всех малых $\rho$,
+        а $u(0) = 1$. Утверждение о поточечной и равномерной сходимости требует
+        непрерывности $u$, и ступенька показывает, что без неё оно неверно.
+\end{itemize}
+\end{idea}
+
+\lecture{Лекция 2}{15.09.2026}
+
+\subsubsection*{Следствия: плотность гладких функций в $\Lp{p}$}
+
+\begin{corollary}\label{cor:dense-smooth}
+$C^\infty(\clOm)$ плотно в $\Lp{p}(\Om)$, $1 \le p < \infty$. В качестве приближений можно
+брать усреднения $u_\rho$.
+\end{corollary}
+
+\begin{proof}
+По свойству 3 $u_\rho \in C^\infty(\R^n)$, поэтому сужение $u_\rho$ на $\Om$ лежит
+в $C^\infty(\clOm)$: все производные непрерывно продолжаются до границы.
+По теореме~\ref{thm:conv} $u_\rho \to u$ в $\Lp{p}(\Om)$.
+\end{proof}
+
+\begin{warn}
+В тетради написано «$1 \le p = \infty$». Должно быть $1 \le p < \infty$: при $p = \infty$
+утверждение неверно (см. пример со ступенькой).
+\end{warn}
+
+\begin{corollary}\label{cor:dense-c0}
+$C_0^\infty(\Om)$ плотно в $\Lp{p}(\Om)$, $1 \le p < \infty$.
+\end{corollary}
+
+\begin{reminder}[что такое $C_0^\infty(\Om)$]
+Если $u \in C_0^\infty(\Om)$, то, продолженная нулём, $u \in C^\infty(\R^n)$, и
+\[
+  \supp u \Subset \Om \iff \supp u \text{ — компакт и } \supp u \subset \Om .
+\]
+Знак $\Subset$ означает «строго внутри»: множество вместе с замыканием лежит в $\Om$.
+\end{reminder}
+
+\begin{idea}
+\textbf{Разница со следствием~\ref{cor:dense-smooth}.} Функции из $C^\infty(\clOm)$ могут
+быть ненулевыми вплоть до границы. Функции из $C_0^\infty(\Om)$ обязаны обращаться в ноль
+в некоторой полосе около границы. Обычное усреднение $u_\rho$ этого не гарантирует: его
+носитель, наоборот, вылезает за $\Om$. Поэтому функцию нужно сначала «обрезать» внутри $\Om$.
+\end{idea}
+
+\begin{proof}
+Пусть $u \in \Lp{p}(\Om)$ и $\eps > 0$.
+
+\emph{Шаг 1: обрезка.} Для компакта $K \subset \Om$ положим
+\[
+  u_K = u\,\chi_K = \begin{cases} u, & \text{на } K, \\ 0, & \text{вне } K. \end{cases}
+\]
+Тогда
+\[
+  \norm{u - u_K}_{\Lp{p}(\Om)}
+  = \left(\int\limits_\Om |u - u_K|^p dx\right)^{1/p}
+  = \left(\int\limits_{\Om\setminus K} |u - u_K|^p dx\right)^{1/p}
+  = \left(\int\limits_{\Om\setminus K} |u|^p dx\right)^{1/p} .
+\]
+Поскольку $|u|^p \in \Lp{1}(\Om)$, по \textbf{абсолютной непрерывности интеграла Лебега}
+(как функции множества) существует $\delta > 0$ такое, что
+\[
+  \int\limits_{E_0} |u|^p\,dx < \left(\frac\eps2\right)^p ,
+  \quad \text{как только } \mu(E_0) < \delta .
+\]
+Выберем компакт $K \subset \Om$ с $\mu(\Om \setminus K) < \delta$; это возможно,
+см. доказательство теоремы~\ref{thm:conv}. Тогда $\norm{u - u_K}_{\Lp{p}} < \eps/2$.
+
+\emph{Шаг 2: усреднение обрезанной функции.} Рассмотрим
+\[
+  (u_K)_\rho(x) = \int\limits_\Om \omega_\rho(x-y)\,u_K(y)\,dy
+                = \int\limits_{K \cap \ball{x}{\rho}} \omega_\rho(x-y)\,u_K(y)\,dy ,
+\]
+поскольку $u_K = 0$ вне $K$, а $\supp_y \omega_\rho(x-y) = \overline{\ball{x}{\rho}}$.
+Если $\rho < \dist(K, \dOm)$, то
+\[
+  (u_K)_\rho(x) = 0 \quad \text{для всех } x \text{ с } \dist(x, K) \ge \rho ,
+\]
+то есть носитель $(u_K)_\rho$ лежит в замкнутой $\rho$-окрестности компакта $K$ — она сама
+компакт и целиком содержится в $\Om$ (картинка в тетради: $K$ внутри $\Om$, вокруг $K$
+пунктиром $\rho$-окрестность, ср. рис.~\ref{fig:compact}). Вместе с гладкостью (свойство 3)
+это даёт
+\[
+  (u_K)_\rho \in C_0^\infty(\Om), \qquad \rho < \dist(K, \dOm) \quad\text{— финитная функция.}
+\]
+
+\emph{Шаг 3: оценка.} По теореме~\ref{thm:conv} $(u_K)_\rho \to u_K$ в $\Lp{p}(\Om)$,
+поэтому найдётся $\rho_0 > 0$ такое, что $\norm{u_K - (u_K)_\rho}_{\Lp{p}} < \eps/2$
+при $\rho < \rho_0$. Тогда
+\[
+  \norm{u - (u_K)_\rho}_{\Lp{p}}
+  \le \norm{u - u_K}_{\Lp{p}} + \norm{u_K - (u_K)_\rho}_{\Lp{p}}
+  < \frac\eps2 + \frac\eps2 = \eps
+\]
+для $\rho < \min\big(\rho_0,\ \dist(K, \dOm)\big)$.
+\end{proof}
+
+\begin{idea}
+\textbf{Идея.} Сначала отрезаем от $u$ «каёмку» у границы — это стоит мало в $\Lp{p}$
+из-за абсолютной непрерывности интеграла. Затем сглаживаем оставшуюся функцию усреднением
+с радиусом меньше расстояния до границы. Сглаживание размывает носитель всего на $\rho$,
+и он остаётся строго внутри $\Om$.
+\end{idea}
+
+\begin{remark}
+Всё это — для $p < \infty$. В $\Lp{\infty}$ не плотны даже непрерывные функции.
+\end{remark}
+
+\subsubsection*{Локально суммируемые функции}
+
+\begin{definition}
+$u \in L^1_{\mathrm{loc}}(\Om)$ («$u$ локально принадлежит $\Lp{1}$»), если
+\[
+  u \in \Lp{1}(\Om') \quad \forall\, \Om' \Subset \Om .
+\]
+\end{definition}
+
+\begin{warn}
+На доске определение записано так: «$u \in L^1_{\mathrm{loc}}(\Om)$, если
+$u \in \Lp{p}(\Om')\ \forall \Om' \Subset \Om$» — показатель в условии записан как $p$,
+хотя слева стоит $L^1_{\mathrm{loc}}$. Общее определение: $u \in L^p_{\mathrm{loc}}(\Om)$,
+если $u \in \Lp{p}(\Om')$ для всех $\Om' \Subset \Om$; дальше в курсе нужен случай $p = 1$.
+\end{warn}
+
+\begin{example}
+$\Om = \R$: функции, суммируемые на отрезках, лежат в $L^1_{\mathrm{loc}}(\R)$.
+В частности, константа $\in L^1_{\mathrm{loc}}(\R)$, хотя она не суммируема на всей прямой.
+\end{example}
+
+\begin{example}
+$\Om = (0,1)$: $\dfrac1x \in L^1_{\mathrm{loc}}\big((0,1)\big)$, хотя
+$\int_0^1 \frac{dx}{x} = +\infty$ и $\tfrac1x \notin \Lp{1}((0,1))$.
+\end{example}
+
+\inputfig{figures/fig-loc-1x}
+
+\begin{remark}[иерархия классов]
+\[
+  C_0^\infty(\Om) \text{ — самые хорошие функции (но самый узкий класс)},
+\]
+\[
+  L^1_{\mathrm{loc}}(\Om) \text{ — самые плохие функции (но самый широкий класс)} .
+\]
+\end{remark}
+
+\subsubsection*{Основная лемма вариационного исчисления (Дюбуа--Реймона)}
+
+\begin{lemma}[Дюбуа--Реймон]\label{lem:dbr}
+Пусть $\Om$ — открытое множество (не обязательно ограниченное),
+\[
+  f \in L^1_{\mathrm{loc}}(\Om), \qquad
+  \int\limits_\Om f\,u\,dx = 0 \quad \forall u \in C_0^\infty(\Om) .
+\]
+Тогда $f = 0$ почти всюду на $\Om$.
+\end{lemma}
+
+\begin{idea}
+Пометка с лекции: здесь основная борьба идёт за \emph{классы функций}. Пробные функции $u$
+берутся из самого узкого класса $C_0^\infty$, а вывод делается про $f$ из самого широкого
+класса $L^1_{\mathrm{loc}}$. Чем уже класс пробных функций, тем сильнее утверждение.
+\end{idea}
+
+\begin{proof}
+\emph{Шаг 1: локализация.} Пусть $K \subset \Om$ — компакт. Найдётся открытое ограниченное
+$\widetilde\Om$ с
+\[
+  K \subset \widetilde\Om \Subset \Om .
+\]
+Так как $f \in L^1_{\mathrm{loc}}(\Om)$, то $f \in \Lp{1}(\widetilde\Om)$.
+
+\inputfig{figures/fig-nested}
+
+\emph{Шаг 2: пробная функция.} Положим
+\[
+  g = \begin{cases} \operatorname{sign} f, & \text{на } K, \\ 0, & \text{вне } K, \end{cases}
+  \qquad\text{то есть } g = \operatorname{sign} f \cdot \chi_K .
+\]
+Это произведение измеримых функций, поэтому $g$ измерима в $\Om$. Её усреднение
+\[
+  g_\rho(x) = \int\limits_{\widetilde\Om} \omega_\rho(x-y)\,g(y)\,dy
+            = \int\limits_{K} \omega_\rho(x-y)\,g(y)\,dy ,
+\]
+и, как в следствии~\ref{cor:dense-c0},
+\[
+  g_\rho \in C_0^\infty(\widetilde\Om) \subset C_0^\infty(\Om),
+  \qquad \text{если } \rho < \dist(K, \partial\widetilde\Om) .
+\]
+
+\emph{Шаг 3: сходимость почти всюду.} По теореме~\ref{thm:conv} $g_\rho \to g$
+в $\Lp{1}(\widetilde\Om)$, значит, $g_\rho \to g$ по мере в $\widetilde\Om$. По теореме
+Рисса существует последовательность $\rho_k \to 0$ с
+\[
+  g_{\rho_k} \to g \quad \text{п.\,в. в } \widetilde\Om
+  \qquad\Longrightarrow\qquad
+  f\,g_{\rho_k} \to f\,g \quad \text{п.\,в. в } \widetilde\Om .
+\]
+
+\emph{Шаг 4: мажоранта (нужная ветвь рассуждений).} По построению $g \in \Lp{\infty}(\widetilde\Om)$
+и $|g| \le 1$ в $\widetilde\Om$. По теореме~\ref{thm:norm} (случай $p=\infty$)
+\[
+  \norm{g_\rho}_{\Lp{\infty}} \le \norm{g}_{\Lp{\infty}} \le 1
+  \ \Longrightarrow\ |g_\rho| \le 1 \ \text{п.\,в. в } \widetilde\Om
+  \ \Longrightarrow\ |g_\rho|\cdot|f| \le |f| \ \text{п.\,в. на } \widetilde\Om ,
+\]
+а $f \in L^1_{\mathrm{loc}}(\Om)$ даёт $|f| \in \Lp{1}(\widetilde\Om)$. Итого по теореме
+Лебега о мажорированной сходимости
+\[
+  \int\limits_{\widetilde\Om} f\,g_{\rho_k}\,dx \longrightarrow \int\limits_{\widetilde\Om} f\,g\,dx .
+\]
+
+\emph{Шаг 5: предел равен нулю.} Но $g_{\rho_k} \in C_0^\infty(\Om)$, поэтому по условию леммы
+\[
+  \int\limits_{\widetilde\Om} f\,g_{\rho_k}\,dx = \int\limits_{\Om} f\,g_{\rho_k}\,dx = 0 .
+\]
+Следовательно,
+\[
+  0 = \int\limits_{\widetilde\Om} f\,g\,dx = \int\limits_K f\,\operatorname{sign} f\,dx
+    = \int\limits_K |f|\,dx
+  \qquad\Longrightarrow\qquad f = 0 \ \text{п.\,в. на } K .
+\]
+
+\emph{Шаг 6: от компакта ко всей области.} По теореме о представлении открытого множества
+ячейками $\Om = \bigcup_{k=1}^{\infty} \overline{P_k}$, где $P_k$ — замкнутые ячейки, то есть
+компакты. Тогда
+\[
+  \Om[f \neq 0] = \bigcup_{i \in \N} \overline{P_i}[f \neq 0]
+  \ \Longrightarrow\
+  \mu\big(\Om[f \neq 0]\big) \le \sum_{i=1}^{\infty} \mu\big(\overline{P_i}[f \neq 0]\big) = 0 ,
+\]
+поскольку каждое слагаемое нулевое по шагу 5. Значит, $f = 0$ п.\,в. на $\Om$.
+\end{proof}
+
+\begin{idea}
+\textbf{Зачем $\operatorname{sign} f$.} Пробная функция подбирается так, чтобы
+$f\,g = |f|$ на $K$: тогда равенство нулю интеграла сразу даёт $f = 0$. Но
+$\operatorname{sign} f \cdot \chi_K$ разрывна и не годится как пробная функция, поэтому её
+сначала сглаживают усреднением — отсюда переход к $g_\rho$ и предельный переход по Лебегу.
+\end{idea}

@@ -1,0 +1,39 @@
+% Рисунок из тетради: усреднения ступеньки при rho = 1, 1/2, 1/4, 1/10.
+% Кривые схематические: гладкая ступенька заменена многочленом 6t^5-15t^4+10t^3.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 2, horizontal sep=1.8cm, vertical sep=1.6cm},
+  width=7.2cm, height=4.0cm,
+  axis lines=middle,
+  xmin=-1.6, xmax=2.2, ymin=-0.25, ymax=1.45,
+  ytick={1}, yticklabels={$1$},
+  samples=150, clip=false,
+  every axis plot/.append style={very thick, blue!60!black},
+]
+\nextgroupplot[title={$\rho=1$}, xtick={-1,1}, xticklabels={$-1$,$1$}]
+  \addplot[domain=-1.6:2.2] {urho(x,1)};
+  \draw[dashed,gray] (axis cs:-1.6,1) -- (axis cs:2.2,1);
+
+\nextgroupplot[title={$\rho=\tfrac12$}, xtick={-1,-0.5,0.5,1,1.5},
+               xticklabels={$-1$,$-\tfrac12$,$\tfrac12$,$1$,$\tfrac32$}]
+  \addplot[domain=-1.6:2.2] {urho(x,0.5)};
+
+\nextgroupplot[title={$\rho=\tfrac14$}, xtick={-1,-0.25,0.25,0.75,1.25},
+               xticklabels={$-1$,$-\tfrac14$,$\tfrac14$,$\tfrac34$,$\tfrac54$}]
+  \addplot[domain=-1.6:2.2] {urho(x,0.25)};
+
+\nextgroupplot[title={$\rho=\tfrac1{10}$}, xtick={-1,1}, xticklabels={$-1$,$1$}]
+  \addplot[domain=-1.6:2.2] {urho(x,0.1)};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Усреднения ступеньки. При $\rho=1$ окно усреднения шире участка, где $u=1$,
+и $u_\rho$ не достигает единицы («горб»). При $\rho=\tfrac12$ значение $1$ берётся ровно
+в одной точке $x=\tfrac12$; при $\rho=\tfrac14$ появляется плато $u_\rho\equiv1$
+на $[\tfrac14,\tfrac34]$ («трапеция»). Во всех случаях $u_\rho(0)=\tfrac12$,
+а носитель выходит за $\Omega$ на $\rho$.
+\emph{Кривые схематические}: гладкая первообразная ядра заменена многочленом
+$6t^5-15t^4+10t^3$.}
+\label{fig:step-mollified}
+\end{figure}

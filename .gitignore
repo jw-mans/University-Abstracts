@@ -1,0 +1,26 @@
+## LaTeX
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+*.auxlock
+*.dpth
+*.md5
+*.run.xml
+*.bcf
+
+## Сборка
+build/
+*.pdf
+!figures/**/*.pdf

@@ -1,0 +1,36 @@
+% Рисунок из тетради: семейство ядер omega_rho при уменьшении rho (n = 1).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=11cm, height=6cm,
+  axis lines=middle,
+  xmin=-1.35, xmax=1.35,
+  ymin=-0.35, ymax=4.8,
+  xtick={-1,-0.5,0.5,1},
+  xticklabels={$-1$,$-\tfrac12$,$\tfrac12$,$1$},
+  ytick=\empty,
+  xlabel={$x$},
+  x label style={at={(axis description cs:1.0,0.08)},anchor=west},
+  samples=120,
+  clip=false,
+]
+  \addplot[very thick,  domain=-1:1   ] {bump(x,1)};
+  \addplot[thick,       domain=-0.6:0.6] {bump(x,0.6)};
+  \addplot[thick,       domain=-0.35:0.35] {bump(x,0.35)};
+  \addplot[thick,       domain=-0.2:0.2 ] {bump(x,0.2)};
+
+  \node[anchor=west] at (axis cs:1.02,0.83) {\scriptsize $\rho=1$};
+  \node[anchor=south] at (axis cs:0.2,4.3) {\scriptsize $\rho\downarrow$};
+
+  % стрелки «уменьшение rho»
+  \draw[-{Latex[length=2mm]}] (axis cs:-1.0,-0.22) -- (axis cs:-0.22,-0.22);
+  \draw[-{Latex[length=2mm]}] (axis cs: 1.0,-0.22) -- (axis cs: 0.22,-0.22);
+  \node[anchor=north] at (axis cs:0,-0.22) {\scriptsize уменьшение $\rho$};
+\end{axis}
+\end{tikzpicture}
+\caption{Ядро $\omega_\rho(x)=\rho^{-n}\omega(x/\rho)$ при убывающем $\rho$:
+носитель сжимается до $\overline{B(0,\rho)}$, высота растёт как $\rho^{-n}$,
+а площадь под графиком остаётся равной $1$.}
+\label{fig:kernel-rho}
+\end{figure}

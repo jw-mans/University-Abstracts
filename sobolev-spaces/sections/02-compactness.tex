@@ -1,0 +1,181 @@
+\subsection{Критерий компактности в $\Lp{p}(\Om)$}
+
+\begin{theorem}[критерий предкомпактности]\label{thm:compact}
+Пусть $F \subset \Lp{p}(\Om)$, $1 \le p < \infty$, $\Om$ ограничено, и все функции из $F$
+продолжены нулём на всё $\R^n$. Тогда $F$ предкомпактно $\iff$
+\begin{enumerate}
+  \item \textbf{равномерная ограниченность:} $\exists M \ge 0$ такое, что
+        $\norm{u}_{\Lp{p}} \le M$ для всех $u \in F$;
+  \item \textbf{равностепенная непрерывность сдвига:}
+        \[
+          \delta(\rho) \;:=\; \sup_{u \in F}\ \sup_{|z| < \rho}\
+          \norm{u(x+z) - u(x)}_{\Lp{p}(\Om)} \xrightarrow[\rho \to 0]{} 0 ,
+        \]
+        где
+        \[
+          \norm{u(x+z) - u(x)}_{\Lp{p}(\Om)}
+          = \left[\ \int\limits_\Om |u(x+z) - u(x)|^p\,dx \right]^{1/p} .
+        \]
+\end{enumerate}
+\end{theorem}
+
+\begin{warn}
+Условие на $\Om$ на доске записано сокращённо (читается как «$\Om$ огр.»). В доказательстве
+ограниченность $\Om$ используется дважды: в оценке $\mu(\Om)^{1/q}$ на шаге 1 и при переходе
+от нормы в $C(\clOm)$ к норме в $\Lp{p}$ на шаге 3.
+\end{warn}
+
+\begin{idea}
+Это критерий М.~Рисса--Колмогорова — аналог теоремы Арцела--Асколи для $\Lp{p}$. Условие 1 —
+это «равномерная ограниченность», условие 2 — замена равностепенной непрерывности: функции
+нельзя трясти по $x$ так, чтобы норма сдвига не стремилась к нулю равномерно по всему
+семейству. Ключевая величина $\delta(\rho)$ зависит только от семейства $F$, не от отдельной
+функции.
+\end{idea}
+
+\begin{proof}
+Необходимость ($\Longrightarrow$) на лекции не разбиралась. Докажем достаточность
+($\Longleftarrow$).
+
+\paragraph{Шаг 1: при фиксированном $\rho$ семейство усреднений предкомпактно в $C(\clOm)$.}
+Положим
+\[
+  F_\rho = \{\,u_\rho \mid u \in F\,\}, \qquad
+  u_\rho(x) = \int\limits_\Om \omega_\rho(x-y)\,u(y)\,dy .
+\]
+
+\emph{Равномерная ограниченность $F_\rho$.} По неравенству Гёльдера
+($\frac1p + \frac1q = 1$)
+\begin{multline*}
+  |u_\rho(x)|
+  \le \left[\ \int\limits_{\Om \cap \ball{x}{\rho}} \omega_\rho^{\,q}(x-y)\,dy \right]^{1/q}
+      \underbrace{\left[\ \int\limits_\Om |u(y)|^p\,dy \right]^{1/p}}_{\le\, M} \\
+  \le M \left[\ \int\limits_{\ball{x}{\rho}} \omega_\rho^{\,q}(x-y)\,dy \right]^{1/q}
+  = M\,\norm{\omega_\rho}_{\Lp{q}(\R^n)} .
+\end{multline*}
+Правая часть — некоторое число, зависящее только от $\rho$ (и не зависящее ни от $x$,
+ни от $u$). Значит, $F_\rho$ равномерно ограничено.
+
+\begin{idea}
+Пометка с лекции: «но это при фиксированном $\rho$». Константа
+$M\,\norm{\omega_\rho}_{\Lp{q}}$ растёт при $\rho \to 0$ (ядро становится выше), поэтому
+равномерности по $\rho$ здесь нет и не требуется: на шаге 1 параметр $\rho$ фиксирован.
+\end{idea}
+
+\emph{Равностепенная непрерывность $F_\rho$.} Из
+\[
+  u_\rho(x+z) - u_\rho(x) = \int\limits_\Om \big(\omega_\rho(x+z-y) - \omega_\rho(x-y)\big)\,u(y)\,dy
+\]
+по неравенству Гёльдера
+\[
+  |u_\rho(x+z) - u_\rho(x)|
+  \le \left[\ \int\limits_\Om \big|\omega_\rho(x+z-y) - \omega_\rho(x-y)\big|^q dy \right]^{1/q}
+      \underbrace{\left[\ \int\limits_\Om |u(y)|^p dy \right]^{1/p}}_{\le\, M} .
+\]
+Ядро $\omega_\rho \in C^\infty$ и финитно, поэтому оно равномерно непрерывно на $\R^n$:
+для любого $\eps > 0$ найдётся $\delta > 0$ такое, что
+\[
+  |z| < \delta \ \Longrightarrow\ \big|\omega_\rho(x+z-y) - \omega_\rho(x-y)\big| < \eps .
+\]
+Тогда
+\[
+  |u_\rho(x+z) - u_\rho(x)| \le \eps\,\big[\mu(\Om)\big]^{1/q}\,M
+  \qquad \text{при } |z| < \delta ,
+\]
+причём оценка одна и та же для всех $x \in \Om$, всех $u_\rho \in F_\rho$ и всех $|z| < \delta$.
+Значит, $F_\rho$ равностепенно непрерывно.
+
+По теореме Арцела--Асколи семейство $F_\rho$ \textbf{предкомпактно в $C(\clOm)$ при каждом
+фиксированном $\rho > 0$}.
+
+\paragraph{Шаг 2: усреднения приближают $F$ равномерно по $u$.}
+Вложим $\Om$ в большую ограниченную открытую область: $\Om \Subset \widetilde\Om$. Если
+$\rho < \dist(\Om, \partial\widetilde\Om)$, то $\ball{x}{\rho} \subset \widetilde\Om$ для
+всех $x \in \Om$.
+
+\inputfig{figures/fig-omega-tilde}
+
+Для $x \in \Om$
+\[
+  u(x) - u_\rho(x)
+  = u(x) - \int\limits_\Om \omega_\rho(x-y)\,u(y)\,dy
+  = u(x) - \int\limits_{\widetilde\Om} \omega_\rho(x-y)\,u(y)\,dy ,
+\]
+так как вне $\Om$ функция $u$ продолжена нулём. Далее, вес полный:
+\[
+  \int\limits_{\widetilde\Om} \omega_\rho(x-y)\,u(x)\,dy
+  = \int\limits_{\widetilde\Om \cap \ball{x}{\rho}} \omega_\rho(x-y)\,u(x)\,dy
+  = u(x)\underbrace{\int\limits_{\ball{x}{\rho}} \omega_\rho(x-y)\,dy}_{=\,1} = u(x) ,
+\]
+поэтому
+\[
+  u(x) - u_\rho(x) = \int\limits_{\widetilde\Om} \omega_\rho(x-y)\,\big(u(x) - u(y)\big)\,dy .
+\]
+По Гёльдеру с разложением $\omega_\rho = \omega_\rho^{1/q}\,\omega_\rho^{1/p}$:
+\begin{multline*}
+  |u(x) - u_\rho(x)|
+  \le \underbrace{\left[\ \int\limits_{\widetilde\Om} \omega_\rho(x-y)\,dy \right]^{1/q}}_{\le\, 1}
+      \left[\ \int\limits_{\widetilde\Om} \omega_\rho(x-y)\,|u(x) - u(y)|^p\,dy \right]^{1/p} \\
+  \le \left[\ \int\limits_{\ball{0}{\rho}} \omega_\rho(z)\,|u(x) - u(x+z)|^p\,dz \right]^{1/p} ,
+\end{multline*}
+где использованы $\widetilde\Om \cap \ball{x}{\rho} = \ball{x}{\rho}$ и замена $z = y - x$.
+Возведём в степень $p$ и проинтегрируем по $x$:
+\begin{multline*}
+  \int\limits_\Om |u(x) - u_\rho(x)|^p\,dx
+  \le \int\limits_\Om dx \int\limits_{\ball{0}{\rho}} \omega_\rho(z)\,|u(x+z) - u(x)|^p\,dz \\
+  \overset{\text{Фубини--Тонелли}}{=}
+  \int\limits_{\ball{0}{\rho}} \omega_\rho(z)\,dz \int\limits_\Om |u(x+z) - u(x)|^p\,dx .
+\end{multline*}
+Внутренний интеграл не превосходит $\delta(\rho)^p$ по условию 2, а
+$\int_{\ball{0}{\rho}} \omega_\rho = 1$, поэтому
+\[
+  \norm{u - u_\rho}_{\Lp{p}(\Om)} \le \delta(\rho) \xrightarrow[\rho \to 0]{} 0
+  \qquad \forall u \in F .
+\]
+То есть $u_\rho \to u$ в $\Lp{p}$ \textbf{равномерно по $u \in F$}: оценка одна для всего
+семейства.
+
+\paragraph{Шаг 3: построение $\eps$-сети.}
+Пусть $\eps > 0$. Выберем $\rho$ так, чтобы $\delta(\rho) < \eps/2$; тогда
+\[
+  \norm{u - u_\rho}_{\Lp{p}} \le \delta(\rho) < \frac\eps2 \qquad \forall u \in F .
+\]
+Положим
+\[
+  r = \frac{\eps}{2\,[\mu(\Om)]^{1/p}} .
+\]
+Семейство $F_\rho$ предкомпактно в $C(\clOm)$ по шагу 1, поэтому у него есть конечная
+$r$-сеть $\{g_1, \dots, g_N\}$ в норме $C$. Для данного $u \in F$ возьмём
+$u_\rho \in F_\rho$ и найдём номер $i$ с $\norm{u_\rho - g_i}_{C} < r$.
+Переход от нормы $C$ к норме $\Lp{p}$ (здесь и нужна ограниченность $\Om$):
+\[
+  \norm{f}_{\Lp{p}} = \left(\int\limits_\Om |f|^p dx\right)^{1/p}
+  \le [\mu(\Om)]^{1/p}\,\norm{f}_{C} ,
+\]
+поэтому $\norm{u_\rho - g_i}_{\Lp{p}} \le [\mu(\Om)]^{1/p}\,r = \eps/2$.
+Итого
+\[
+  \norm{u - g_i}_{\Lp{p}}
+  \le \underbrace{\norm{u - u_\rho}_{\Lp{p}}}_{<\,\eps/2}
+    + \underbrace{\norm{u_\rho - g_i}_{\Lp{p}}}_{<\,\eps/2} < \eps ,
+\]
+то есть $\{g_1, \dots, g_N\}$ — конечная $\eps$-сеть семейства $F$ в $\Lp{p}(\Om)$.
+Значит, $F$ предкомпактно.
+\end{proof}
+
+\begin{warn}
+На доске шаг 3 сначала был записан через $\eps/3$-сеть ($\norm{u-u_\rho} < \eps/3$,
+$\norm{u_\rho - g_i} < \eps/3$, итог $2\eps/3 < \eps$) — без перевода нормы из $C(\clOm)$
+в $\Lp{p}(\Om)$. Затем он переписан аккуратно: сеть берётся с радиусом
+$\eps/(2[\mu(\Om)]^{1/p})$ именно для того, чтобы после умножения на $[\mu(\Om)]^{1/p}$
+получилось $\eps/2$. Выше приведён второй, корректный вариант.
+\end{warn}
+
+\begin{idea}
+\textbf{Схема целиком.} Усреднение переводит $F$ в семейство $F_\rho$ гладких функций,
+к которому применима Арцела--Асколи (шаг 1) — но только при фиксированном $\rho$. Условие 2
+гарантирует, что $F_\rho$ приближает $F$ \emph{равномерно по всему семейству} (шаг 2).
+Конечная сеть для $F_\rho$ превращается в конечную сеть для $F$ (шаг 3). Если бы в шаге 2
+оценка зависела от $u$, сеть собрать бы не удалось — именно поэтому $\delta(\rho)$
+определено как супремум по $u \in F$.
+\end{idea}

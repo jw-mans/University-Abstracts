@@ -1,0 +1,39 @@
+% Рисунок из тетради: область Omega, её rho-окрестность и шары B(x,rho).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  % сама область
+  \draw[thick, fill=blue!4]
+    plot[smooth cycle, tension=0.8]
+      coordinates {(0,0) (2.2,0.9) (4.2,0.4) (5.2,-1.0) (3.6,-2.3) (1.2,-2.1) (-0.5,-1.1)};
+  \node at (3.6,-1.3) {$\Omega$};
+
+  % rho-окрестность пунктиром
+  \draw[dashed, gray]
+    plot[smooth cycle, tension=0.8]
+      coordinates {(0,0.55) (2.2,1.45) (4.75,0.75) (5.8,-1.05) (3.9,-2.85) (1.1,-2.65) (-1.05,-1.15)};
+  \node[gray, anchor=south west] at (4.9,0.75) {\footnotesize $\rho$-окрестность $\Omega$};
+
+  % шар целиком внутри
+  \filldraw[pattern=north east lines, pattern color=blue!50, draw=blue!60!black]
+    (2.0,-0.6) circle (0.55);
+  \filldraw (2.0,-0.6) circle (1.2pt);
+  \draw[-{Latex[length=1.5mm]}] (2.0,-0.6) -- node[above,font=\tiny]{$\rho$} (2.55,-0.6);
+  \node[anchor=south] at (2.0,-0.05) {\footnotesize $x$};
+
+  % шар, пересекающий границу
+  \filldraw[pattern=north east lines, pattern color=orange!60, draw=orange!70!black]
+    (-0.45,-1.45) circle (0.55);
+  \filldraw (-0.45,-1.45) circle (1.2pt);
+  \node[anchor=east] at (-1.05,-1.45) {\footnotesize $x'$};
+
+  % шар, не задевающий Omega
+  \draw[dashed, red!60!black] (6.6,-0.2) circle (0.5);
+  \filldraw (6.6,-0.2) circle (1.2pt);
+  \node[anchor=west] at (7.15,-0.2) {\footnotesize $x''$: $\dist(x'',\Omega)\ge\rho \Rightarrow u_\rho(x'')=0$};
+\end{tikzpicture}
+\caption{Интегрирование в $u_\rho(x)$ фактически идёт по $\Omega\cap B(x,\rho)$.
+Для $x$ в глубине области шар лежит целиком в $\Omega$; около границы часть шара
+выходит наружу (там $u$ считается нулём); если $\dist(x,\Omega)\ge\rho$, то $u_\rho(x)=0$.}
+\label{fig:support}
+\end{figure}
