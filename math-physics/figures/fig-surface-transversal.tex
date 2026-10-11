@@ -1,0 +1,60 @@
+% Рисунок из тетради: начальная поверхность S, параметризованная tau, и
+% характеристики, выпущенные с неё. Поле a нигде не касается S.
+% Из каждого основания вектора a выходит пара касательных к S векторов
+% d(xi)/d(tau_1), d(xi)/d(tau_2) -- это остальные столбцы якобиана замены.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  >={Latex[length=4pt]},
+  x={(0.95cm,-0.22cm)}, y={(0.48cm,0.38cm)}, z={(0cm,0.85cm)},
+]
+  % сетка на поверхности S: z = 0.05*(u-2)^2 + 0.06*v
+  \foreach \u in {0,1,2,3,4} {
+    \draw[gray!70]
+      plot[variable=\v, domain=0:3, samples=13, smooth]
+      (\u, \v, {0.05*(\u-2)*(\u-2) + 0.06*\v});
+  }
+  \foreach \v in {0,1,2,3} {
+    \draw[gray!70]
+      plot[variable=\u, domain=0:4, samples=17, smooth]
+      (\u, \v, {0.05*(\u-2)*(\u-2) + 0.06*\v});
+  }
+
+  % в каждой точке: пара касательных к S векторов (столбцы якобиана)
+  \foreach \u/\v in {1/1, 2/1, 3/1, 1/2, 2/2, 3/2} {
+    \draw[->, teal!75!black]
+      (\u, \v, {0.05*(\u-2)*(\u-2) + 0.06*\v})
+      -- ++(0.62, 0, {0.062*(\u-2)});
+    \draw[->, teal!75!black]
+      (\u, \v, {0.05*(\u-2)*(\u-2) + 0.06*\v})
+      -- ++(0, 0.62, 0.037);
+  }
+
+  % характеристики, выходящие с поверхности
+  \foreach \u/\v in {1/1, 2/1, 3/1, 1/2, 2/2, 3/2} {
+    \draw[->, blue!60!black, thick]
+      (\u, \v, {0.05*(\u-2)*(\u-2) + 0.06*\v})
+      -- ++(0.25, 0.25, 0.95);
+  }
+
+  \node[blue!60!black, anchor=south, font=\footnotesize] at (2.4,2.4,1.5)
+    {$\bar a$};
+  \node[gray, anchor=west, font=\footnotesize] at (4.3,2.6,0.4) {$S$};
+
+  % подписи касательных векторов у самой правой точки
+  \node[teal!75!black, anchor=west, font=\footnotesize] at (3.9,1.0,0.17)
+    {$\vec\xi_{\tau_1}$};
+  \node[teal!75!black, anchor=west, font=\footnotesize] at (3.15,2.75,0.25)
+    {$\vec\xi_{\tau_2}$};
+
+  \node[anchor=north, font=\footnotesize] at (2,-1.1,0)
+    {$S = \{s = 0\}$, точки $\vec\xi(\vec\tau)$};
+\end{tikzpicture}
+\caption{Начальная поверхность $S = \{\vec\xi(\vec\tau)\}$ размерности $n-1$ и
+характеристики, выпущенные из её точек. Зелёные векторы
+$\vec\xi_{\tau_j} = \partial\vec\xi/\partial\tau_j$ лежат в касательной
+плоскости к $S$ и образуют её базис; вместе с $\bar a$ они и составляют
+столбцы якобиана замены. Условие трансверсальности: $\bar a$ нигде не лежит в
+этой плоскости, то есть не касается $S$.}
+\label{fig:surface-transversal}
+\end{figure}

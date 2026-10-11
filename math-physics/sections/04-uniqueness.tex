@@ -1,0 +1,159 @@
+\subsection{Теорема единственности}
+
+\stepcounter{equation}
+\begin{equation}\tag{1}\label{eq:uniq-problem}
+  \begin{cases}
+    \Box u \equiv u_{tt} - a^2 \Delta u = 0, & x \in \R^n,\ t > 0, \\[2pt]
+    u|_{t=0} = 0, \quad u_t|_{t=0} = 0, \\[4pt]
+    u \in C^2\big(\R^n \times (0,\infty)\big) \cap
+         C^{2,1}\big(\R^n \times [0,\infty)\big) .
+  \end{cases}
+\end{equation}
+
+\begin{warn}
+На доске номер параграфа не был проставлен; в тетради он есть — \S4, так что
+нумерация верна. Класс гладкости записан как
+$C^{2,1}(\R^n \times [0,\infty))$ с пометкой «это условия для классического
+решения»: по смыслу две производные по $x$ и одна по $t$, непрерывные вплоть
+до границы $t=0$, чтобы начальные условия имели смысл.
+\end{warn}
+
+\begin{theorem}[единственность]
+Единственное решение задачи~\eqref{eq:uniq-problem} — тождественный нуль:
+$u \equiv 0$.
+\end{theorem}
+
+\begin{idea}
+Это и есть теорема единственности для задачи Коши: если два решения имеют
+одинаковые данные $\varphi, \psi$ и одинаковую правую часть $f$, то их разность
+решает~\eqref{eq:uniq-problem} и, значит, равна нулю. Заметим, что $n$
+произвольно — формул Даламбера и Кирхгофа здесь не требуется.
+\end{idea}
+
+\subsubsection*{Энергетическое тождество}
+
+Продифференцируем плотность энергии:
+\[
+  \frac12 \dd{}{t}\Big(u_t^2 + a^2 |\nabla u|^2\Big)
+  = u_t u_{tt} + a^2 \sum_{i=1}^{n} u_{x_i} u_{x_i t}
+  = a^2 \sum_{i=1}^{n} \dd{}{x_i}\big(u_{x_i} u_t\big) ,
+\]
+то есть
+
+\stepcounter{equation}
+\begin{equation}\tag{2}\label{eq:energy-identity}
+  \frac12 \dd{}{t}\Big(u_t^2 + a^2 |\nabla u|^2\Big)
+  - a^2 \sum_{i=1}^{n} \dd{}{x_i}\big(u_{x_i} u_t\big) = 0 .
+\end{equation}
+
+\begin{idea}
+Последнее равенство в цепочке — это само уравнение. Действительно,
+\[
+  a^2 \sum_i \dd{}{x_i}\big(u_{x_i} u_t\big)
+  = a^2 \underbrace{\Delta u}_{=\,u_{tt}/a^2}\, u_t
+    + a^2 \sum_i u_{x_i} u_{x_i t}
+  = u_t u_{tt} + a^2 \sum_i u_{x_i} u_{x_i t} .
+\]
+Тождество~\eqref{eq:energy-identity} — закон сохранения энергии в
+дифференциальной форме: $\partial_t(\text{плотность энергии}) +
+\operatorname{div}(\text{поток энергии}) = 0$, где поток равен
+$-a^2 u_t \nabla u$.
+\end{idea}
+
+\subsubsection*{Интегрирование по усечённому конусу}
+
+Зафиксируем точку $(x_0,t_0)$ и возьмём усечённый конус
+\[
+  D = \big\{\, (x,t) : \ 0 \le t \le t_1, \ \ |x - x_0| \le a(t_0 - t) \,\big\},
+  \qquad t_1 \in (0, t_0) .
+\]
+Его граница состоит из трёх кусков: нижнего основания $\Gamma_0$ (при $t=0$),
+верхнего среза $\Gamma_1$ (при $t = t_1$) и боковой поверхности $\Gamma$.
+
+\inputfig{figures/fig-energy-frustum}
+
+Интегрируем~\eqref{eq:energy-identity} по $D$ и применяем формулу
+Гаусса—Остроградского в $\R^{n+1}$; через $n = (n_1,\dots,n_n, n_t)$ обозначена
+внешняя нормаль:
+\begin{align*}
+  0 &= \int\limits_D \left[\frac12 \dd{}{t}(\,\cdot\,)
+       - a^2 \sum_{i=1}^{n} \dd{}{x_i}(\,\cdot\,)\right] dx\, dt \\[4pt]
+    &= \int\limits_{\partial D} \left[\frac12 n_t
+       \Big(u_t^2 + a^2 |\nabla u|^2\Big)
+       - a^2 \sum_{i=1}^{n} n_i\, u_{x_i} u_t \right] ds
+     = \int\limits_{\Gamma_0} \cdot
+     + \int\limits_{\Gamma_1} \cdot
+     + \int\limits_{\Gamma} \cdot
+\end{align*}
+
+Разберём три слагаемых по отдельности.
+
+\paragraph{На $\Gamma_0$.} Нулевые начальные данные дают $u_t|_{t=0} = 0$ и
+$\nabla u|_{t=0} = 0$, поэтому
+\[
+  \int\limits_{\Gamma_0} \cdot \ = 0 .
+\]
+
+\paragraph{На $\Gamma_1$.} Здесь нормаль равна $(0,\dots,0,1)$, значит
+\[
+  \int\limits_{\Gamma_1} \cdot
+  = \frac12 \int\limits_{\Gamma_1} \Big(u_t^2 + a^2 |\nabla u|^2\Big) ds
+  \ \ge\ 0 .
+\]
+
+\paragraph{На $\Gamma$.} Боковая поверхность характеристическая, и для её
+нормали выполняется
+\[
+  n_t^2 = a^2 \sum_{i=1}^{n} n_i^2 .
+\]
+Умножим и разделим подынтегральное выражение на $n_t$ и воспользуемся этим
+соотношением:
+\begin{align*}
+  \int\limits_{\Gamma} \cdot\ ds
+  &= \int\limits_{\Gamma} \frac{1}{n_t}\left[
+       \frac12 n_t^2 u_t^2
+       + \frac{a^2}{2} \sum_{i=1}^{n} n_t^2 u_{x_i}^2
+       - a^2 \sum_{i=1}^{n} n_t n_i\, u_{x_i} u_t
+     \right] ds \\[4pt]
+  &= \int\limits_{\Gamma} \frac{a^2}{2 n_t} \sum_{i=1}^{n}
+     \big(n_i u_t - n_t u_{x_i}\big)^2 ds \ \ge\ 0 .
+\end{align*}
+
+\begin{idea}
+Фокус ровно в одном месте: $\tfrac12 n_t^2 u_t^2 = \tfrac{a^2}{2}\sum_i n_i^2
+u_t^2$ по характеристическому соотношению. После этого все три слагаемых
+собираются в полный квадрат
+\[
+  \frac{a^2}{2 n_t} \sum_i \Big(n_i^2 u_t^2 - 2 n_t n_i u_{x_i} u_t
+  + n_t^2 u_{x_i}^2\Big) .
+\]
+Знак обеспечен тем, что $n_t > 0$: конус раскрыт вниз, и внешняя нормаль к
+боковой поверхности имеет положительную компоненту по времени.
+\end{idea}
+
+\subsubsection*{Завершение доказательства}
+
+Сумма трёх неотрицательных слагаемых равна нулю, значит каждое из них нулевое. В
+частности
+\[
+  \int\limits_{\Gamma_1} \Big(u_t^2 + a^2 |\nabla u|^2\Big) ds = 0
+  \qquad \forall\, t_1 \in [0,t_0] .
+\]
+Подынтегральное выражение неотрицательно и непрерывно, поэтому внутри конуса
+\[
+  u_t = 0, \qquad u_{x_i} = 0, \quad i = \overline{1,n}
+  \qquad\Longrightarrow\qquad u = \mathrm{const}
+  \qquad\Longrightarrow\qquad u \equiv 0 ,
+\]
+и в частности $u(x_0,t_0) = 0$. Точка $(x_0,t_0)$ была произвольной.
+\hfill$\blacksquare$
+
+\begin{idea}
+Доказательство попутно даёт то, что в \S1 и \S3 было вычитано из явных формул:
+\textbf{конечность скорости распространения}. Всё рассуждение велось внутри
+одного конуса, поэтому если данные равны нулю лишь на шаре
+$|x - x_0| \le a t_0$, то $u(x_0,t_0) = 0$ всё равно — значение в вершине
+определяется только конусом зависимости. Метод при этом не зависит от
+размерности и переносится на уравнения с переменными коэффициентами, где
+никаких явных формул нет.
+\end{idea}

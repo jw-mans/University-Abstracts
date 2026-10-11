@@ -1,0 +1,363 @@
+\subsection{Колебание в трёхмерном пространстве}
+
+\stepcounter{equation}
+\begin{equation}\tag{1}\label{eq:wave3-free}
+  \begin{cases}
+    u_{tt} - a^2 \Delta u = 0, & x \in \R^3,\ t > 0, \\[2pt]
+    u|_{t=0} = \varphi(x), \quad u_t|_{t=0} = \psi(x) .
+  \end{cases}
+\end{equation}
+
+\subsubsection*{Сферические средние}
+
+\begin{definition}
+\textbf{Сферическим средним} функции $u$ называется
+\[
+  \bar u(x,t,z) := \frac{1}{4\pi z^2} \int\limits_{S_{x,z}} u(y,t)\, ds
+  = \frac{1}{4\pi z^2} \int\limits_0^{2\pi} \int\limits_0^{\pi}
+    u\, z^2 \sin\theta \, d\theta\, d\varphi ,
+\]
+где $S_{x,z}$ — сфера радиуса $z$ с центром в $x$.
+\end{definition}
+
+\begin{warn}
+На доске радиальная переменная обозначена буквой, похожей на $z$; это именно
+радиус, а не декартова координата. Вторая радиальная переменная, по которой идёт
+интегрирование внутри шара, обозначена $\rho$. Здесь сохранены обозначения доски:
+$z$ — радиус внешней сферы, $\rho \in [0,z]$ — переменная интегрирования.
+\end{warn}
+
+\inputfig{figures/fig-spherical-mean}
+
+\begin{idea}
+Множитель $4\pi z^2$ — это площадь сферы $S_{x,z}$, так что $\bar u$ —
+действительно среднее по сфере, а не просто интеграл. Отсюда сразу
+\[
+  \bar u(x,t,z) \xrightarrow[z \to 0]{} u(x,t)
+\]
+для непрерывной $u$: среднее по стягивающейся сфере стремится к значению в
+центре. Именно этот предельный переход в конце даст формулу Кирхгофа.
+\end{idea}
+
+\subsubsection*{Уравнение для сферического среднего}
+
+Проинтегрируем уравнение по шару $B_{x,z}$. Левая часть:
+\[
+  \int\limits_{B_{x,z}} u_{tt}\, dx
+  = \int\limits_0^{z} \int\limits_{S_{x,\rho}} u_{tt}\, ds\, d\rho
+  = \int\limits_0^{z} 4\pi \rho^2\, \bar u_{tt}\, d\rho .
+\]
+Правая часть — по первой формуле Грина (она же формула
+Гаусса—Остроградского для $\operatorname{div}\nabla u$), с учётом того, что
+внешняя нормаль к сфере направлена по радиусу, то есть
+$\partial/\partial n = \partial/\partial z$; затем переходим от сферы к
+угловым переменным:
+\[
+  \int\limits_{B_{x,z}} \Delta u\, dx
+  = \int\limits_{S_{x,z}} \dd{u}{n}\, ds
+  = \int\limits_{S_{x,z}} \dd{u}{z}\, ds
+  = \int\limits_0^{2\pi} \int\limits_0^{\pi} \dd{u}{z}\, z^2 \sin\theta\,
+    d\theta\, d\varphi
+  = z^2 \dd{}{z}\big(4\pi \bar u\big) .
+\]
+Приравнивая (уравнение даёт $u_{tt} = a^2 \Delta u$) и сокращая на $4\pi$:
+\[
+  \int\limits_0^{z} \rho^2\, \bar u_{tt}\, d\rho
+    - a^2 z^2 \dd{\bar u}{z} = 0 .
+\]
+Дифференцируем по $z$:
+\[
+  z^2 \bar u_{tt} - a^2 \dd{}{z}\!\left(z^2 \dd{\bar u}{z}\right) = 0
+  \qquad\Longleftrightarrow\qquad
+  \bar u_{tt} - a^2 \frac{1}{z^2} \dd{}{z}\!\left(z^2 \dd{\bar u}{z}\right) = 0 .
+\]
+
+\begin{idea}
+Это уравнение Эйлера—Пуассона—Дарбу: радиальная часть волнового оператора в
+$\R^3$. Главное наблюдение следующего шага — в размерности $3$ (и только в
+нечётных) оно сводится к \emph{одномерному} волновому уравнению заменой
+$v = z\bar u$.
+\end{idea}
+
+\subsubsection*{Сведение к полубесконечной струне}
+
+Положим
+\[
+  \bar u = \frac{v}{z}, \qquad\text{то есть}\qquad v(z,t) = z\,\bar u(x,t,z) .
+\]
+Тогда
+\[
+  \begin{cases}
+    v_{tt} - a^2 v_{zz} = 0, & z \in (0,\infty), \\[2pt]
+    v|_{t=0} = z\,\bar\varphi =: v_0(z), \quad
+    v_t|_{t=0} = z\,\bar\psi =: v_1(z), \\[2pt]
+    v|_{z=0} = 0 .
+  \end{cases}
+\]
+
+\begin{idea}
+Это ровно задача~\eqref{eq:semi-dirichlet} из \S2: свободные колебания
+полубесконечной струны с закреплённым концом. Условие $v|_{z=0} = 0$ не
+навязано извне — оно следует из определения $v = z\bar u$ при ограниченной
+$\bar u$.
+
+\medskip
+Проверка замены: прямое вычисление даёт
+$\frac{1}{z^2}\big(z^2 \bar u_z\big)_z = \frac{1}{z}\,(z\bar u)_{zz}$, откуда
+после умножения уравнения на $z$ и получается $v_{tt} = a^2 v_{zz}$.
+\end{idea}
+
+Здесь $\bar\varphi$ и $\bar\psi$ — сферические средние начальных данных:
+\[
+  \bar\varphi(x,z) = \frac{1}{4\pi z^2} \int\limits_{S_{x,z}} \varphi(y)\, ds,
+  \qquad
+  \bar\psi(x,z) = \frac{1}{4\pi z^2} \int\limits_{S_{x,z}} \psi(y)\, ds .
+\]
+
+\subsubsection*{Предельный переход и формула Кирхгофа}
+
+Искомое значение восстанавливается как предел среднего:
+\[
+  u(x,t) = \lim_{z \to 0} \bar u = \lim_{z \to 0} \frac{v(z,t)}{z}
+         = \dd{v}{z}\bigg|_{z=0} ,
+\]
+по правилу Лопиталя: $v|_{z=0} = 0$, так что это неопределённость
+$\tfrac{0}{0}$, и предел равен производной $v$ по $z$ в нуле.
+
+Так как $z \to 0$, при фиксированном $t > 0$ мы попадаем в случай $z - at < 0$,
+то есть во вторую строку ответа из \S2:
+\[
+  v = \frac12\Big[v_0(z+at) - v_0(at-z)\Big]
+    + \frac{1}{2a}\int\limits_{at-z}^{z+at} v_1(\rho)\, d\rho .
+\]
+Дифференцируем по $z$ и полагаем $z = 0$:
+\[
+  \dd{v}{z}\bigg|_{z=0}
+  = \frac12\Big[v_0'(at) + v_0'(at)\Big]
+    + \frac{1}{2a}\Big[v_1(at) + v_1(at)\Big]
+  = v_0'(at) + \frac1a\, v_1(at) .
+\]
+
+Остаётся подставить $v_0$ и $v_1$:
+\[
+  v_0(z) = z\,\bar\varphi = \frac{z}{4\pi z^2} \int\limits_{S_{x,z}} \varphi\, ds
+         = \frac{1}{4\pi z} \int\limits_{S_{x,z}} \varphi\, ds ,
+\]
+\[
+  \frac1a\, v_1\big|_{z=at} = \frac1a \big(z\,\bar\psi\big)\Big|_{z=at}
+  = \frac1a \cdot \frac{at}{4\pi a^2 t^2} \int\limits_{S_{x,at}} \psi\, ds .
+\]
+Производная $v_0'$ в точке $z = at$ переписывается через $\partial/\partial t$:
+\[
+  v_0'(at) = \frac1a\, \dd{}{t}\Big[v_0(at)\Big] ,
+\]
+так что
+\[
+  u(x,t) = v_0'(at) + \frac1a v_1(at)
+         = \frac1a\left[\dd{}{t} v_0(at) + v_1(at)\right] .
+\]
+
+Итого:
+
+\stepcounter{equation}
+\begin{equation}\tag{К}\label{eq:kirchhoff-free}
+  \boxed{\ u(x,t) = \frac{1}{4\pi a^2}\left[
+    \dd{}{t}\left(\frac1t \int\limits_{S_{x,at}} \varphi(y)\, ds_y\right)
+    + \frac1t \int\limits_{S_{x,at}} \psi(y)\, ds_y
+  \right]\ }
+\end{equation}
+
+\begin{center}
+\textbf{— формула Кирхгофа} (однородное уравнение).
+\end{center}
+
+\begin{idea}
+Сравните с компактной записью Даламбера из \S1: структура та же — производная по
+$t$ от интеграла по «шару» от $\varphi$ плюс интеграл от $\psi$. Разница
+принципиальная: при $n=1$ интегрирование шло по \emph{отрезку}
+$\Bxat{x}{at}$, а при $n=3$ — по \emph{сфере} $S_{x,at}$, то есть только по
+границе. Отсюда и принцип Гюйгенса (см. ниже).
+\end{idea}
+
+\subsubsection*{Неоднородное уравнение: принцип Дюамеля}
+
+Теперь наоборот: однородные начальные условия и неоднородное уравнение. Здесь
+\[
+  \Box u = u_{tt} - a^2 \Delta u
+\]
+— \textbf{оператор Даламбера}.
+
+\stepcounter{equation}
+\begin{equation}\tag{2}\label{eq:wave3-forced}
+  \begin{cases}
+    \Box u \equiv u_{tt} - a^2 \Delta u = f(x,t), & x \in \R^3,\ t > 0, \\[2pt]
+    u|_{t=0} = 0, \quad u_t|_{t=0} = 0 .
+  \end{cases}
+\end{equation}
+
+Представим правую часть как суперпозицию мгновенных импульсов:
+\[
+  f(x,t) = \int\limits_0^{\infty} f(x,\tau)\, \delta(\tau - t)\, d\tau ,
+\]
+и рассмотрим вспомогательную задачу на один импульс:
+\[
+  \begin{cases}
+    v_{tt} - a^2 \Delta v = f(x,\tau)\,\delta(t - \tau), & t > 0, \\[2pt]
+    v|_{t=0} = 0, \quad v_t|_{t=0} = 0 .
+  \end{cases}
+\]
+
+\paragraph{Что делает импульс.} Проинтегрируем уравнение по
+$t \in [\tau-\eps,\, \tau+\eps]$ и устремим $\eps \to 0$:
+\[
+  \int\limits_{\tau-\eps}^{\tau+\eps} v_{tt}\, dt
+  = v_t \Big|_{\tau-\eps}^{\tau+\eps}
+  \xrightarrow[\eps \to 0]{} v_t\big|_{t=\tau} ,
+  \qquad
+  \int\limits_{\tau-\eps}^{\tau+\eps} \Delta v\, dt
+  \xrightarrow[\eps \to 0]{} 0 ,
+\]
+\begin{idea}
+Почему в первом пределе остаётся только верхний предел: при $t < \tau$ правая
+часть тождественно равна нулю, а начальные данные нулевые, поэтому по теореме
+единственности (\S4) там $v \equiv 0$. Значит и $v_t(\tau - \eps) \to 0$.
+Во втором пределе всё проще: $\Delta v$ — хорошая функция, а промежуток
+интегрирования стягивается в точку.
+\end{idea}
+\[
+  \int\limits_{\tau-\eps}^{\tau+\eps} f(x,\tau)\,\delta(\tau - t)\, dt
+  = f(x,\tau) .
+\]
+Значит $\delta$-импульс не меняет саму $v$, но мгновенно задаёт ей скорость:
+\[
+  \begin{cases}
+    v_{tt} - a^2 \Delta v = 0, & t > \tau, \\[2pt]
+    v|_{t=\tau} = 0, \quad v_t|_{t=\tau} = f(x,\tau) .
+  \end{cases}
+\]
+
+\paragraph{Суперпозиция.} Положим
+\[
+  u(x,t) = \int\limits_0^{\infty} v(x,t,\tau)\, d\tau
+         = \int\limits_0^{t} v\, d\tau
+\]
+(при $\tau > t$ решение $v$ ещё тождественно равно нулю).
+
+\begin{proposition}
+Так построенная $u$ решает задачу~\eqref{eq:wave3-forced}.
+\end{proposition}
+
+\begin{proof}
+Начальные условия: $u|_{t=0} = 0$ очевидно, и
+\[
+  u_t = \underbrace{v\big|_{t=\tau}}_{=\,0} + \int\limits_0^t v_t\, d\tau
+      = \int\limits_0^t v_t\, d\tau
+  \qquad\Longrightarrow\qquad u_t|_{t=0} = 0 .
+\]
+Далее
+\[
+  u_{tt} = v_t\big|_{t=\tau} + \int\limits_0^t v_{tt}\, d\tau
+         = f(x,t) + \int\limits_0^t v_{tt}\, d\tau ,
+\]
+и поэтому
+\[
+  u_{tt} - a^2 \Delta u
+  = f(x,t) + \int\limits_0^t \big(v_{tt} - a^2 \Delta v\big)\, d\tau
+  = f(x,t) ,
+\]
+так как подынтегральное выражение равно нулю при $\tau < t$.
+\end{proof}
+
+\paragraph{Явный вид.} Задача для $v$
+\[
+  \begin{cases}
+    v_{tt} - a^2 \Delta v = 0, & x \in \R^3,\ t > \tau, \\[2pt]
+    v|_{t=\tau} = 0, \quad v_t|_{t=\tau} = f(x,\tau)
+  \end{cases}
+\]
+— это задача~\eqref{eq:wave3-free} со сдвинутым началом отсчёта времени,
+$\varphi \equiv 0$ и $\psi = f(\cdot,\tau)$. Применяя
+формулу~\eqref{eq:kirchhoff-free} и интегрируя по $\tau$:
+\[
+  u(x,t) = \frac{1}{4\pi a^2} \int\limits_0^{t} \frac{1}{t-\tau}
+  \int\limits_{S_{x,a(t-\tau)}} f(y,\tau)\, ds\, d\tau .
+\]
+
+\subsubsection*{Формула Кирхгофа в общем виде}
+
+Складывая оба вклада, для задачи с данными $\varphi, \psi$ и правой частью $f$:
+\[
+  \boxed{
+  \begin{aligned}
+    u(x,t) = \frac{1}{4\pi a^2}\Bigg[ &
+      \dd{}{t}\left(\frac1t \int\limits_{S_{x,at}} \varphi(y)\, ds_y\right)
+      + \frac1t \int\limits_{S_{x,at}} \psi(y)\, ds_y \\[4pt]
+    & + \int\limits_0^{t} \frac{1}{t-\tau}
+      \int\limits_{S_{x,a(t-\tau)}} f(y,\tau)\, ds_y\, d\tau
+    \Bigg]
+  \end{aligned}}
+\]
+
+\begin{center}
+\textbf{— формула Кирхгофа.}
+\end{center}
+
+\inputfig{figures/fig-cone-kirchhoff}
+
+\begin{remark}
+В тетради к этому рисунку приписано: \emph{область влияния — это только
+образующие конуса, в отличие от одномерного случая}. То есть и терминология
+здесь та же, что в \S1 («область влияния \emph{на} точку» = область
+зависимости), и подчёркнуто главное отличие от $n=1$: работает не весь конус,
+а только его боковая поверхность.
+\end{remark}
+
+\begin{idea}[title={Принцип Гюйгенса}]
+Во все три интеграла входят только \emph{сферы}, то есть боковая поверхность
+конуса, а не его внутренность. Поэтому возмущение, сосредоточенное в момент
+$t=0$ в малой окрестности точки $y_0$, проходит через точку $x$ за конечное
+время $|x-y_0|/a$ и после этого не оставляет следа — сигнал имеет чёткий задний
+фронт.
+
+\medskip
+При $n=1$ это не так: в формуле Даламбера интеграл от $\psi$ берётся по всему
+отрезку $\Bxat{x}{at}$, и «хвост» остаётся навсегда — это видно по ступеньке в
+примере с $\psi = \delta$ из \S1.
+\end{idea}
+
+\subsubsection*{Замечание: метод спуска и формула Пуассона}
+
+\begin{remark}
+Рассмотрим двумерную задачу
+\[
+  \begin{cases}
+    u_{tt} - a^2 \Delta u = f(x,t), & x \in \R^2,\ t > 0, \\[2pt]
+    u|_{t=0} = \varphi(x), \quad u_t|_{t=0} = \psi(x) .
+  \end{cases}
+\]
+Она получается из трёхмерной, если считать все данные не зависящими от третьей
+координаты:
+\[
+  f(x_1,x_2,x_3) = f(x_1,x_2) .
+\]
+Подстановка в формулу Кирхгофа и интегрирование по $x_3$ даёт \textbf{формулу
+Пуассона}.
+\end{remark}
+
+\begin{warn}
+Сама формула Пуассона не выписана ни на доске, ни в тетради. В тетради есть
+только приписка: «получим формулу Пуассона — там будет интеграл по шару в
+двумерии, проекции трёхмерной сферы». Вывод, по-видимому, в следующей лекции.
+\end{warn}
+
+\begin{idea}
+Приём называется \textbf{методом спуска}: задача в $\R^2$ решается как задача в
+$\R^3$ с данными, постоянными вдоль $x_3$. Интеграл по сфере $S_{x,at} \subset
+\R^3$ при этом проецируется на круг $\Bxat{x}{at} \subset \R^2$, причём сфера
+накрывает круг дважды — отсюда в формуле Пуассона появляется интеграл по
+\emph{кругу} со знаменателем $\sqrt{a^2t^2 - |y-x|^2}$.
+
+\medskip
+Принципиальное следствие: в $\R^2$ интегрирование идёт по кругу, а не по
+окружности, значит принцип Гюйгенса \textbf{не выполняется} — как и при $n=1$.
+\end{idea}

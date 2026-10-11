@@ -1,0 +1,50 @@
+% Рисунок с доски: усечённый характеристический конус D с вершиной (x_0, t_0),
+% срезанный плоскостью t = t_1. Граница состоит из трёх кусков:
+% Gamma_0 (низ, t = 0), Gamma_1 (верх, t = t_1) и Gamma (боковая поверхность).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[->] (0,-0.5) -- (0,3.9) node[anchor=south east] {$t$};
+  \draw[->] (-0.5,0) -- (6.3,0) node[anchor=north east] {$\R^n$};
+
+  % усечённый конус
+  \fill[pattern=north east lines, pattern color=blue!30]
+    (1,0) -- (5,0) -- (4,1.5) -- (2,1.5) -- cycle;
+  \draw[thick, blue!60!black] (1,0) -- (5,0);
+  \draw[thick, blue!60!black] (2,1.5) -- (4,1.5);
+  \draw[thick, blue!60!black] (1,0) -- (2,1.5);
+  \draw[thick, blue!60!black] (5,0) -- (4,1.5);
+
+  % срезанная верхушка
+  \draw[dashed, gray] (2,1.5) -- (3,3.0) -- (4,1.5);
+  \fill[gray] (3,3.0) circle (1.4pt);
+  \node[gray, anchor=south, font=\footnotesize] at (3,3.08) {$(x_0,t_0)$};
+
+  \draw[dashed, gray] (0,1.5) -- (2,1.5);
+  \draw[dashed, gray] (0,3.0) -- (3,3.0);
+  \node[anchor=east, font=\footnotesize] at (-0.06,1.5) {$t_1$};
+  \node[anchor=east, font=\footnotesize] at (-0.06,3.0) {$t_0$};
+
+  % нормали
+  \draw[->, red!65!black] (3,0) -- (3,-0.6);
+  \node[red!65!black, anchor=north, font=\footnotesize] at (3,-0.62) {$n$};
+  \draw[->, red!65!black] (3,1.5) -- (3,2.1);
+  \node[red!65!black, anchor=south, font=\footnotesize] at (3,2.12) {$n$};
+  \draw[->, red!65!black] (4.5,0.75) -- (5.3,1.28);
+  \node[red!65!black, anchor=west, font=\footnotesize] at (5.35,1.3)
+    {$n = (n_1,\dots,n_n,\, n_t)$};
+
+  \node[blue!60!black, anchor=north, font=\footnotesize] at (1.4,-0.08)
+    {$\Gamma_0$};
+  \node[blue!60!black, anchor=south, font=\footnotesize] at (2.4,1.54)
+    {$\Gamma_1$};
+  \node[blue!60!black, anchor=east, font=\footnotesize] at (1.35,0.8)
+    {$\Gamma$};
+  \node[blue!60!black, font=\footnotesize] at (3,0.6) {$D$};
+\end{tikzpicture}
+\caption{Область интегрирования в энергетическом тождестве: конус зависимости
+точки $(x_0,t_0)$, срезанный на уровне $t = t_1$. На $\Gamma_0$ интеграл обнуляют
+начальные данные, на $\Gamma_1$ он равен энергии, на боковой поверхности $\Gamma$
+работает соотношение $n_t^2 = a^2 \sum_i n_i^2$.}
+\label{fig:energy-frustum}
+\end{figure}

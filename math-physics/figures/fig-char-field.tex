@@ -1,0 +1,32 @@
+% Рисунок с доски: поле направлений a(x) и его интегральные кривые.
+% Решение уравнения a.grad u = 0 постоянно вдоль каждой такой кривой.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=1.0]
+  \draw[->] (-0.3,0) -- (6.2,0) node[anchor=north east] {$x_1$};
+  \draw[->] (0,-0.3) -- (0,3.6) node[anchor=south east] {$x_2$};
+
+  % семейство интегральных кривых
+  \foreach \k/\o in {0.9/0.0, 0.9/0.55, 0.9/1.1, 0.9/1.65} {
+    \draw[thick, blue!60!black]
+      plot[domain=0.25:5.6, samples=60]
+      (\x, {\o + \k*sqrt(\x)});
+  }
+
+  % касательные векторы
+  \draw[->, red!65!black, thick] (1.6,1.138) -- (2.5,1.44);
+  \node[red!65!black, anchor=north west, font=\footnotesize] at (2.3,1.42)
+    {$\bar a$};
+  \draw[->, red!65!black, thick] (3.2,2.26) -- (4.1,2.47);
+  \node[red!65!black, anchor=south east, font=\footnotesize] at (4.1,2.47)
+    {$\bar a$};
+  \draw[->, red!65!black, thick] (0.9,0.854) -- (1.8,1.3);
+  \node[red!65!black, anchor=north west, font=\footnotesize] at (1.55,1.26)
+    {$\bar a$};
+\end{tikzpicture}
+\caption{Поле направлений $\bar a(x)$ и его интегральные кривые
+(характеристики). Уравнение $\bar a(x)\cdot\nabla u = 0$ означает, что
+производная $u$ вдоль каждой такой кривой равна нулю: решение постоянно на
+характеристиках.}
+\label{fig:char-field}
+\end{figure}

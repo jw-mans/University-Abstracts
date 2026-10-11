@@ -1,0 +1,33 @@
+% Рисунок с доски: phi = 0, psi = delta(x). Решение -- «ступенька» высоты 1/(2a)
+% на интервале (-at, at); точки разрыва -at и at.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=8.4cm, height=4.2cm,
+  axis lines=middle,
+  xmin=-2.7, xmax=2.7, ymin=-0.3, ymax=1.35,
+  xlabel={$x$}, ylabel={$u$},
+  xlabel style={anchor=north west}, ylabel style={anchor=south east},
+  xtick={-1.4,1.4}, xticklabels={$-at$,$at$},
+  ytick={1}, yticklabels={$\tfrac{1}{2a}$},
+  clip=false,
+]
+  \addplot[very thick, blue!60!black] coordinates {(-2.5,0) (-1.4,0)};
+  \addplot[very thick, blue!60!black] coordinates {(-1.4,1) (1.4,1)};
+  \addplot[very thick, blue!60!black] coordinates {(1.4,0) (2.5,0)};
+  \draw[dashed, gray] (axis cs:-1.4,0) -- (axis cs:-1.4,1);
+  \draw[dashed, gray] (axis cs: 1.4,0) -- (axis cs: 1.4,1);
+  \draw[dashed, gray] (axis cs:-2.5,1) -- (axis cs:-1.4,1);
+  % выколотые / закрашенные концы
+  \fill[blue!60!black] (axis cs:-1.4,1) circle (1.6pt);
+  \fill[blue!60!black] (axis cs: 1.4,1) circle (1.6pt);
+  \draw[blue!60!black, fill=white] (axis cs:-1.4,0) circle (1.6pt);
+  \draw[blue!60!black, fill=white] (axis cs: 1.4,0) circle (1.6pt);
+\end{axis}
+\end{tikzpicture}
+\caption{Случай $\varphi \equiv 0$, $\psi = \delta(x)$: решение равно $\tfrac{1}{2a}$
+на интервале $(-at,\,at)$ и нулю вне его. Фронты разрыва расходятся из нуля со
+скоростью $a$.}
+\label{fig:delta-box}
+\end{figure}

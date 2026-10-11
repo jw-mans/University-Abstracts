@@ -1,0 +1,58 @@
+%  Математическая физика — конспект лекций
+%  Компиляция: pdflatex main.tex  (дважды, из-за ссылок и оглавления)
+
+\documentclass[12pt,a4paper]{article}
+
+\input{preamble}
+
+\title{\textbf{Математическая физика}\\[0.3em]\large Конспект лекций}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{idea}[title={Обозначения в конспекте}]
+Блок \textbf{«Пояснение»} — то, чего не было на лекции: интуиция, обоснование
+пропущенных шагов, связи с другими темами.
+
+\medskip
+Блок \textbf{«Сверить с записью»} — места, где запись на доске или в тетради
+неразборчива, содержит описку или требует уточнения.
+
+\medskip
+Маркер \plusplus{} вместо доказательства — так помечено в тетради; эти доказательства
+дописываются позже по записям прошлых семестров.
+\end{idea}
+
+\tableofcontents
+\newpage
+
+% Нумерация: section = глава, subsection = параграф (§)
+\renewcommand{\thesubsection}{\S\arabic{subsection}}
+
+\input{sections/00-heat-reminder}
+
+\newpage
+\section{Волновое уравнение}
+\input{sections/01-infinite-string}
+
+\newpage
+\input{sections/02-semi-infinite-string}
+
+\newpage
+\input{sections/03-three-dimensional}
+
+\newpage
+\input{sections/04-uniqueness}
+
+\newpage
+\section{Уравнения в частных производных первого порядка}
+\input{sections/05-first-order-linear}
+
+\newpage
+\input{sections/06-semilinear}
+
+\end{document}

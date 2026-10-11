@@ -1,0 +1,39 @@
+% Рисунок с доски: psi = 0, начальный профиль phi -- треугольник. Он распадается
+% на две бегущие волны половинной высоты со скоростями -a и +a.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.9cm},
+  width=6.6cm, height=4.2cm,
+  axis lines=middle,
+  xlabel={$x$},
+  xlabel style={anchor=north west},
+  xtick=\empty, ytick=\empty, clip=false,
+]
+% --- слева: начальный профиль
+\nextgroupplot[xmin=-2.6, xmax=2.6, ymin=-0.35, ymax=1.45]
+  \addplot[very thick, blue!60!black] coordinates {(-2.4,0) (-0.6,0) (0,1) (0.6,0) (2.4,0)};
+  \node[blue!60!black, anchor=south east, font=\footnotesize] at (axis cs:-0.1,0.78) {$\varphi(x)$};
+  \node[anchor=south, font=\footnotesize] at (axis cs:0,1.12) {$\psi \equiv 0$};
+  \node[anchor=east, font=\footnotesize] at (axis cs:-0.04,0.98) {$1$};
+
+% --- справа: момент времени t > 0
+\nextgroupplot[xmin=-2.6, xmax=2.6, ymin=-0.35, ymax=1.45,
+               xtick={-1.4,1.4}, xticklabels={$-at$,$at$}]
+  \addplot[very thick, blue!60!black]
+    coordinates {(-2.4,0) (-2.0,0) (-1.4,0.5) (-0.8,0) (0.8,0) (1.4,0.5) (2.0,0) (2.4,0)};
+  \draw[dashed, gray] (axis cs:-1.4,0) -- (axis cs:-1.4,0.5);
+  \draw[dashed, gray] (axis cs: 1.4,0) -- (axis cs: 1.4,0.5);
+  \draw[-{Latex[length=4pt]}, gray] (axis cs:-1.0,0.75) -- (axis cs:-1.7,0.75);
+  \node[anchor=south, font=\footnotesize] at (axis cs:-1.35,0.78) {$a$};
+  \draw[-{Latex[length=4pt]}, gray] (axis cs:1.0,0.75) -- (axis cs:1.7,0.75);
+  \node[anchor=south, font=\footnotesize] at (axis cs:1.35,0.78) {$a$};
+  \node[anchor=east, font=\footnotesize] at (axis cs:-1.44,0.5) {$\tfrac12$};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Случай $\psi \equiv 0$: начальный профиль распадается на две волны половинной
+амплитуды, бегущие влево и вправо со скоростью $a$. Их вершины находятся в точках
+$x = -at$ и $x = at$.}
+\label{fig:wave-split}
+\end{figure}

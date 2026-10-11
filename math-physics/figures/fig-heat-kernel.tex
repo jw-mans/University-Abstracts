@@ -1,0 +1,35 @@
+% Рисунок с доски: профили фундаментального решения Ф(x,t) при t_1 < t_2 < t_3.
+% Показатель зажат сверху: exp(-20) ~ 2e-9, на графике это ноль, а pgfmath
+% не уходит в переполнение на хвостах.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=9cm, height=5.4cm,
+  axis lines=middle,
+  xmin=-3.2, xmax=3.6, ymin=-0.18, ymax=1.55,
+  xlabel={$x$}, ylabel={$u$},
+  xlabel style={anchor=north west}, ylabel style={anchor=south east},
+  xtick=\empty, ytick=\empty, clip=false,
+]
+  \addplot[very thick, blue!60!black, domain=-3:3, samples=241]
+    {(x*x/(4*0.05) > 20) ? 0 : 1/(2*sqrt(pi*0.05))*exp(-x*x/(4*0.05))};
+  \addplot[very thick, blue!45!black, domain=-3:3, samples=241]
+    {(x*x/(4*0.20) > 20) ? 0 : 1/(2*sqrt(pi*0.20))*exp(-x*x/(4*0.20))};
+  \addplot[very thick, blue!30!black, domain=-3:3, samples=241]
+    {(x*x/(4*0.80) > 20) ? 0 : 1/(2*sqrt(pi*0.80))*exp(-x*x/(4*0.80))};
+
+  \draw[-{Latex[length=4pt]}, gray] (axis cs:0.75,1.30) -- (axis cs:0.16,1.15);
+  \node[anchor=west, font=\footnotesize] at (axis cs:0.78,1.32) {$t_1$};
+  \draw[-{Latex[length=4pt]}, gray] (axis cs:1.25,0.80) -- (axis cs:0.44,0.60);
+  \node[anchor=west, font=\footnotesize] at (axis cs:1.28,0.82) {$t_2$};
+  \draw[-{Latex[length=4pt]}, gray] (axis cs:1.75,0.45) -- (axis cs:0.95,0.25);
+  \node[anchor=west, font=\footnotesize] at (axis cs:1.78,0.47) {$t_3$};
+  \node[anchor=west, font=\footnotesize] at (axis cs:2.15,1.15) {$t_1 < t_2 < t_3$};
+\end{axis}
+\end{tikzpicture}
+\caption{Профили фундаментального решения $\Phi(\cdot,t)$ уравнения теплопроводности.
+С ростом $t$ пик падает как $t^{-1/2}$, а носитель «расплывается»; площадь под каждой
+кривой равна $1$.}
+\label{fig:heat-kernel}
+\end{figure}

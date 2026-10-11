@@ -1,0 +1,145 @@
+\subsection{Свободные колебания полубесконечной струны}
+
+\stepcounter{equation}
+\begin{equation}\tag{1}\label{eq:semi-dirichlet}
+  \begin{cases}
+    u_{tt} - a^2 u_{xx} = 0, & x > 0,\ t > 0, \\[2pt]
+    u|_{t=0} = \varphi(x), \quad u_t|_{t=0} = \psi(x), \\[2pt]
+    u|_{x=0} = 0 .
+  \end{cases}
+\end{equation}
+
+Теперь струна занимает полупрямую, а её левый конец закреплён. Нумерация задач в
+этом параграфе начинается заново.
+
+\subsubsection*{Метод нечётного продолжения}
+
+Продолжим данные на всю ось нечётно:
+\[
+  \Phi(x) =
+  \begin{cases}
+    \varphi(x), & x \ge 0, \\
+    -\varphi(-x), & x \le 0,
+  \end{cases}
+  \qquad\qquad
+  \Psi(x) =
+  \begin{cases}
+    \psi(x), & x \ge 0, \\
+    -\psi(-x), & x \le 0 .
+  \end{cases}
+\]
+
+\inputfig{figures/fig-odd-extension}
+
+Решим на всей прямой задачу с данными $\Phi, \Psi$ по формуле Даламбера:
+\[
+  u(x,t) = \frac12\Big[\Phi(x-at) + \Phi(x+at)\Big]
+         + \frac{1}{2a}\int\limits_{x-at}^{x+at} \Psi(y)\, dy .
+\]
+
+\begin{idea}
+Ключ: если $\Phi$ и $\Psi$ нечётны, то $u|_{x=0} = 0$ автоматически. Действительно,
+при $x=0$
+\[
+  \frac12\big[\Phi(-at) + \Phi(at)\big] = 0
+  \quad\text{(нечётность $\Phi$)},
+\]
+\[
+  \int\limits_{-at}^{at} \Psi(y)\, dy = 0
+  \quad\text{(интеграл нечётной функции по симметричному отрезку)} .
+\]
+Значит построенная функция удовлетворяет и уравнению, и начальным данным (при
+$x>0$ они совпадают с исходными), и краевому условию. Условие Дирихле
+$u|_{x=0}=0$ «встроено» в симметрию данных.
+\end{idea}
+
+\subsubsection*{Явный вид решения}
+
+Если $x - at \ge 0$, то все аргументы попадают на полупрямую $x\ge 0$ и формула
+не отличается от случая бесконечной струны. Если же
+\[
+  x - at < 0,
+\]
+то работает нечётность:
+\[
+  \Phi(x-at) = -\varphi(at-x),
+  \qquad
+  \int\limits_{x-at}^{at-x} \Psi(y)\, dy = 0 ,
+\]
+поэтому интеграл от $\Psi$ сворачивается до интеграла по отрезку
+$[\,at-x,\ x+at\,]$ от исходной $\psi$. Итог:
+\[
+  \boxed{\
+  u(x,t) =
+  \begin{cases}
+    \dfrac12\Big[\varphi(x-at) + \varphi(x+at)\Big]
+      + \dfrac{1}{2a} \displaystyle\int\limits_{x-at}^{x+at} \psi(y)\, dy,
+      & x \ge at, \\[18pt]
+    \dfrac12\Big[\varphi(x+at) - \varphi(at-x)\Big]
+      + \dfrac{1}{2a} \displaystyle\int\limits_{at-x}^{x+at} \psi(y)\, dy,
+      & x < at .
+  \end{cases}\ }
+\]
+
+\begin{idea}
+Физический смысл второй строки: при $x < at$ до точки $x$ уже успела дойти волна,
+отражённая от закреплённого конца. Слагаемое $-\varphi(at-x)$ — это как раз
+отражённая волна, и знак «минус» означает отражение \emph{с переворотом}: у
+закреплённого конца горб возвращается впадиной.
+
+\medskip
+Прямая $x = at$ в плоскости $(x,t)$ разделяет две зоны: ниже неё отражение ещё не
+пришло, выше — уже пришло.
+\end{idea}
+
+\subsubsection*{Упражнения}
+
+\begin{exercise}
+Решите задачу (свободный конец вместо закреплённого; $\varphi, \psi$ заданы на
+полуоси):
+\stepcounter{equation}
+\begin{equation}\tag{2}\label{eq:semi-neumann}
+  \begin{cases}
+    u_{tt} - a^2 u_{xx} = 0, & x > 0,\ t > 0, \\[2pt]
+    u|_{t=0} = \varphi(x), \quad u_t|_{t=0} = \psi(x), \\[2pt]
+    u_x|_{x=0} = 0 .
+  \end{cases}
+\end{equation}
+\end{exercise}
+
+\begin{idea}
+Подсказка: условие $u_x|_{x=0} = 0$ (Нейман) получается тем же приёмом, но с
+\textbf{чётным} продолжением данных. Отражение тогда идёт без переворота знака.
+\end{idea}
+
+\begin{exercise}
+Изобразите решения задач~\eqref{eq:semi-dirichlet} и~\eqref{eq:semi-neumann} со
+следующими начальными условиями:
+\begin{enumerate}[label=(\alph*), leftmargin=2em]
+  \item $\varphi(x)$ — «треугольник» с вершиной в точке $x_0 > 0$, $\psi \equiv 0$;
+  \item $\varphi \equiv 0$, $\psi(x) = \delta(x - x_0)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{exercise}
+Решите задачи для уравнения теплопроводности на полупрямой:
+\[
+  \begin{cases}
+    u_t - \alpha u_{xx} = 0, & x > 0,\ t > 0, \\
+    u|_{t=0} = \varphi(x), \\
+    u|_{x=0} = 0 ;
+  \end{cases}
+  \qquad\qquad
+  \begin{cases}
+    u_t - \alpha u_{xx} = 0, & x > 0,\ t > 0, \\
+    u|_{t=0} = \varphi(x), \\
+    u_x|_{x=0} = 0 .
+  \end{cases}
+\]
+\end{exercise}
+
+\begin{idea}
+Тот же метод отражения работает и здесь: нечётное продолжение для условия
+Дирихле, чётное — для Неймана, а затем свёртка с $\Phi$ из напоминания в начале
+конспекта.
+\end{idea}

@@ -1,0 +1,26 @@
+% Рисунок с доски: характеристики уравнения переноса u_t + a u_x = 0 --
+% параллельные прямые x - at = const с направляющим вектором (a, 1).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[->] (-0.3,0) -- (6.2,0) node[anchor=north east] {$x$};
+  \draw[->] (0,-0.3) -- (0,3.3) node[anchor=south east] {$t$};
+
+  % характеристики x = at + c, наклон dx/dt = a
+  \foreach \c in {0.2, 1.2, 2.2, 3.2, 4.2} {
+    \draw[thick, blue!60!black] (\c,0) -- ({\c+1.8},2.9);
+  }
+
+  % направляющий вектор
+  \draw[->, red!65!black, very thick] (2.2,0) -- (2.82,1.0);
+  \node[red!65!black, anchor=west, font=\footnotesize] at (2.88,0.92)
+    {$\bar a = (a,\,1)$};
+
+  \node[blue!60!black, anchor=north, font=\footnotesize] at (4.2,-0.06)
+    {$x - at = \mathrm{const}$};
+\end{tikzpicture}
+\caption{Характеристики уравнения переноса $u_t + a u_x = 0$ в плоскости
+$(x,t)$. Вдоль каждой прямой $x - at = \mathrm{const}$ концентрация не меняется:
+профиль просто сносится средой со скоростью $a$.}
+\label{fig:transport-lines}
+\end{figure}

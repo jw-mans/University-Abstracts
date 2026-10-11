@@ -1,0 +1,34 @@
+% Шар B_{x,z} и сферы S_{x,rho} внутри него: по ним берётся сферическое среднее.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=1.0]
+  % внешняя сфера S_{x,z}
+  \draw[thick, blue!60!black] (0,0) circle (2.1);
+  \draw[thick, blue!60!black, densely dotted] (0,0) ellipse [x radius=2.1, y radius=0.6];
+
+  % внутренняя сфера S_{x,rho}
+  \draw[gray] (0,0) circle (1.25);
+  \draw[gray, densely dotted] (0,0) ellipse [x radius=1.25, y radius=0.36];
+
+  % центр и радиусы
+  \fill (0,0) circle (1.6pt);
+  \node[anchor=north east, font=\footnotesize] at (0,-0.05) {$x$};
+
+  \draw[->, gray] (0,0) -- (-0.88,0.88);
+  \node[gray, anchor=south east, font=\footnotesize] at (-0.5,0.46) {$\rho$};
+  \draw[->, blue!60!black] (0,0) -- (1.48,1.48);
+  \node[blue!60!black, anchor=north west, font=\footnotesize] at (0.78,0.86) {$z$};
+
+  % внешняя нормаль
+  \draw[->, red!65!black] (2.1,0) -- (2.85,0);
+  \node[red!65!black, anchor=west, font=\footnotesize] at (2.9,0) {$n$};
+
+  \node[blue!60!black, anchor=south, font=\footnotesize] at (0,2.2) {$S_{x,z}$};
+  \node[gray, anchor=south east, font=\footnotesize] at (-1.0,-1.5) {$S_{x,\rho}$};
+  \node[anchor=north, font=\footnotesize] at (0,-2.35) {$B_{x,z}$ — шар радиуса $z$};
+\end{tikzpicture}
+\caption{Шар $B_{x,z}$ расслаивается на сферы $S_{x,\rho}$, $0 \le \rho \le z$:
+именно так интеграл по шару сводится к повторному, а на границе работает формула
+Гаусса—Остроградского с внешней нормалью $n$, направленной по радиусу.}
+\label{fig:spherical-mean}
+\end{figure}

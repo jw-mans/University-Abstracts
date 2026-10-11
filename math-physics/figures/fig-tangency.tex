@@ -1,0 +1,36 @@
+% Контрпример из тетради: характеристики u_x = 0 -- прямые y = const,
+% кривая y = x^3 касается одной из них в начале координат.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+\begin{axis}[
+  width=8.4cm, height=5.4cm,
+  axis lines=middle,
+  xmin=-1.75, xmax=2.3, ymin=-1.5, ymax=1.5,
+  xlabel={$x$}, ylabel={$y$},
+  xlabel style={anchor=north west}, ylabel style={anchor=south east},
+  xtick=\empty, ytick=\empty, clip=false,
+]
+  % характеристики: y = const
+  \foreach \c in {-1.15, -0.75, -0.35, 0, 0.35, 0.75, 1.15} {
+    \addplot[blue!55!black, thick, domain=-1.6:1.9, samples=2] {\c};
+  }
+  % кривая y = x^3
+  \addplot[very thick, red!70!black, domain=-1.12:1.12, samples=80] {x^3};
+
+  \fill (axis cs:0,0) circle (1.8pt);
+  \draw[->, gray] (axis cs:-1.1,0.95) -- (axis cs:-0.15,0.1);
+  \node[anchor=south east, font=\footnotesize] at (axis cs:-1.05,0.95)
+    {точка касания};
+  \node[red!70!black, anchor=west, font=\footnotesize] at (axis cs:1.15,1.25)
+    {$y = x^3$};
+  \node[blue!55!black, anchor=west, font=\footnotesize] at (axis cs:1.95,0.35)
+    {$y = \mathrm{const}$};
+\end{axis}
+\end{tikzpicture}
+\caption{Нарушение трансверсальности. Характеристики уравнения $u_x = 0$ —
+горизонтальные прямые, а кривая $y = x^3$ касается одной из них в начале
+координат: при $x=0$ её касательная $(1, 3x^2)$ совпадает с $\bar a = (1,0)$.
+Решение $u = y^{2/3}$ существует, но негладко на оси $Ox$.}
+\label{fig:tangency}
+\end{figure}

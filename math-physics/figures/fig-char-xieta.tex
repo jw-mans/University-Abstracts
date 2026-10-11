@@ -1,0 +1,40 @@
+% Рисунок с доски: область интегрирования D в характеристических переменных.
+% Прямая eta = xi отвечает t = 0; треугольник D имеет вершины
+% (xi_0, xi_0), (xi_0, eta_0), (eta_0, eta_0).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=1.0]
+  \draw[->] (-0.3,0) -- (4.6,0) node[anchor=north east] {$\xi$};
+  \draw[->] (0,-0.3) -- (0,4.6) node[anchor=south east] {$\eta$};
+
+  % биссектриса eta = xi : образ прямой t = 0
+  \draw[thick, gray] (0,0) -- (4.2,4.2);
+  \node[gray, anchor=west, font=\footnotesize] at (3.5,3.1)
+    {$t = 0 \iff \xi = \eta$};
+
+  % треугольник D
+  \fill[blue!10] (1.2,1.2) -- (1.2,3.4) -- (3.4,3.4) -- cycle;
+  \draw[thick, blue!60!black] (1.2,1.2) -- (1.2,3.4) -- (3.4,3.4) -- cycle;
+  \node[blue!60!black, font=\footnotesize] at (1.75,2.75) {$D$};
+
+  % угол 45 градусов при нижней вершине
+  \draw[gray] (1.2,1.65) arc (90:45:0.45);
+  \node[gray, font=\scriptsize] at (1.52,1.78) {$45^\circ$};
+
+  % вершина (xi_0, eta_0)
+  \fill (1.2,3.4) circle (1.6pt);
+  \node[anchor=south east, font=\footnotesize] at (1.2,3.45) {$(\xi_0,\eta_0)$};
+
+  \draw[dashed, gray] (1.2,0) -- (1.2,1.2);
+  \draw[dashed, gray] (0,3.4) -- (1.2,3.4);
+  \node[anchor=north, font=\footnotesize] at (1.2,-0.05) {$\xi_0$};
+  \node[anchor=east,  font=\footnotesize] at (-0.05,3.4) {$\eta_0$};
+  \node[anchor=north, font=\footnotesize] at (3.4,-0.05) {$\eta_0$};
+  \draw[dashed, gray] (3.4,0) -- (3.4,3.4);
+\end{tikzpicture}
+\caption{Область интегрирования $D$ в характеристических переменных:
+$\xi_0 \le \xi \le \eta_0$, $\xi \le \eta \le \eta_0$. Две стороны — отрезки
+характеристик $\xi = \xi_0$ и $\eta = \eta_0$, третья лежит на прямой
+$\xi = \eta$, то есть на оси $t = 0$.}
+\label{fig:char-xieta}
+\end{figure}

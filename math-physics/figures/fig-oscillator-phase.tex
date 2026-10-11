@@ -1,0 +1,61 @@
+% Гармонический осциллятор: слева -- траектории в фазовой плоскости (эллипсы),
+% справа -- интегральная кривая в расширенном фазовом пространстве (винтовая
+% линия над эллипсом). Ответ на вопрос в конце лекции.
+%
+% Правая панель нарисована чистым TikZ с заданными базисными векторами x/y/z:
+% addplot3 из pgfplots на такой кривой упирается в main memory size.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+\begin{axis}[
+  width=6.2cm, height=5.4cm,
+  axis lines=middle,
+  xmin=-2.3, xmax=2.3, ymin=-2.5, ymax=2.5,
+  xlabel={$x$}, ylabel={$v$},
+  xlabel style={anchor=north west}, ylabel style={anchor=south east},
+  xtick=\empty, ytick=\empty, clip=false,
+  title style={font=\footnotesize, yshift=-4pt},
+  title={(а) фазовая плоскость $\R^2$},
+]
+  \foreach \r in {0.6, 1.1, 1.6} {
+    \addplot[thick, blue!60!black, domain=0:360, samples=90]
+      ({\r*cos(x)}, {1.3*\r*sin(x)});
+  }
+  \addplot[only marks, mark=*, mark size=1.2pt, black] coordinates {(0,0)};
+  \draw[->, red!65!black, thick] (axis cs:1.1,0.30) -- (axis cs:1.04,0.75);
+\end{axis}
+\end{tikzpicture}%
+\hfill
+\begin{tikzpicture}[
+  >={Latex[length=4pt]},
+  x={(0.80cm,-0.30cm)}, y={(0.62cm,0.34cm)}, z={(0cm,0.62cm)},
+]
+  % оси
+  \draw[->] (0,0,0) -- (2.6,0,0) node[anchor=north, font=\footnotesize] {$x$};
+  \draw[->] (0,0,0) -- (0,2.6,0) node[anchor=west, font=\footnotesize] {$v$};
+  \draw[->] (0,0,0) -- (0,0,6.6) node[anchor=south, font=\footnotesize] {$t$};
+
+  % траектория: проекция на фазовую плоскость
+  \draw[gray, dashed, thick]
+    plot[variable=\s, domain=0:360, samples=72, smooth cycle]
+    ({1.5*cos(\s)}, {1.5*sin(\s)}, 0);
+
+  % интегральная кривая: винтовая линия над эллипсом
+  \draw[very thick, blue!60!black]
+    plot[variable=\s, domain=0:720, samples=145, smooth]
+    ({1.5*cos(\s)}, {1.5*sin(\s)}, {\s/720*5.8});
+
+  \node[gray, anchor=north west, font=\footnotesize] at (1.7,-1.5,0)
+    {траектория};
+  \node[blue!60!black, anchor=west, font=\footnotesize] at (1.6,0.6,5.6)
+    {интегральная кривая};
+  \node[anchor=south, font=\footnotesize] at (0.6,0,7.4)
+    {(б) расширенное фазовое пространство $\R^3$};
+\end{tikzpicture}
+\caption{Гармонический осциллятор. (а) Траектории в фазовой плоскости —
+эллипсы $\omega^2 x^2 + v^2 = \alpha^2\omega^2$; система автономна, поэтому
+траектория не зависит от начального момента $t_0$. (б) Интегральная кривая в
+расширенном фазовом пространстве — винтовая линия над этим эллипсом; сдвиг
+начального момента сдвигает её вдоль оси $t$, не меняя проекции.}
+\label{fig:oscillator-phase}
+\end{figure}
