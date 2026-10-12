@@ -1,0 +1,46 @@
+% Рисунок с доски: параллельное и последовательное соединения элементов.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  % --- параллельное ---
+  \begin{scope}
+    \draw[thick] (-0.9,-0.45) rectangle (0.1,0.45);
+    \node at (-0.4,0) {$\alpha$};
+    \draw[thick] (1.1,-0.45) rectangle (2.1,0.45);
+    \node at (1.6,0) {$\beta$};
+    % поперечины
+    \draw[thick] (-0.4,0.45) -- (-0.4,1.0) -- (1.6,1.0) -- (1.6,0.45);
+    \draw[thick] (-0.4,-0.45) -- (-0.4,-1.0) -- (1.6,-1.0) -- (1.6,-0.45);
+    \draw[->, thick] (0.6,1.7) -- (0.6,1.0);
+    \draw[->, thick] (0.6,-1.0) -- (0.6,-1.7);
+    \node[font=\footnotesize, anchor=south] at (0.6,1.75)
+      {$\Sdev = \Sdev_\alpha + \Sdev_\beta$};
+    \node[font=\footnotesize, anchor=north, align=center] at (0.6,-1.8)
+      {поперечины движутся поступательно\\ $\Rightarrow\ \dev_\alpha = \dev_\beta$};
+    \node[font=\footnotesize, anchor=south] at (0.6,2.4)
+      {\textbf{1) параллельное}};
+  \end{scope}
+
+  % --- последовательное ---
+  \begin{scope}[xshift=7cm]
+    \draw[thick] (-0.5,0.3) rectangle (0.5,1.2);
+    \node at (0,0.75) {$\alpha$};
+    \draw[thick] (-0.5,-1.2) rectangle (0.5,-0.3);
+    \node at (0,-0.75) {$\beta$};
+    \draw[thick] (0,0.3) -- (0,-0.3);
+    \draw[->, thick] (0,1.7) -- (0,1.2);
+    \draw[->, thick] (0,-1.2) -- (0,-1.7);
+    \node[font=\footnotesize, anchor=south] at (0,1.75)
+      {$\Sdev = \Sdev_\alpha = \Sdev_\beta$};
+    \node[font=\footnotesize, anchor=north] at (0,-1.8)
+      {$\dev = \dev_\alpha + \dev_\beta$};
+    \node[font=\footnotesize, anchor=south] at (0,2.4)
+      {\textbf{2) последовательное}};
+  \end{scope}
+\end{tikzpicture}
+\caption{Аксиомы соединений. В обоих случаях плотность свободной энергии и
+энтропия складываются:
+$\psi_\kappa = \psi_{\kappa\alpha} + \psi_{\kappa\beta}$,
+$s_\kappa = s_{\kappa\alpha} + s_{\kappa\beta}$.}
+\label{fig:rheo-connections}
+\end{figure}

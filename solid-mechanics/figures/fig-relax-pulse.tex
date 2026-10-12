@@ -1,0 +1,28 @@
+% Рисунок с доски: отклик материала Максвелла на импульс деформации
+% e = e_0 H(t) - e_0 H(t - t*).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[->] (0,-2.3) -- (0,2.9) node[anchor=south east] {$\Sdev$};
+  \draw[->] (-0.3,0) -- (6.5,0) node[anchor=north east] {$t$};
+
+  % подъём и релаксация
+  \draw[very thick, blue!60!black] (0,0) -- (0,2.4);
+  \draw[very thick, blue!60!black, domain=0:2.6, samples=100, smooth]
+    plot (\x, {2.4*exp(-\x/1.6)});
+  % скачок вниз на ту же величину 2μ e_0
+  \draw[very thick, blue!60!black] (2.6,{2.4*exp(-2.6/1.6)}) -- (2.6,{2.4*exp(-2.6/1.6)-2.4});
+  \draw[very thick, blue!60!black, domain=2.6:6.2, samples=100, smooth]
+    plot (\x, {(2.4*exp(-2.6/1.6)-2.4)*exp(-(\x-2.6)/1.6)});
+
+  \node[anchor=east, font=\footnotesize] at (-0.08,2.4) {$2\mu\,\dev_0$};
+  \node[anchor=north west, font=\footnotesize] at (2.65,0.55) {$t^*$};
+  \draw[<->, gray] (3.05,{2.4*exp(-2.6/1.6)}) -- (3.05,{2.4*exp(-2.6/1.6)-2.4});
+  \node[gray, font=\footnotesize, anchor=west] at (3.1,{2.4*exp(-2.6/1.6)-1.2})
+    {скачок на ту же величину $2\mu\,\dev_0$};
+\end{tikzpicture}
+\caption{Импульс деформации: в момент $t^*$ напряжение падает ровно на
+$2\mu\,\dev_0$ — столько же, сколько «набрала» пружина в нуле, — и дальше
+релаксирует к нулю снизу.}
+\label{fig:relax-pulse}
+\end{figure}

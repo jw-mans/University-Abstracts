@@ -1,0 +1,29 @@
+% Рисунок с доски: функция ползучести обобщённой модели при N = 2,
+% μ1 = μ2, τ2 >> τ1 — излом около τ1.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, xscale=1.0]
+  \draw[->] (0,0) -- (7.3,0) node[anchor=north east] {$t$};
+  \draw[->] (0,0) -- (0,3.3) node[anchor=south east] {$\Pi$};
+
+  \draw[dashed, gray] (0,2.8) -- (7.0,2.8);
+  \node[anchor=east, font=\footnotesize] at (-0.05,2.8) {$\dfrac{1}{\mu_1}$};
+  \draw[dashed, gray] (0,1.4) -- (1.0,1.4);
+  \node[anchor=east, font=\footnotesize] at (-0.05,1.4) {$\dfrac{1}{2\mu_1}$};
+
+  \draw[very thick, blue!60!black, domain=0:7, samples=200, smooth]
+    plot (\x, {1.4*(1-exp(-\x/0.35)) + 1.4*(1-exp(-\x/2.6))});
+
+  \fill (1.0,{1.4*(1-exp(-1/0.35)) + 1.4*(1-exp(-1/2.6))}) circle (1.3pt);
+  \node[font=\footnotesize, anchor=north west]
+    at (1.1,{1.4*(1-exp(-1/0.35)) + 1.4*(1-exp(-1/2.6))}) {излом};
+
+  \node[anchor=north, font=\footnotesize] at (1.0,-0.05) {$\tau_1$};
+  \node[anchor=north, font=\footnotesize] at (5.2,-0.05) {$\tau_2$};
+  \draw[dashed, gray] (5.2,0) -- (5.2,2.8);
+\end{tikzpicture}
+\caption{Обобщённая модель при $N=2$, $\mu_1 = \mu_2$, $\tau_2 \gg \tau_1$:
+быстрое звено набирает ползучесть за время $\tau_1$, медленное — за $\tau_2$.
+Реальный график сглажен в окрестности излома.}
+\label{fig:kv-two-times}
+\end{figure}

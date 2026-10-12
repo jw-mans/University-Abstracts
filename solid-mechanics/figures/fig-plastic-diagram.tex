@@ -1,0 +1,21 @@
+% Рисунок с доски: диаграмма деформирования пластического материала
+% с площадкой текучести.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[->] (0,0) -- (5.5,0) node[anchor=north east] {$\dev$};
+  \draw[->] (0,0) -- (0,3.0) node[anchor=south east] {$\Sdev$};
+
+  \draw[very thick, blue!60!black] (0,0) -- (1.6,2.0) -- (4.8,2.0);
+  \draw[dashed, gray] (0,2.0) -- (1.6,2.0);
+  \node[anchor=east, font=\footnotesize] at (-0.05,2.0) {$\tau_s$};
+
+  \node[font=\footnotesize, anchor=south] at (3.4,2.1) {пластичность};
+  \node[font=\footnotesize, anchor=west, align=left] at (1.0,0.9)
+    {упругость};
+\end{tikzpicture}
+\caption{Пластический материал: пока $N(\Sdev) < \tau_s$, деформация не растёт
+($\dt{\dev} = 0$); при $N(\Sdev) = \tau_s$ выполняется $\Sdev = \lambda\dt{\dev}$,
+где множитель $\lambda \ge 0$ подстраивается так, чтобы напряжение не росло.}
+\label{fig:plastic-diagram}
+\end{figure}

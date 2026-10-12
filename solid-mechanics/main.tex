@@ -1,0 +1,55 @@
+%  Механика деформируемого твёрдого тела — конспект лекций
+%  Компиляция: pdflatex main.tex  (дважды, из-за ссылок и оглавления)
+
+\documentclass[12pt,a4paper]{article}
+
+\input{preamble}
+
+\title{\textbf{Механика деформируемого твёрдого тела}\\[0.3em]\large Конспект лекций}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{idea}[title={Обозначения в конспекте}]
+Блок \textbf{«Пояснение»} — то, чего не было на лекции: интуиция, обоснование
+пропущенных шагов, связи с другими темами.
+
+\medskip
+Блок \textbf{«Сверить с записью»} — места, где запись на доске или в тетради
+неразборчива, содержит описку или требует уточнения.
+
+\medskip
+Маркер \plusplus{} вместо доказательства — так помечено в тетради; эти доказательства
+дописываются позже по записям прошлых семестров.
+\end{idea}
+
+\tableofcontents
+\newpage
+
+% Нумерация: section = глава, subsection = параграф (§)
+\renewcommand{\thesubsection}{\S\arabic{subsection}}
+
+\section{Линейная теория упругости}
+\input{sections/00-elasticity-system}
+
+\newpage
+\input{sections/01-hooke-forms}
+
+\newpage
+\section{Реологические модели}
+\input{sections/02-classification}
+
+\newpage
+\input{sections/03-rheological-method}
+
+\newpage
+\input{sections/04-kelvin-voigt}
+
+\newpage
+\input{sections/05-maxwell}
+
+\end{document}

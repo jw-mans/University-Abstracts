@@ -1,0 +1,169 @@
+%  Преамбула конспекта «Механика деформируемого твёрдого тела»
+%  Компилировать pdfLaTeX (кодировка utf8, шрифты T2A).
+
+% Latin Modern не имеет T2A-начертаний (нет t2almr.fd), поэтому кириллица идёт
+% через cm-super: семейство cmr в кодировке T2A.
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{geometry}
+\geometry{a4paper,margin=2.5cm}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,patterns,decorations.pathmorphing,decorations.pathreplacing,shapes.geometric,calc}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots,fillbetween}
+\pgfplotsset{compat=1.18}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={Механика деформируемого твёрдого тела --- конспект}
+}
+
+\hyphenation{фор-мо-из-ме-не-ния опре-де-ля-ю-щих ре-о-ло-ги-чес-ких}
+
+%  Окружения для теорем
+\theoremstyle{plain}
+\newtheorem{theorem}{Теорема}
+\newtheorem{proposition}[theorem]{Утверждение}
+\newtheorem{corollary}{Следствие}
+\newtheorem*{corollary*}{Следствие}
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{criterion}{Признак}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+\newtheorem{example}{Пример}
+\newtheorem{exercise}{Упражнение}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Замечание}
+\newtheorem*{reminder}{Напоминание}
+
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+%  Пометки конспекта
+%    \begin{idea} ... \end{idea}  — пояснения, которых не было на лекции
+%    \begin{warn} ... \end{warn} — неразборчиво / описка / требует сверки
+\newtcolorbox{idea}[1][]{
+  breakable,
+  enhanced,
+  colback=blue!4!white,
+  colframe=blue!45!black,
+  boxrule=0.4pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  title={Пояснение},
+  fonttitle=\bfseries\small,
+  coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-2pt},
+  boxed title style={colback=blue!45!black,boxrule=0pt,arc=1pt},
+  #1
+}
+
+\newtcolorbox{warn}[1][]{
+  breakable,
+  enhanced,
+  colback=orange!6!white,
+  colframe=orange!65!black,
+  boxrule=0.4pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  title={Сверить с записью},
+  fonttitle=\bfseries\small,
+  coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-2pt},
+  boxed title style={colback=orange!65!black,boxrule=0pt,arc=1pt},
+  #1
+}
+
+% Отметка начала лекции
+\newcommand{\lecture}[2]{%
+  \bigskip
+  \noindent\hfill\textit{\small #1\ifx\relax#2\relax\else, #2\fi}\\[-0.3em]
+  \noindent\rule{\textwidth}{0.4pt}
+  \medskip
+}
+
+%  Макросы
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\sgn}{\operatorname{sign}}
+\newcommand{\dd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\dt}[1]{\dot{#1}}
+\newcommand{\tr}{\operatorname{tr}}
+
+%  Векторы и тензоры.
+%  В тетради вектор помечен одной чертой снизу, тензор 2-го ранга — двумя.
+%  В конспекте и то и другое набрано полужирным: \vc — вектор, \tn — тензор.
+\newcommand{\vc}[1]{\boldsymbol{#1}}
+\newcommand{\tn}[1]{\boldsymbol{#1}}
+\newcommand{\Eten}{\boldsymbol{E}}          % единичный тензор
+\newcommand{\sig}{\boldsymbol{\sigma}}      % тензор напряжений
+\newcommand{\epsT}{\boldsymbol{\varepsilon}}% тензор деформации
+\newcommand{\dev}{\boldsymbol{e}}           % девиатор деформации
+\newcommand{\Sdev}{\boldsymbol{S}}          % девиатор напряжений
+\newcommand{\nab}{\nabla}
+\newcommand{\divg}{\nab\cdot}
+\newcommand{\sym}[1]{\left(#1\right)^{s}}   % симметричная часть
+\newcommand{\ddotp}{\mathbin{\cdot\cdot}}   % двойное скалярное произведение
+
+% Маркер «++ в кружке» из тетради: доказательство будет дописано позже
+% по записям прошлых семестров.
+\newcommand{\plusplus}{%
+  \tikz[baseline=(pp.base)]{%
+    \node[draw, ellipse, inner xsep=3pt, inner ysep=1pt, line width=0.4pt] (pp)
+      {\footnotesize $+\,+$};}%
+}
+
+%  Реологические элементы для схем (pic-и для TikZ).
+%    \pic at (x,y) {spring};    — упругий элемент (пружина, закон Гука)
+%    \pic at (x,y) {damper};    — вязкий элемент (демпфер, элемент Ньютона)
+%    \pic at (x,y) {stvenant};  — пластический элемент (сухое трение, Сен-Венан)
+%  Каждый элемент нарисован горизонтально, с выводами в (-0.9,0) и (0.9,0).
+\tikzset{
+  pics/spring/.style={code={
+    \draw[thick] (-0.9,0) -- (-0.55,0);
+    \draw[thick, decorate, decoration={zigzag, segment length=4pt, amplitude=4pt}]
+      (-0.55,0) -- (0.55,0);
+    \draw[thick] (0.55,0) -- (0.9,0);
+  }},
+  pics/damper/.style={code={
+    \draw[thick] (-0.9,0) -- (-0.4,0);
+    \draw[thick] (0.3,-0.3) -- (-0.4,-0.3) -- (-0.4,0.3) -- (0.3,0.3);
+    \draw[thick] (0.0,-0.26) -- (0.0,0.26);
+    \draw[thick] (0.0,0) -- (0.9,0);
+  }},
+  pics/stvenant/.style={code={
+    \draw[thick] (-0.9,0) -- (-0.3,0);
+    \draw[thick] (-0.3,-0.22) rectangle (0.3,0.22);
+    \draw[thick] (-0.5,0.28) -- (0.5,0.28);
+    \draw[thick] (-0.5,-0.28) -- (0.5,-0.28);
+    \draw[thick] (0.3,0) -- (0.9,0);
+  }},
+}
+
+%  Быстрая сборка: \showfiguresfalse выключает все TikZ-рисунки.
+%  Нужно, когда бесплатный Overleaf не успевает в лимит времени.
+\newif\ifshowfigures
+\showfigurestrue
+
+\newcommand{\inputfig}[1]{%
+  \ifshowfigures
+    \input{#1}%
+  \else
+    \begin{center}\fbox{\small рисунок выключен: \texttt{\detokenize{#1}}}\end{center}%
+  \fi
+}

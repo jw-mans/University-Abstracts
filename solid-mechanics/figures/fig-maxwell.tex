@@ -1,0 +1,30 @@
+% Рисунок с доски: схема материала Максвелла — пружина (1) последовательно
+% с демпфером (2).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[thick] (0,2.6) -- (0,2.1);
+  \pic[rotate=90] at (0,1.2) {spring};
+  \node[anchor=west, font=\footnotesize] at (0.45,1.2) {$\mu$};
+  \node[anchor=east, font=\footnotesize] at (-0.45,1.2) {$1$};
+
+  \draw[thick] (0,0.3) -- (0,-0.3);
+
+  \pic[rotate=90] at (0,-1.2) {damper};
+  \node[anchor=west, font=\footnotesize] at (0.45,-1.2) {$\eta$};
+  \node[anchor=east, font=\footnotesize] at (-0.45,-1.2) {$2$};
+  \draw[thick] (0,-2.1) -- (0,-2.6);
+
+  \node[anchor=west, align=left] at (2.2,1.2)
+    {$\Sdev = \Sdev_1 = \Sdev_2$};
+  \node[anchor=west, align=left] at (2.2,0.2)
+    {$\dev = \dev_1 + \dev_2$};
+  \node[anchor=west, align=left] at (2.2,-1.0)
+    {$\Sdev_1 = 2\mu\,\dev_1$};
+  \node[anchor=west, align=left] at (2.2,-1.9)
+    {$\Sdev_2 = 2\eta\,\dt{\dev}_2$};
+\end{tikzpicture}
+\caption{Материал Максвелла: пружина и демпфер последовательно. Отсюда
+$\dt{\dev} = \dfrac{\dt{\Sdev}}{2\mu} + \dfrac{\Sdev}{2\eta}$.}
+\label{fig:maxwell}
+\end{figure}

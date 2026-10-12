@@ -1,0 +1,30 @@
+% Рисунок с доски: отклик модели Кельвина — Фойгта на импульс нагрузки
+% S = S_0 H(t) - S_0 H(t - t*).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, xscale=1.0]
+  % нагрузка
+  \begin{scope}
+    \draw[->] (0,0) -- (6.3,0) node[anchor=north east] {$t$};
+    \draw[->] (0,0) -- (0,2.2) node[anchor=south east] {$\Sdev$};
+    \draw[very thick, red!60!black] (0,0) -- (0,1.6) -- (2.5,1.6) -- (2.5,0) -- (6.0,0);
+    \node[anchor=north, font=\footnotesize] at (2.5,-0.05) {$t^*$};
+    \node[anchor=east, font=\footnotesize] at (-0.05,1.6) {$\Sdev_0$};
+  \end{scope}
+  % отклик
+  \begin{scope}[xshift=7.6cm]
+    \draw[->] (0,0) -- (6.3,0) node[anchor=north east] {$t$};
+    \draw[->] (0,0) -- (0,2.2) node[anchor=south east] {$\Lambda$};
+    \draw[very thick, blue!60!black, domain=0:2.5, samples=80, smooth]
+      plot (\x, {1.6*(1-exp(-\x/1.0))});
+    \draw[very thick, blue!60!black, domain=2.5:6, samples=80, smooth]
+      plot (\x, {1.6*(exp(-(\x-2.5)/1.0)-exp(-\x/1.0))});
+    \draw[dashed, gray] (2.5,0) -- (2.5,{1.6*(1-exp(-2.5))});
+    \node[anchor=north, font=\footnotesize] at (2.5,-0.05) {$t^*$};
+  \end{scope}
+\end{tikzpicture}
+\caption{Импульс нагрузки и отклик по формуле Стилтьеса:
+$\dev(t) = \Sdev_0\bigl(\Pi(t) - \Pi(t-t^*)\bigr) = \Sdev_0\Lambda(t)$.
+После снятия нагрузки деформация убывает по экспоненте, а не исчезает мгновенно.}
+\label{fig:creep-pulse}
+\end{figure}

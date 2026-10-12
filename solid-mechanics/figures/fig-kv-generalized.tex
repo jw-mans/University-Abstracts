@@ -1,0 +1,37 @@
+% Рисунок с доски: обобщённый материал Кельвина — Фойгта — последовательная
+% цепочка из N звеньев «пружина ∥ демпфер».
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=0.95, transform shape]
+  \foreach \k/\lab in {0/1, 3.2/2, 6.4/3} {
+    \begin{scope}[xshift=\k cm]
+      \pic at (0,0) {spring};
+      \node[font=\footnotesize, anchor=north] at (0,-0.45) {$\mu_{\lab}$};
+      \pic at (0,1.2) {damper};
+      \node[font=\footnotesize, anchor=south] at (0,1.55) {$\eta_{\lab}$};
+      \draw[thick] (-0.9,0) -- (-1.2,0) -- (-1.2,1.2) -- (-0.9,1.2);
+      \draw[thick] (0.9,0) -- (1.2,0) -- (1.2,1.2) -- (0.9,1.2);
+      \node[font=\footnotesize, anchor=west] at (1.3,0.6)
+        {$\tau_{\lab} = \frac{\eta_{\lab}}{\mu_{\lab}}$};
+    \end{scope}
+  }
+  \draw[thick] (-1.2,0.6) -- (-1.8,0.6);
+  \draw[thick] (2.0,0.6) -- (2.3,0.6);
+  \draw[thick] (5.2,0.6) -- (5.5,0.6);
+  \node at (8.6,0.6) {$\cdots$};
+  \begin{scope}[xshift=10.6cm]
+    \pic at (0,0) {spring};
+    \node[font=\footnotesize, anchor=north] at (0,-0.45) {$\mu_N$};
+    \pic at (0,1.2) {damper};
+    \node[font=\footnotesize, anchor=south] at (0,1.55) {$\eta_N$};
+    \draw[thick] (-0.9,0) -- (-1.2,0) -- (-1.2,1.2) -- (-0.9,1.2);
+    \draw[thick] (0.9,0) -- (1.2,0) -- (1.2,1.2) -- (0.9,1.2);
+    \draw[thick] (1.2,0.6) -- (1.8,0.6);
+  \end{scope}
+  \draw[thick] (9.0,0.6) -- (9.4,0.6);
+\end{tikzpicture}
+\caption{Обобщённый материал Кельвина–Фойгта: $N$ звеньев соединены
+последовательно, поэтому $\dev = \sum_k \dev_k$ при общем $\Sdev$, а функции
+ползучести складываются.}
+\label{fig:kv-generalized}
+\end{figure}

@@ -1,0 +1,39 @@
+% Рисунок с доски: отсчётная и актуальная конфигурации тела,
+% радиус-векторы R и r, перемещение u = r - R.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  % отсчётная конфигурация
+  \draw[thick, blue!55!black]
+    plot[smooth cycle, tension=0.9]
+    coordinates {(0,0) (1.3,0.7) (2.4,0.3) (2.6,-0.9) (1.4,-1.6) (0.1,-1.1)};
+  \node[blue!55!black, font=\footnotesize, anchor=north] at (1.3,-1.75)
+    {отсчётная: $t=0$, $S$, $V$};
+
+  % актуальная конфигурация
+  \draw[thick, red!60!black]
+    plot[smooth cycle, tension=0.9]
+    coordinates {(4.6,0.5) (6.0,1.0) (7.0,0.2) (6.9,-1.1) (5.6,-1.6) (4.5,-0.6)};
+  \node[red!60!black, font=\footnotesize, anchor=north] at (5.8,-1.75)
+    {актуальная: $t$, $s$, $v$};
+
+  % точка и её образ
+  \fill (1.3,-0.5) circle (1.4pt);
+  \fill (5.7,-0.3) circle (1.4pt);
+
+  % радиус-векторы из общего полюса
+  \coordinate (O) at (3.3,-3.2);
+  \fill (O) circle (1pt);
+  \draw[->, thick] (O) -- (1.3,-0.5) node[midway, left, font=\footnotesize] {$\vc R$};
+  \draw[->, thick] (O) -- (5.7,-0.3) node[midway, right, font=\footnotesize] {$\vc r$};
+
+  % перемещение
+  \draw[->, very thick, green!45!black] (1.3,-0.5) -- (5.7,-0.3)
+    node[midway, above, font=\footnotesize] {$\vc u$};
+\end{tikzpicture}
+\caption{Отсчётная и актуальная конфигурации: $\vc r = \vc R + \vc u$.
+В эйлеровом подходе все поля заданы в актуальной конфигурации, $\epsT = \epsT(\vc r)$;
+при малых $\norm{\vc u}$ и $\norm{\nab \vc u}$ граничные условия сносятся
+на отсчётную конфигурацию.}
+\label{fig:configurations}
+\end{figure}

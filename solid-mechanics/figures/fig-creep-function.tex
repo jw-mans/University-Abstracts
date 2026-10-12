@@ -1,0 +1,26 @@
+% Рисунок с доски: функция ползучести материала Кельвина — Фойгта
+% Π(t) = (1/2μ)(1 - e^{-t/τ}) с касательной в нуле наклона 1/(2η).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, xscale=1.1]
+  \draw[->] (0,0) -- (6.3,0) node[anchor=north east] {$t$};
+  \draw[->] (0,0) -- (0,3.1) node[anchor=south east] {$\Pi$};
+
+  \draw[dashed, gray] (0,2.5) -- (6.0,2.5);
+  \node[anchor=east, font=\footnotesize] at (-0.05,2.5) {$\dfrac{1}{2\mu}$};
+
+  \draw[very thick, blue!60!black, domain=0:6, samples=120, smooth]
+    plot (\x, {2.5*(1-exp(-\x/1.5))});
+
+  % касательная в нуле: наклон Π'(0) = 1/(2η)
+  \draw[gray] (0,0) -- (1.5,2.5);
+  \draw[dashed, gray] (1.5,0) -- (1.5,{2.5*(1-exp(-1))});
+  \node[anchor=north, font=\footnotesize] at (1.5,-0.05) {$\tau$};
+  \fill (1.5,{2.5*(1-exp(-1))}) circle (1.2pt);
+\end{tikzpicture}
+\caption{Функция ползучести $\Pi(t) = \frac{1}{2\mu}(1-e^{-t/\tau})$.
+Наклон в нуле $\dt\Pi(0) = \frac{1}{2\mu\tau} = \frac{1}{2\eta}$; за время
+$\tau$ набирается $\Pi(\tau) \approx \frac23 \cdot \frac{1}{2\mu}$ — отсюда
+название «время запаздывания ползучести».}
+\label{fig:creep-function}
+\end{figure}

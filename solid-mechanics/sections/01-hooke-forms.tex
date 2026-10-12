@@ -1,0 +1,144 @@
+\subsection{Различные варианты закона Гука}
+
+\subsubsection*{1-й вид: модуль объёмного сжатия и модуль сдвига}
+
+\[
+  \boxed{\ \sig = K\theta\,\Eten + 2\mu\,\dev\ }
+\]
+$K$ — модуль объёмного сжатия, $\mu$ — модуль сдвига. Разложение на шаровую
+часть и девиатор даёт две независимые связи:
+\[
+  \bar\sigma = K\theta ,
+  \qquad
+  \Sdev = 2\mu\,\dev .
+\]
+
+Положительные напряжения — растяжение: тело растянуто, оно «хочет» сжаться.
+Отрицательные напряжения — сжатие: тело сжато, оно «хочет» растянуться.
+Поэтому по физическому смыслу
+\[
+  K > 0, \qquad \mu > 0 .
+\]
+
+\begin{warn}
+Про $K>0$ в тетради помечено «(уже обсудили)», про $\mu>0$ — «(вроде аналогично
+$K$)». Строгий вывод обоих неравенств из термодинамики появляется позже,
+см.~\S\ref{ssec:classification}.
+\end{warn}
+
+\subsubsection*{2-й вид: модули Ламе}
+
+По определению девиатора
+\[
+  \dev = \epsT - \frac{\theta}{3}\Eten
+  \quad\Longrightarrow\quad
+  \sig = K\theta\,\Eten + 2\mu\underbrace{\left(\epsT - \frac{\theta}{3}\Eten\right)}_{\dev}
+  = \left(K - \frac{2}{3}\mu\right)\theta\,\Eten + 2\mu\,\epsT ,
+\]
+и, обозначив
+\[
+  \lambda = K - \frac{2}{3}\mu ,
+\]
+получаем
+\[
+  \boxed{\ \sig = \lambda\theta\,\Eten + 2\mu\,\epsT\ }
+\]
+$\lambda, \mu$ — \textbf{модули Ламе}.
+
+\subsubsection*{3-й вид: инженерная форма}
+
+\inputfig{figures/fig-uniaxial}
+
+При одноосном растяжении $\eps = \dfrac{1}{E}\sigma$. Для изотропного материала
+(во всех направлениях одинаково) это обобщается до
+\[
+  \begin{aligned}
+    \eps_{11} &= \frac{1}{E}\bigl(\sigma_{11} - \nu(\sigma_{22} + \sigma_{33})\bigr), \\
+    \eps_{22} &= \frac{1}{E}\bigl(\sigma_{22} - \nu(\sigma_{11} + \sigma_{33})\bigr), \\
+    \eps_{33} &= \frac{1}{E}\bigl(\sigma_{33} - \nu(\sigma_{11} + \sigma_{22})\bigr),
+  \end{aligned}
+  \qquad
+  \begin{aligned}
+    \eps_{12} &= \frac{\sigma_{12}}{2G}, \\
+    \eps_{13} &= \frac{\sigma_{13}}{2G}, \\
+    \eps_{23} &= \frac{\sigma_{23}}{2G},
+  \end{aligned}
+\]
+где $E$ — модуль Юнга, $\nu$ — коэффициент Пуассона, $G$ — модуль сдвига.
+
+Коэффициент Пуассона отвечает за то, что при растяжении в одну сторону тело
+сжимается в поперечном направлении — но не на $100\%$.
+
+\subsubsection*{Связь констант}
+
+Константы здесь не независимы, их можно выводить друг из друга. Свернём 2-й вид
+закона Гука, записанный относительно деформации:
+\[
+  \epsT = \frac{1}{2\mu}\left(\sig - \lambda\theta\,\Eten\right)
+  \quad \ddotp\ \Eten \ \Longrightarrow\\
+  \theta = \frac{1}{2\mu}\left(3\bar\sigma - 3\lambda\theta\right),
+  \qquad \bar\sigma = \frac{\tr \sig}{3} ,
+\]
+откуда
+\[
+  \theta = \frac{3\bar\sigma}{3\lambda + 2\mu}
+  \quad\Longrightarrow\quad
+  \epsT = \frac{1}{2\mu}\left(\sig - \frac{\lambda}{3\lambda+2\mu}\,3\bar\sigma\,\Eten\right).
+\]
+
+Теперь то же самое из инженерной формы. Прибавив и вычтя $\nu\sigma_{ii}$:
+\[
+  \eps_{11} = \frac{1}{E}\Bigl(\sigma_{11}(1+\nu) - \nu(\sigma_{11}+\sigma_{22}+\sigma_{33})\Bigr),
+\]
+и аналогично для $\eps_{22}$, $\eps_{33}$. Вынося $(1+\nu)/E$:
+\[
+  \eps_{11} = \frac{1+\nu}{E}\left(\sigma_{11} - \frac{\nu}{1+\nu}(\sigma_{11}+\sigma_{22}+\sigma_{33})\right),
+\]
+\[
+  \begin{aligned}
+    \eps_{22} &= \frac{1+\nu}{E}\left(\sigma_{22} - \frac{\nu}{1+\nu}(\sigma_{11}+\sigma_{22}+\sigma_{33})\right), \\
+    \eps_{33} &= \frac{1+\nu}{E}\left(\sigma_{33} - \frac{\nu}{1+\nu}(\sigma_{11}+\sigma_{22}+\sigma_{33})\right).
+  \end{aligned}
+\]
+Сравнивая это с $\epsT = \frac{1}{2\mu}\left(\sig - \frac{\lambda}{3\lambda+2\mu}3\bar\sigma\Eten\right)$,
+получаем связи для констант:
+\[
+  \frac{1+\nu}{E} = \frac{1}{2\mu} ,
+  \qquad
+  \frac{\nu}{1+\nu} = \frac{\lambda}{3\lambda + 2\mu} ,
+\]
+а из сдвиговой компоненты $\eps_{12} = \dfrac{\sigma_{12}}{2\mu}$ следует
+\[
+  \mu = G = \frac{E}{2(1+\nu)} .
+\]
+
+То есть независимых констант всего $2$, остальные выводятся:
+\[
+  \lambda = \frac{2\mu\nu}{1-2\nu} ,
+  \qquad
+  \nu(3\lambda + 2\mu) = \lambda(1+\nu) .
+\]
+
+\subsubsection*{Ограничение на коэффициент Пуассона}
+
+Из определения $\lambda = K - \dfrac{2\mu}{3}$:
+\[
+  K = \lambda + \frac{2\mu}{3} = \dots = \frac{2\mu(1+\nu)}{3(1-2\nu)} > 0 ,
+\]
+то есть
+\[
+  \boxed{\ -1 \le \nu < \tfrac{1}{2}\ }
+\]
+
+\begin{idea}
+Промежуточная выкладка (в тетради «$=\dots=$»): подставляем
+$\lambda = \dfrac{2\mu\nu}{1-2\nu}$ и приводим к общему знаменателю:
+\[
+  K = \frac{2\mu\nu}{1-2\nu} + \frac{2\mu}{3}
+    = \frac{6\mu\nu + 2\mu(1-2\nu)}{3(1-2\nu)}
+    = \frac{2\mu(1+\nu)}{3(1-2\nu)} .
+\]
+При $\mu>0$ требование $K>0$ даёт $(1+\nu)(1-2\nu) > 0$, то есть
+$-1 < \nu < \tfrac12$; граничное значение $\nu=-1$ записано в тетради
+нестрого. Случай $\nu \to \tfrac12$ — несжимаемый материал ($K\to\infty$).
+\end{idea}

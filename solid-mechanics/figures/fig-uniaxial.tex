@@ -1,0 +1,21 @@
+% Рисунок с доски: одноосное растяжение образца — исходная форма для
+% инженерной записи закона Гука (модуль Юнга, коэффициент Пуассона).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[thick, fill=blue!5] (0,0) rectangle (3,0.9);
+  \draw[dashed, gray] (-0.1,0.12) rectangle (3.1,0.78);
+  \draw[->, very thick, red!65!black] (3,0.45) -- (4.1,0.45)
+    node[anchor=west, font=\footnotesize] {$\sigma_{11}$};
+  \draw[->, very thick, red!65!black] (0,0.45) -- (-1.1,0.45)
+    node[anchor=east, font=\footnotesize] {$\sigma_{11}$};
+  \draw[->, gray] (1.5,0.9) -- (1.5,1.25);
+  \draw[->, gray] (1.5,0) -- (1.5,-0.35);
+  \node[gray, font=\footnotesize, anchor=north] at (1.5,-0.4)
+    {поперечное сжатие: $\eps_{22} = \eps_{33} = -\nu\,\eps_{11}$};
+\end{tikzpicture}
+\caption{Одноосное растяжение: $\eps_{11} = \sigma_{11}/E$, а в поперечных
+направлениях образец сжимается — но не на $100\%$: доля задаётся коэффициентом
+Пуассона $\nu$.}
+\label{fig:uniaxial}
+\end{figure}

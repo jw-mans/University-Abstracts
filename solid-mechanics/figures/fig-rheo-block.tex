@@ -1,0 +1,24 @@
+% Рисунок с доски: произвольный элемент α с нагрузкой S_α и деформацией e_α.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[thick] (-0.8,-0.5) rectangle (0.8,0.5);
+  \node at (0,0) {$\alpha$};
+  \draw[->, thick] (0,1.3) -- (0,0.55);
+  \draw[->, thick] (0,-0.55) -- (0,-1.3);
+  \node[anchor=east, font=\footnotesize] at (-0.1,1.1) {$\Sdev_\alpha$};
+  \node[anchor=east, font=\footnotesize] at (-0.1,-1.1) {$\Sdev_\alpha$};
+  \node[anchor=west, font=\footnotesize] at (0.1,1.1) {$\dev_\alpha$};
+
+  \node[anchor=west, align=left, font=\footnotesize] at (2.0,0.5)
+    {$\alpha = 1, 2, 3, \dots, N$};
+  \node[anchor=west, align=left, font=\footnotesize] at (2.0,-0.4)
+    {$\alpha$ может быть:};
+  \pic at (6.0,-0.4) {spring};
+  \pic at (7.9,-0.4) {damper};
+  \pic at (9.8,-0.4) {stvenant};
+\end{tikzpicture}
+\caption{Элемент реологической модели. Комбинируя элементы, собираем новый
+материал.}
+\label{fig:rheo-block}
+\end{figure}

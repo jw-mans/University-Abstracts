@@ -1,0 +1,23 @@
+% Рисунок с доски: три базовых реологических элемента.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+  \pic at (0,0) {spring};
+  \node[font=\footnotesize, anchor=north] at (0,-0.75)
+    {упругий: $\Sdev = 2\mu\,\dev$};
+  \node[font=\footnotesize, anchor=south] at (0,0.5) {закон Гука};
+
+  \pic at (4,0) {damper};
+  \node[font=\footnotesize, anchor=north] at (4,-0.75)
+    {вязкий: $\Sdev = 2\eta\,\dt{\dev}$};
+  \node[font=\footnotesize, anchor=south] at (4,0.5) {элемент Ньютона};
+
+  \pic at (8,0) {stvenant};
+  \node[font=\footnotesize, anchor=north] at (8,-0.75)
+    {пластический: $N(\Sdev)\le\tau_s$};
+  \node[font=\footnotesize, anchor=south] at (8,0.5) {элемент Сен-Венана};
+\end{tikzpicture}
+\caption{Базовые реологические элементы: пружина, демпфер и элемент сухого
+трения. Из них методом реологических моделей собираются новые материалы.}
+\label{fig:rheo-elements}
+\end{figure}

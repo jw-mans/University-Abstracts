@@ -1,0 +1,175 @@
+\subsection{Вязко-упругий материал Кельвина–Фойгта}
+
+\inputfig{figures/fig-kelvin-voigt}
+
+Пружина (элемент 1) и демпфер (элемент 2) соединены параллельно:
+\[
+  \Sdev = \Sdev_1 + \Sdev_2 ,
+  \qquad
+  \dev = \dev_1 = \dev_2 .
+\]
+Элементы по отдельности:
+\[
+  \Sdev_1 = 2\mu\,\dev_1 = 2\mu\,\dev ,
+  \qquad
+  \Sdev_2 = 2\eta\,\dt{\dev}_2 = 2\eta\,\dt{\dev}
+\]
+\[
+  \Longrightarrow\quad
+  \boxed{\ \Sdev = 2\mu\,\dev + 2\eta\,\dt{\dev}\ }
+\]
+— определяющее соотношение для Кельвина–Фойгта.
+
+\subsubsection*{Статическое нагружение}
+
+Пусть
+\[
+  \Sdev = \Sdev_0\, H(t), \qquad \Sdev_0 = \mathrm{const} ,
+  \qquad
+  H(t) = \begin{cases} 0, & t < 0, \\ 1, & t \ge 0 \end{cases}
+\]
+(функция Хевисайда — мгновенно приложенная и дальше постоянная нагрузка). Тогда
+\[
+  \begin{cases}
+    t > 0: & 2\mu\,\dev + 2\eta\,\dt{\dev} = \Sdev_0 , \\[0.3em]
+    t \le 0: & \dev = 0, \quad \Sdev = 0 .
+  \end{cases}
+\]
+Структуру девиатора $\Sdev_0$ мы не трогаем — ищем $\dev$ в виде
+\[
+  \dev = \Sdev_0 \,\frac{1}{2\mu}\, \gamma(t) ,
+\]
+где $\gamma(t)$ — скалярная функция.
+
+\begin{warn}
+Фраза перед этой подстановкой в тетради неразборчива («мы не \dots{} структуру
+$\Sdev$»). Смысл: тензорная структура решения повторяет структуру нагрузки,
+неизвестна только скалярная зависимость от времени.
+\end{warn}
+
+Подставляем:
+\[
+  \Sdev_0\gamma + \underbrace{\frac{2\eta}{2\mu}}_{\tau}\dt\gamma\,\Sdev_0 = \Sdev_0
+  \quad\Longrightarrow\quad
+  \tau\dt\gamma + \gamma = 1 ,
+  \qquad
+  \tau = \frac{\eta}{\mu} ,
+\]
+где $\tau$ — постоянное \textbf{время запаздывания ползучести}. Итого задача
+\[
+  \begin{cases}
+    t > 0: & \tau\dt\gamma + \gamma = 1 , \\
+    t = 0: & \gamma = 0 .
+  \end{cases}
+\]
+Частное решение $\gamma_{\text{част}} = 1$, общее решение однородного уравнения
+$\gamma_{\text{одн}} = C e^{-t/\tau}$, значит $\gamma(t) = 1 + Ce^{-t/\tau}$, и из
+начального условия
+\[
+  \gamma(t) = 1 - e^{-t/\tau} .
+\]
+Тогда
+\[
+  \dev = \underbrace{\frac{1}{2\mu}\left(1 - e^{-t/\tau}\right)}_{\Pi(t)}\Sdev_0
+  = \Pi(t)\,\Sdev_0 ,
+  \qquad
+  \boxed{\ \Pi(t) = \frac{1}{2\mu}\left(1 - e^{-t/\tau}\right)\ }
+\]
+— \textbf{функция ползучести}.
+
+\inputfig{figures/fig-creep-function}
+
+Свойства:
+\[
+  \dt\Pi(t=0) = \frac{1}{2\mu\tau} = \frac{1}{2\eta} ,
+  \qquad
+  \Pi(\tau) = \frac{1}{2\mu}\left(1 - e^{-1}\right) \approx \frac{2}{3}\cdot\frac{1}{2\mu} .
+\]
+Поэтому $\tau$ — время запаздывания ползучести: это время, за которое набирается
+$\approx \tfrac23$ предельной деформации.
+
+\subsubsection*{Произвольное нагружение: интеграл Стилтьеса}
+
+\[
+  \boxed{\ \dev = \int\limits_0^t \Pi(t-\xi)\,\dt{\Sdev}(\xi)\,d\xi
+         = \int\limits_0^t \Pi(t-\xi)\,d\Sdev(\xi)\ }
+\]
+— интеграл Стилтьеса.
+
+\begin{idea}
+В тетради переменная интегрирования обозначена той же буквой $\tau$, что и время
+запаздывания. Здесь она переименована в $\xi$, чтобы не путать: $\tau$ всюду
+дальше — характерное время материала.
+
+Форма Стилтьеса удобна именно потому, что допускает скачки $\Sdev$: в точке
+скачка $d\Sdev$ даёт конечный вклад, тогда как $\dt{\Sdev}$ там — дельта-функция.
+\end{idea}
+
+Проверим на примерах.
+
+\medskip
+\textbf{1)} $\Sdev = \Sdev_0 H(t)$. Тогда $d\Sdev = \Sdev_0\,\delta(\xi)d\xi$ и
+\[
+  \dev(t) = \Pi(t)\,\Sdev_0 ,
+\]
+то есть результат согласуется с прямым решением.
+
+\medskip
+\textbf{2)} Импульс нагрузки
+\[
+  \Sdev = \Sdev_0 f(t) = \Sdev_0 H(t) - \Sdev_0 H(t - t^*) :
+\]
+\[
+  \dev(t) = \Sdev_0\bigl(\Pi(t) - \Pi(t - t^*)\bigr) = \Sdev_0\,\Lambda(t) .
+\]
+При этом $\Pi(t)$ всегда больше, чем $\Pi(t-t^*)$, — функция ползучести растёт,
+поэтому $\Lambda(t) \ge 0$: после снятия нагрузки деформация не исчезает мгновенно,
+а убывает по экспоненте (обратная ползучесть).
+
+\inputfig{figures/fig-creep-pulse}
+
+\subsection{Обобщённый материал Кельвина–Фойгта}
+
+Последовательное соединение $N$ штук моделей Кельвина–Фойгта.
+
+\inputfig{figures/fig-kv-generalized}
+
+По аксиомам последовательного соединения
+\[
+  \dev = \sum_{k=1}^{N} \dev_k ,
+  \qquad
+  \Sdev = \Sdev_1 = \Sdev_2 = \dots = \Sdev_N ,
+\]
+а каждое звено даёт
+\[
+  \dev_k = \int\limits_0^t \frac{1}{2\mu_k}\left(1 - e^{-(t-\xi)/\tau_k}\right) d\Sdev(\xi) ,
+  \qquad
+  \tau_k = \frac{\eta_k}{\mu_k} .
+\]
+Складывая:
+\[
+  \dev = \int\limits_0^t \underbrace{\left[\sum_{k=1}^{N}\frac{1}{2\mu_k}
+         \left(1 - e^{-(t-\xi)/\tau_k}\right)\right]}_{\Pi(t-\xi)} d\Sdev(\xi)
+       = \int\limits_0^t \Pi(t-\xi)\,d\Sdev(\xi) .
+\]
+
+Предельные значения:
+\[
+  t = 0 \ \Longrightarrow\ \dt\Pi(0) = \sum_{k=1}^{N}\frac{1}{2\eta_k} ,
+  \qquad
+  t \to \infty \ \Longrightarrow\ \Pi(t) \to \sum_{k=1}^{N}\frac{1}{2\mu_k} .
+\]
+
+\begin{warn}
+Следующая фраза в тетради читается плохо: «в н. момент напряжения только
+в \dots, в \dots{} напряжения только в \dots». По физике модели: сразу после
+скачка нагрузки деформация равна нулю, скорость деформации конечна только за счёт
+демпферов — нагрузку несут \emph{демпферы}; при $t\to\infty$ скорости обнуляются
+и всю нагрузку несут \emph{пружины}.
+\end{warn}
+
+При $N = 2$, $\mu_1 = \mu_2$, $\tau_2 \gg \tau_1$ график $\Pi(t)$ имеет излом
+около $t = \tau_1$ (на уровне $1/2\mu_1$) и выходит на $1/\mu_1$ при $t\sim\tau_2$;
+реальный график — сглаженный.
+
+\inputfig{figures/fig-kv-two-times}

@@ -1,0 +1,87 @@
+\subsection{Метод реологических моделей}
+
+\begin{warn}
+Подзаголовок в тетради: «(принцип объективности материальный)» — запись
+неразборчива.
+\end{warn}
+
+Цель — из уже имеющихся материалов собрать новые модели. Каждый элемент
+$\alpha = 1, 2, 3, \dots, N$ нагружен девиатором $\Sdev_\alpha$ и деформируется
+с девиатором $\dev_\alpha$; элементом может быть пружина, демпфер или элемент
+сухого трения.
+
+\inputfig{figures/fig-rheo-block}
+
+Комбинируем элементы, чтобы сделать новый материал.
+
+\subsubsection*{1) Параллельное соединение}
+
+\inputfig{figures/fig-rheo-connections}
+
+Поперечины движутся поступательно, поэтому деформации одинаковы —
+это \textbf{аксиома параллельного соединения}:
+\[
+  \dev_\alpha = \dev_\beta ,
+  \qquad
+  \Sdev = \Sdev_\alpha + \Sdev_\beta ,
+\]
+\[
+  \psi_\kappa = \psi_{\kappa\alpha} + \psi_{\kappa\beta}
+  \quad(\text{плотность свободной энергии}),
+  \qquad
+  s_\kappa = s_{\kappa\alpha} + s_{\kappa\beta}
+  \quad(\text{энтропия}).
+\]
+
+\subsubsection*{2) Последовательное соединение}
+
+\[
+  \Sdev = \Sdev_\alpha = \Sdev_\beta ,
+  \qquad
+  \dev = \dev_\alpha + \dev_\beta ,
+\]
+\[
+  \psi_\kappa = \psi_{\kappa\alpha} + \psi_{\kappa\beta} ,
+  \qquad
+  s_\kappa = s_{\kappa\alpha} + s_{\kappa\beta} .
+\]
+
+Эти аксиомы позволяют гарантировать, что новые материалы — «хорошие»
+(удовлетворяют принципам).
+
+\begin{warn}
+Индекс у $\psi$ и $s$ в тетради написан кириллической «к» — здесь он набран как
+$\kappa$. Что именно он помечает (конфигурацию? формоизменение?), на лекции не
+расшифровано.
+\end{warn}
+
+\subsubsection*{Проверка II закона термодинамики}
+
+Неравенство Клаузиуса–Дюгема для формоизменения:
+\[
+  \Sdev \ddotp \dt{\dev} - \rho_0 \dt\psi_\kappa - \rho_0 s_\kappa \dt T \ge 0 .
+\]
+Оно должно выполняться для новых материалов. Проверим его для параллельного
+соединения:
+\[
+  \Sdev \ddotp \dt{\dev}
+  - \rho_0\bigl(\dt\psi_{\kappa\alpha} + \dt\psi_{\kappa\beta}\bigr)
+  - \rho_0\bigl(s_{\kappa\alpha} + s_{\kappa\beta}\bigr)\dt T \ge 0 .
+\]
+Материалы $\alpha$ и $\beta$ — хорошие, мы это знаем:
+\[
+  \begin{cases}
+    \Sdev_\alpha \ddotp \dt{\dev}_\alpha - \rho_0 \dt\psi_{\kappa\alpha}
+      - \rho_0 s_{\kappa\alpha}\dt T \ge 0, \\[0.4em]
+    \Sdev_\beta \ddotp \dt{\dev}_\beta - \rho_0 \dt\psi_{\kappa\beta}
+      - \rho_0 s_{\kappa\beta}\dt T \ge 0 .
+  \end{cases}
+\]
+Тогда сложим (учитывая $\dev_\alpha = \dev_\beta = \dev$):
+\[
+  \underbrace{\bigl(\Sdev_\alpha + \Sdev_\beta\bigr)}_{\Sdev} \ddotp \dt{\dev}
+  - \rho_0\bigl(\dt\psi_{\kappa\alpha} + \dt\psi_{\kappa\beta}\bigr)
+  - \rho_0\bigl(s_{\kappa\alpha} + s_{\kappa\beta}\bigr)\dt T \ge 0 .
+\]
+То есть параллельное соединение — хороший материал (удовлетворяет II закону
+термодинамики).
