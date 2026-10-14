@@ -24,3 +24,10 @@
 build/
 *.pdf
 !figures/**/*.pdf
+
+## Решения задач «++» — только локально, в удалённый репозиторий не уходят
+solutions/
+solutions.tex
+solutions.pdf
+*/solutions/
+*/solutions.tex

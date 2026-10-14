@@ -1,0 +1,210 @@
+\section{Обобщённые функции и производные по Соболеву}
+
+\subsection{Пространство основных функций $\mathcal{D}(\Om)$}
+
+\subsubsection*{Мотивировка}
+
+Пусть $u$ гладкая, $u \in C^1(a,b)$. Тогда для любой $\vartheta \in C_0^\infty\big((a,b)\big)$
+интегрирование по частям даёт
+\[
+  \int\limits_a^b u'\,\vartheta\, dx = -\int\limits_a^b u\,\vartheta'\, dx
+  \qquad \forall\, \vartheta \in C_0^\infty\big((a,b)\big) ,
+\]
+причём внеинтегральные члены пропадают: $\vartheta$ обращается в нуль около концов.
+Правая часть имеет смысл и тогда, когда $u$ не дифференцируема, — её и берут
+за определение производной.
+
+\begin{idea}
+Вся конструкция ниже — развитие этой одной формулы. Производную «перекладывают»
+с плохой функции на хорошую пробную, расплачиваясь знаком $(-1)^{|\alpha|}$.
+Поэтому сначала нужно аккуратно описать класс пробных функций и сходимость в нём.
+\end{idea}
+
+\subsubsection*{Основные функции и сходимость в $\mathcal{D}(\Om)$}
+
+Пусть $\Om \subset \R^n$, $n \in \N$, не обязательно ограничено.
+
+\begin{definition}
+\[
+  \mathcal{D}(\Om) = C_0^\infty(\Om)
+\]
+— множество \textbf{основных} (пробных) функций.
+\end{definition}
+
+\begin{definition}[сходимость в $\mathcal{D}$]
+$\varphi_k \xrightarrow{\ \mathcal{D}\ } \varphi$, если
+\begin{enumerate}
+  \item $\exists\, K \subset \Om$ — компакт, такой что $\supp \varphi_k \subset K$
+        для всех $k \in \N$ (все носители в одном компакте);
+  \item $D^\alpha \varphi_k \unif D^\alpha \varphi$ равномерно, для любого мультииндекса
+        $\alpha$.
+\end{enumerate}
+\end{definition}
+
+\inputfig{figures/fig-test-conv}
+
+$\mathcal{D}(\Om)$ — линейное пространство.
+
+\begin{idea}
+Требование общего компакта существенно: без него последовательность «шапочек»,
+уползающих к границе $\Om$, формально сходилась бы к нулю равномерно вместе со всеми
+производными, и непрерывность функционалов ничего бы не давала. Сходимость в
+$\mathcal{D}$ намеренно сделана очень сильной, чтобы непрерывных функционалов было
+как можно больше.
+\end{idea}
+
+\subsection{Распределения (обобщённые функции)}
+
+\begin{definition}
+$T$ — \textbf{распределение} (обобщённая функция) над $\Om$, если $T : \mathcal{D}(\Om) \to \R$
+линеен и непрерывен:
+\begin{enumerate}
+  \item $T(a_1\varphi_1 + a_2\varphi_2) = a_1 T(\varphi_1) + a_2 T(\varphi_2)$
+        для всех $\varphi_1, \varphi_2 \in \mathcal{D}(\Om)$, $a_1, a_2 \in \R$;
+  \item $\varphi_k \xrightarrow{\ \mathcal{D}\ } \varphi
+        \ \Longrightarrow\ T(\varphi_k) \to T(\varphi)$.
+\end{enumerate}
+Множество всех распределений над $\Om$ обозначается $\mathcal{D}^*(\Om)$.
+\end{definition}
+
+\subsubsection*{Регулярные распределения}
+
+\begin{example}\label{ex:regular}
+Пусть $f \in \Lloc(\Om)$. Положим
+\[
+  T_f(\varphi) = \int\limits_\Om f\,\varphi\, dx
+  \qquad \forall\, \varphi \in \mathcal{D}(\Om) .
+\]
+Тогда $T_f \in \mathcal{D}^*(\Om)$.
+\end{example}
+
+\emph{Корректность.} Интеграл фактически берётся по $\supp \varphi$ — компакту внутри
+$\Om$, а на компакте $f \in \Lp{1}(\supp\varphi)$ и $\varphi$ ограничена.
+
+\emph{Линейность.}
+\[
+  T_f(a_1\varphi_1 + a_2\varphi_2) = \int\limits_\Om f\,(a_1\varphi_1 + a_2\varphi_2)\, dx
+  = a_1 T_f(\varphi_1) + a_2 T_f(\varphi_2) .
+\]
+
+\emph{Непрерывность.} Пусть $\varphi_n \xrightarrow{\mathcal{D}} \varphi$ и $K$ — общий
+компакт, содержащий все носители. Тогда
+\[
+  \left| \int\limits_K f\,\varphi_n\, dx - \int\limits_K f\,\varphi\, dx \right|
+  \le \int\limits_K |f|\,|\varphi_n - \varphi|\, dx
+  \le \sup_K |\varphi_n - \varphi| \int\limits_K |f|\, dx \xrightarrow[n \to \infty]{} 0 ,
+\]
+так как $\varphi_n \unif \varphi$, а $\int_K |f|\,dx < \infty$.
+
+\begin{proposition}[единственность представления]\label{prop:reg-unique}
+Если $f, g \in \Lloc(\Om)$ и $T_f(\varphi) = T_g(\varphi)$ для всех
+$\varphi \in \mathcal{D}(\Om)$, то $f = g$ почти всюду на $\Om$.
+\end{proposition}
+
+\begin{proof}
+$\int_\Om (f-g)\,\varphi\, dx = 0$ для всех $\varphi \in C_0^\infty(\Om)$, а это в точности
+условие леммы Дюбуа--Реймона (лемма~\ref{lem:dbr}), откуда $f - g = 0$ п.\,в.
+\end{proof}
+
+\begin{definition}
+Распределение $T \in \mathcal{D}^*(\Om)$ называется \textbf{регулярным}, если существует
+$f \in \Lloc(\Om)$ с $T = T_f$, то есть
+\[
+  T(\varphi) = \int\limits_\Om f\,\varphi\, dx \qquad \forall \varphi \in \mathcal{D}(\Om) .
+\]
+Иначе распределение называется \textbf{сингулярным}.
+\end{definition}
+
+\begin{idea}
+По утверждению~\ref{prop:reg-unique} функция $f$ в регулярном случае определена
+однозначно (с точностью до множества меры нуль). Поэтому $\Lloc(\Om)$ вкладывается
+в $\mathcal{D}^*(\Om)$, и распределения — честное расширение класса функций.
+\end{idea}
+
+\subsubsection*{$\delta$-функция Дирака}
+
+\begin{example}[$\delta$-функция]\label{ex:delta}
+Пусть $0 \in \Om$ и
+\[
+  \delta(\varphi) = \varphi(0) \qquad \forall \varphi \in \mathcal{D}(\Om) .
+\]
+Это распределение (линейность очевидна, непрерывность — из равномерной сходимости
+$\varphi_k \unif \varphi$), причём \textbf{сингулярное}.
+\end{example}
+
+\begin{proof}[Доказательство сингулярности]
+Пусть, от противного, $\delta = T_f$ для некоторой $f \in \Lloc(\Om)$, то есть
+\[
+  \int\limits_\Om f\,\varphi\, dx = \varphi(0) \qquad \forall \varphi \in \mathcal{D}(\Om) .
+\]
+Возьмём любую $\varphi \in C_0^\infty(\Om \setminus \{0\})$: для неё $\varphi(0) = 0$,
+значит $\int_\Om f \varphi\, dx = 0$. По лемме Дюбуа--Реймона $f = 0$ п.\,в. на
+$\Om \setminus \{0\}$, а точка имеет меру нуль, поэтому $f = 0$ п.\,в. на $\Om$. Но тогда
+\[
+  \varphi(0) = \int\limits_\Om f\,\varphi\, dx = 0 \qquad \forall \varphi \in \mathcal{D}(\Om) ,
+\]
+что неверно: достаточно взять «шапочку» с $\varphi(0) = e^{-1} \neq 0$. Противоречие.
+\end{proof}
+
+\begin{idea}
+Наглядно $\delta$ — это предел ядер усреднения $\omega_\rho$ при $\rho \to 0$
+(рис.~\ref{fig:kernel-rho}): все $\omega_\rho$ задают регулярные распределения
+$T_{\omega_\rho}$, и $T_{\omega_\rho}(\varphi) \to \varphi(0)$, однако сам предел уже
+не представляется никакой функцией.
+\end{idea}
+
+\subsection{Дифференцирование распределений}
+
+\begin{definition}
+Для $T \in \mathcal{D}^*(\Om)$ положим
+\[
+  D^\alpha T(\varphi) = (-1)^{|\alpha|}\, T(D^\alpha \varphi)
+  \qquad \forall \varphi \in \mathcal{D}(\Om) .
+\]
+\end{definition}
+
+\begin{proposition}[утв.\ 1]\label{prop:deriv-distr}
+$D^\alpha T$ — тоже распределение.
+\end{proposition}
+
+\begin{proof}
+\emph{Линейность} следует из линейности $T$ и оператора $D^\alpha$:
+\[
+  D^\alpha T(a_1\varphi_1 + a_2\varphi_2)
+  = (-1)^{|\alpha|} T\big(a_1 D^\alpha\varphi_1 + a_2 D^\alpha\varphi_2\big)
+  = a_1 D^\alpha T(\varphi_1) + a_2 D^\alpha T(\varphi_2) .
+\]
+\emph{Непрерывность}: если $\varphi_k \xrightarrow{\mathcal{D}} \varphi$, то и
+$D^\alpha \varphi_k \xrightarrow{\mathcal{D}} D^\alpha \varphi$ (носители те же, а
+равномерная сходимость требуется сразу для всех производных). Поэтому
+\[
+  D^\alpha T(\varphi_k) = (-1)^{|\alpha|} T(D^\alpha \varphi_k)
+  \longrightarrow (-1)^{|\alpha|} T(D^\alpha \varphi) = D^\alpha T(\varphi) . \qedhere
+\]
+\end{proof}
+
+\begin{corollary}
+Любое распределение бесконечно дифференцируемо, причём
+\[
+  D^\alpha D^\beta T = D^{\alpha + \beta} T .
+\]
+\end{corollary}
+
+\begin{proposition}[утв.\ 2: согласованность с классической производной]\label{prop:deriv-classic}
+Если $f \in C^{|\alpha|}(\Om)$, то $D^\alpha T_f = T_{D^\alpha f}$.
+\end{proposition}
+
+\begin{proof}
+\[
+  D^\alpha T_f(\varphi) = (-1)^{|\alpha|} T_f(D^\alpha \varphi)
+  = (-1)^{|\alpha|} \int\limits_\Om f\, D^\alpha \varphi\, dx
+  = \int\limits_\Om D^\alpha f \cdot \varphi\, dx = T_{D^\alpha f}(\varphi) ,
+\]
+где предпоследнее равенство — интегрирование по частям $|\alpha|$ раз; внеинтегральные
+члены равны нулю, поскольку $\varphi$ финитна.
+\end{proof}
+
+\begin{idea}
+Это и есть оправдание всей конструкции: на гладких функциях новое дифференцирование
+совпадает со старым, а область определения расширяется на весь $\mathcal{D}^*(\Om)$.
+\end{idea}

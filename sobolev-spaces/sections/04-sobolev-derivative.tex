@@ -1,0 +1,206 @@
+\subsection{Обобщённая производная по Соболеву}
+
+\begin{definition}\label{def:sobolev-deriv}
+Пусть $f \in \Lloc(\Om)$. Функция $g \in \Lloc(\Om)$ называется \textbf{обобщённой
+производной $f$ по Соболеву}, $g = D^\alpha f$, если
+\[
+  D^\alpha T_f = T_g ,
+\]
+то есть
+\[
+  \int\limits_\Om g\,\varphi\, dx = (-1)^{|\alpha|} \int\limits_\Om f\, D^\alpha \varphi\, dx
+  \qquad \forall \varphi \in C_0^\infty(\Om) .
+\]
+\end{definition}
+
+\begin{remark}
+Производная по Соболеву существует \textbf{не всегда}: распределение $D^\alpha T_f$
+определено для любой $f \in \Lloc(\Om)$, но может оказаться сингулярным — тогда
+никакой функции $g$ ему не соответствует.
+\end{remark}
+
+\inputfig{figures/fig-heaviside}
+
+\begin{example}[функция Хевисайда]\label{ex:heaviside}
+Пусть $\Om = \R$ и
+\[
+  H(x) = \begin{cases} 0, & x < 0, \\ 1, & x \ge 0. \end{cases}
+\]
+Тогда
+\begin{multline*}
+  D T_H(\varphi) = -\,T_H(\varphi')
+  = -\int\limits_{-\infty}^{+\infty} H(x)\,\varphi'(x)\, dx \\
+  = -\int\limits_0^{+\infty} \varphi'(x)\, dx
+  = -\big(0 - \varphi(0)\big) = \varphi(0) = \delta(\varphi) ,
+\end{multline*}
+то есть $H' = \delta$. Распределение $\delta$ сингулярно (пример~\ref{ex:delta}),
+значит \textbf{у функции Хевисайда нет соболевской производной}.
+\end{example}
+
+\begin{example}\label{ex:x2sign}
+Пусть
+\[
+  f(x) = x^2 \sgn x = \begin{cases} x^2, & x \ge 0, \\ -x^2, & x < 0. \end{cases}
+\]
+Тогда
+\[
+  f'(x) = \begin{cases} 2x, & x \ge 0, \\ -2x, & x < 0, \end{cases} = 2|x| ,
+  \qquad
+  f''(x) = \begin{cases} 2, & x \ge 0, \\ -2, & x < 0, \end{cases} = 2\sgn x ,
+\]
+и обе эти производные — обычные функции из $\Lloc(\R)$. А вот третья производная уже
+сингулярна:
+\[
+  f'''(\varphi) = -\,T_{f''}(\varphi') = -\int\limits_{-\infty}^{+\infty} 2\sgn x \cdot \varphi'(x)\, dx
+  = 2\int\limits_{-\infty}^{0}\varphi'\,dx - 2\int\limits_0^{+\infty}\varphi'\,dx
+  = 4\varphi(0) ,
+\]
+то есть $f''' = 4\delta$.
+\end{example}
+
+\begin{idea}
+Видна общая картина: каждое дифференцирование «съедает» одну степень гладкости, и как
+только у функции появляется скачок, следующая производная выпадает из $\Lloc$ и становится
+сингулярной. Функция из примера~\ref{ex:x2sign} лежит в $\Wp{p}{2}$, но не в $\Wp{p}{3}$.
+\end{idea}
+
+\subsubsection*{Свойства обобщённой производной}
+
+\begin{proposition}[свойство 1: единственность]\label{prop:deriv-unique}
+Обобщённая производная единственна с точностью до множества меры нуль: если $g_1$ и $g_2$
+обе удовлетворяют определению~\ref{def:sobolev-deriv}, то $g_1 = g_2$ почти всюду в $\Om$.
+\end{proposition}
+
+\begin{proof}
+Вычитая два равенства, получаем
+\[
+  \int\limits_\Om (g_1 - g_2)\,\varphi\, dx = 0 \qquad \forall \varphi \in C_0^\infty(\Om) ,
+\]
+откуда по лемме Дюбуа--Реймона (лемма~\ref{lem:dbr}) $g_1 - g_2 = 0$ п.\,в.
+\end{proof}
+
+\begin{proposition}[свойство 2: линейность]\label{prop:deriv-linear}
+Пусть $f_1, f_2 \in \Lloc(\Om)$ и существуют $D^\alpha f_1, D^\alpha f_2 \in \Lloc(\Om)$.
+Тогда для любых $a_1, a_2 \in \R$ существует
+$D^\alpha(a_1 f_1 + a_2 f_2) \in \Lloc(\Om)$ и
+\[
+  D^\alpha(a_1 f_1 + a_2 f_2) = a_1 D^\alpha f_1 + a_2 D^\alpha f_2 .
+\]
+\end{proposition}
+
+\begin{proof}
+Складывая определяющие равенства с коэффициентами $a_1, a_2$, получаем для всех
+$\varphi \in C_0^\infty(\Om)$
+\[
+  \int\limits_\Om \big(a_1 D^\alpha f_1 + a_2 D^\alpha f_2\big)\varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_\Om \big(a_1 f_1 + a_2 f_2\big) D^\alpha \varphi\, dx ,
+\]
+а это и есть определение~\ref{def:sobolev-deriv} для функции $a_1 f_1 + a_2 f_2$.
+\end{proof}
+
+\subsubsection*{Сходимость в $\Lloc(\Om)$}
+
+\begin{definition}
+$f_k \to f$ в $\Lloc(\Om)$, если
+\[
+  \int\limits_{\Om'} |f_k - f|\, dx \xrightarrow[k \to \infty]{} 0
+  \qquad \forall\, \Om' \Subset \Om ,
+\]
+то есть сходимость в $\Lp{1}(\Om')$ на каждом компактно вложенном подмножестве.
+\end{definition}
+
+\begin{remark}[метрика]
+Эта сходимость метризуема. Возьмём $\Om_k \Subset \Om$ с $\bigcup_k \Om_k = \Om$ и
+положим
+\[
+  \rho_k(f_1, f_2) = \int\limits_{\Om_k} |f_1 - f_2|\, dx ,
+  \qquad
+  \rho(f_1, f_2) = \sum_{k=1}^{\infty} \frac{1}{2^k}\,
+  \frac{\rho_k(f_1, f_2)}{1 + \rho_k(f_1, f_2)} .
+\]
+Ряд сходится, так как каждое слагаемое не превосходит $2^{-k}$, и сумма не больше $1$.
+\end{remark}
+
+\begin{idea}
+Дробь $\frac{t}{1+t}$ обрезает каждое слагаемое до величины меньше единицы — без неё
+ряд мог бы расходиться, ведь $\rho_k$ не ограничены. При этом $\frac{t}{1+t} \to 0$
+тогда и только тогда, когда $t \to 0$, так что сходимость по метрике $\rho$ равносильна
+сходимости всех $\rho_k$ к нулю, то есть сходимости на каждом $\Om' \Subset \Om$.
+\end{idea}
+
+\subsubsection*{Свойство 3: признак существования обобщённой производной}
+
+\begin{theorem}[признак существования производной по Соболеву]\label{thm:crit-deriv}
+Пусть
+\[
+  f_k \in \Lloc(\Om) \quad \forall k, \qquad
+  \exists\, D^\alpha f_k \in \Lloc(\Om) \quad \forall k,
+\]
+\[
+  f_k \to f \ \text{ в } \Lloc(\Om), \qquad
+  D^\alpha f_k \to g \ \text{ в } \Lloc(\Om) .
+\]
+Тогда
+\[
+  \exists\, D^\alpha f \in \Lloc(\Om): \qquad D^\alpha f = g .
+\]
+\end{theorem}
+
+\begin{proof}
+Пусть $\varphi \in C_0^\infty(\Om)$. По определению обобщённой производной для каждого $k$
+\[
+  \int\limits_\Om f_k\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_\Om D^\alpha f_k \cdot \varphi\, dx ,
+\]
+а так как $\varphi$ финитна, интегрирование идёт лишь по $\supp \varphi$:
+\[
+  \int\limits_{\supp \varphi} f_k\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_{\supp \varphi} D^\alpha f_k \cdot \varphi\, dx .
+\]
+
+\emph{Предел в левой части.}
+\begin{multline*}
+  \left| \int\limits_{\supp \varphi} f_k\, D^\alpha \varphi\, dx
+       - \int\limits_{\supp \varphi} f\, D^\alpha \varphi\, dx \right|
+  \le \int\limits_{\supp \varphi} |f_k - f|\cdot |D^\alpha \varphi|\, dx \\
+  \le \sup_{\R^n} |D^\alpha \varphi| \int\limits_{\supp \varphi} |f_k - f|\, dx
+  \xrightarrow[k \to \infty]{} 0 ,
+\end{multline*}
+поскольку $f_k \to f$ в $\Lloc(\Om)$, а $\supp \varphi \Subset \Om$ — компакт.
+
+\emph{Предел в правой части} получается аналогично:
+\[
+  \int\limits_{\supp \varphi} D^\alpha f_k \cdot \varphi\, dx
+  \xrightarrow[k \to \infty]{}
+  \int\limits_{\supp \varphi} g\, \varphi\, dx .
+\]
+
+Тогда перейдём к пределу:
+\[
+  \int\limits_{\supp \varphi} f\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_{\supp \varphi} g\, \varphi\, dx
+  \quad\Longrightarrow\quad
+  \int\limits_\Om f\, D^\alpha \varphi\, dx
+  = (-1)^{|\alpha|} \int\limits_\Om g\, \varphi\, dx ,
+\]
+то есть $g = D^\alpha f$ на $\Om$.
+\end{proof}
+
+\begin{idea}
+Признак позволяет получать обобщённые производные предельным переходом: достаточно
+подобрать удобную последовательность гладких (или просто более хороших) функций,
+сходящуюся вместе с производными. Сходимость нужна лишь локально, в $\Lloc$, —
+это самое слабое требование, какое ещё даёт результат.
+\end{idea}
+
+\begin{example}[$(|x|)' = \sgn x$]
+Знаем, что $(|x|)' = \sgn x$ — проверим это признаком.
+\end{example}
+
+Возьмём $f = |x|$ и последовательность $f_k$, совпадающую с $|x|$ вне
+$\left[-\tfrac1k, \tfrac1k\right]$ и сглаженную внутри этого отрезка.
+Тогда $f_k \to f$, а производные $f_k'$ — кусочно-линейные функции, переходящие
+от $-1$ к $1$ на $\left[-\tfrac1k, \tfrac1k\right]$, так что $f_k' \to \sgn x$.
+По признаку~\ref{thm:crit-deriv} получаем то же самое: $(|x|)' = \sgn x$.
+
+\inputfig{figures/fig-abs-x}

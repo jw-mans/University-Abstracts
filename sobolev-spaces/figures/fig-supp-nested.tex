@@ -1,0 +1,27 @@
+% Рисунок из тетради (утв. про финитный носитель): supp u ⋐ Ω' ⋐ Ω.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0]
+  \draw[thick, fill=blue!3]
+    plot[smooth cycle, tension=0.8]
+      coordinates {(0,0) (2.8,1.0) (5.2,0.4) (5.8,-1.5) (3.6,-2.9) (1.0,-2.5) (-0.9,-1.2)};
+  \node at (5.0,-0.3) {$\Omega$};
+
+  \draw[thick, dashed, fill=blue!8]
+    plot[smooth cycle, tension=0.85]
+      coordinates {(0.9,-0.3) (2.7,0.3) (4.1,-0.5) (3.8,-2.0) (1.9,-2.3) (0.8,-1.4)};
+  \node at (3.75,-1.75) {$\Omega'$};
+
+  \filldraw[pattern=north east lines, pattern color=blue!45, draw=blue!60!black, thick]
+    plot[smooth cycle, tension=0.9]
+      coordinates {(1.7,-0.8) (2.7,-0.7) (3.1,-1.35) (2.4,-1.85) (1.6,-1.55)};
+  \node[font=\footnotesize] at (2.35,-1.3) {$\supp u$};
+
+  \draw[-{Latex[length=1.8mm]}] (3.1,-1.35) -- node[above, font=\scriptsize]{$\rho$} (3.75,-1.3);
+\end{tikzpicture}
+\caption{К утверждению о финитном носителе: берётся промежуточная область
+$\supp u \Subset \Omega' \Subset \Omega$ и радиус усреднения
+$0 < \rho < \dist(\supp u, \partial\Omega')$. Тогда носитель $u_\rho$ не выходит
+за $\Omega'$, то есть $u_\rho \in C_0^\infty(\Omega)$.}
+\label{fig:supp-nested}
+\end{figure}

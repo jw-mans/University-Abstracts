@@ -193,7 +193,7 @@ $\omega_\rho$: подынтегральная функция гладкая по
 (лежат в $\Lp{\infty}$), а $u \in \Lp{1}$.
 \end{idea}
 
-\subsubsection*{Теорема 1: усреднение не увеличивает норму в $\Lp{p}$}
+\subsubsection*{Усреднение не увеличивает норму в $\Lp{p}$}
 
 \begin{theorem}\label{thm:norm}
 Пусть $1 \le p \le \infty$, $u \in \Lp{p}(\Om)$. Тогда
@@ -376,7 +376,7 @@ $y \in \ball{x}{\rho}$ удовлетворяют $|x-y| < \delta$, поэтом
 Точка — это компакт: достаточно взять $K = \{x\}$.
 \end{proof}
 
-\subsubsection*{Теорема 2: сходимость усреднений в $\Lp{p}$}
+\subsubsection*{Сходимость усреднений в $\Lp{p}$}
 
 \begin{theorem}\label{thm:conv}
 Пусть $u \in \Lp{p}(\Om)$, $1 \le p < \infty$. Тогда
@@ -646,26 +646,21 @@ $C_0^\infty(\Om)$ плотно в $\Lp{p}(\Om)$, $1 \le p < \infty$.
 \subsubsection*{Локально суммируемые функции}
 
 \begin{definition}
-$u \in L^1_{\mathrm{loc}}(\Om)$ («$u$ локально принадлежит $\Lp{1}$»), если
+$u \in L^p_{\mathrm{loc}}(\Om)$ («$u$ локально принадлежит $\Lp{p}$»), если
 \[
-  u \in \Lp{1}(\Om') \quad \forall\, \Om' \Subset \Om .
+  u \in \Lp{p}(\Om') \quad \forall\, \Om' \Subset \Om .
 \]
+Случай $p = 1$ даёт класс $\Lloc(\Om)$ локально суммируемых функций — именно он нужен
+дальше в курсе.
 \end{definition}
 
-\begin{warn}
-На доске определение записано так: «$u \in L^1_{\mathrm{loc}}(\Om)$, если
-$u \in \Lp{p}(\Om')\ \forall \Om' \Subset \Om$» — показатель в условии записан как $p$,
-хотя слева стоит $L^1_{\mathrm{loc}}$. Общее определение: $u \in L^p_{\mathrm{loc}}(\Om)$,
-если $u \in \Lp{p}(\Om')$ для всех $\Om' \Subset \Om$; дальше в курсе нужен случай $p = 1$.
-\end{warn}
-
 \begin{example}
-$\Om = \R$: функции, суммируемые на отрезках, лежат в $L^1_{\mathrm{loc}}(\R)$.
-В частности, константа $\in L^1_{\mathrm{loc}}(\R)$, хотя она не суммируема на всей прямой.
+$\Om = \R$: функции, суммируемые на отрезках, лежат в $\Lloc{}(\R)$.
+В частности, константа $\in \Lloc{}(\R)$, хотя она не суммируема на всей прямой.
 \end{example}
 
 \begin{example}
-$\Om = (0,1)$: $\dfrac1x \in L^1_{\mathrm{loc}}\big((0,1)\big)$, хотя
+$\Om = (0,1)$: $\dfrac1x \in \Lloc{}\big((0,1)\big)$, хотя
 $\int_0^1 \frac{dx}{x} = +\infty$ и $\tfrac1x \notin \Lp{1}((0,1))$.
 \end{example}
 
@@ -676,7 +671,7 @@ $\int_0^1 \frac{dx}{x} = +\infty$ и $\tfrac1x \notin \Lp{1}((0,1))$.
   C_0^\infty(\Om) \text{ — самые хорошие функции (но самый узкий класс)},
 \]
 \[
-  L^1_{\mathrm{loc}}(\Om) \text{ — самые плохие функции (но самый широкий класс)} .
+  \Lloc{}(\Om) \text{ — самые плохие функции (но самый широкий класс)} .
 \]
 \end{remark}
 
@@ -685,7 +680,7 @@ $\int_0^1 \frac{dx}{x} = +\infty$ и $\tfrac1x \notin \Lp{1}((0,1))$.
 \begin{lemma}[Дюбуа--Реймон]\label{lem:dbr}
 Пусть $\Om$ — открытое множество (не обязательно ограниченное),
 \[
-  f \in L^1_{\mathrm{loc}}(\Om), \qquad
+  f \in \Lloc{}(\Om), \qquad
   \int\limits_\Om f\,u\,dx = 0 \quad \forall u \in C_0^\infty(\Om) .
 \]
 Тогда $f = 0$ почти всюду на $\Om$.
@@ -694,7 +689,7 @@ $\int_0^1 \frac{dx}{x} = +\infty$ и $\tfrac1x \notin \Lp{1}((0,1))$.
 \begin{idea}
 Пометка с лекции: здесь основная борьба идёт за \emph{классы функций}. Пробные функции $u$
 берутся из самого узкого класса $C_0^\infty$, а вывод делается про $f$ из самого широкого
-класса $L^1_{\mathrm{loc}}$. Чем уже класс пробных функций, тем сильнее утверждение.
+класса $\Lloc{}$. Чем уже класс пробных функций, тем сильнее утверждение.
 \end{idea}
 
 \begin{proof}
@@ -703,7 +698,7 @@ $\widetilde\Om$ с
 \[
   K \subset \widetilde\Om \Subset \Om .
 \]
-Так как $f \in L^1_{\mathrm{loc}}(\Om)$, то $f \in \Lp{1}(\widetilde\Om)$.
+Так как $f \in \Lloc{}(\Om)$, то $f \in \Lp{1}(\widetilde\Om)$.
 
 \inputfig{figures/fig-nested}
 
@@ -739,7 +734,7 @@ $\widetilde\Om$ с
   \ \Longrightarrow\ |g_\rho| \le 1 \ \text{п.\,в. в } \widetilde\Om
   \ \Longrightarrow\ |g_\rho|\cdot|f| \le |f| \ \text{п.\,в. на } \widetilde\Om ,
 \]
-а $f \in L^1_{\mathrm{loc}}(\Om)$ даёт $|f| \in \Lp{1}(\widetilde\Om)$. Итого по теореме
+а $f \in \Lloc{}(\Om)$ даёт $|f| \in \Lp{1}(\widetilde\Om)$. Итого по теореме
 Лебега о мажорированной сходимости
 \[
   \int\limits_{\widetilde\Om} f\,g_{\rho_k}\,dx \longrightarrow \int\limits_{\widetilde\Om} f\,g\,dx .

@@ -33,12 +33,15 @@
 
 %  Окружения для теорем
 \theoremstyle{plain}
+% Счётчики независимы: в лекции теоремы, леммы и утверждения нумеруются
+% каждое своим рядом (Т1, Т2, ... / Л1, Л2, ...).
 \newtheorem{theorem}{Теорема}
-\newtheorem{proposition}[theorem]{Утверждение}
+\newtheorem{proposition}{Утверждение}
 \newtheorem{corollary}{Следствие}
 \newtheorem*{corollary*}{Следствие}
-\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{lemma}{Лемма}
 \newtheorem{criterion}{Признак}
+\newtheorem*{criterion*}{Признак}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Определение}
