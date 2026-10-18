@@ -1,0 +1,35 @@
+% Рисунок с доски: модель Прандтля (пружина последовательно с элементом
+% Сен-Венана) и её диаграмма деформирования.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=0.95, transform shape]
+  % схема
+  \begin{scope}
+    \draw[thick] (0,2.4) -- (0,2.1);
+    \pic[rotate=90] at (0,1.2) {spring};
+    \node[font=\footnotesize, anchor=west] at (0.45,1.2) {$\mu$};
+    \draw[thick] (0,0.3) -- (0,-0.3);
+    \pic[rotate=90] at (0,-1.2) {stvenant};
+    \node[font=\footnotesize, anchor=west] at (0.55,-1.2) {$\tau_s$};
+    \draw[thick] (0,-2.1) -- (0,-2.4);
+  \end{scope}
+
+  % диаграмма
+  \begin{scope}[xshift=4.2cm, yshift=-2.4cm]
+    \draw[->] (0,0) -- (5.4,0) node[anchor=north east] {$\gamma$};
+    \draw[->] (0,0) -- (0,3.4) node[anchor=south east] {$\tau$};
+    \draw[very thick, blue!60!black] (0,0) -- (1.7,2.4) -- (4.9,2.4);
+    \draw[dashed, gray] (0,2.4) -- (1.7,2.4);
+    \draw[dashed, gray] (1.7,0) -- (1.7,2.4);
+    \node[anchor=east, font=\footnotesize] at (-0.05,2.4) {$\tau_s$};
+    \node[anchor=north, font=\footnotesize] at (1.7,-0.05)
+      {$\dfrac{\tau_s}{2\mu}$};
+    \node[font=\footnotesize, anchor=west] at (0.35,1.3) {$\tau = 2\mu\gamma$};
+    \node[font=\footnotesize, anchor=south] at (3.3,2.5) {течение};
+  \end{scope}
+\end{tikzpicture}
+\caption{Модель Прандтля: пока $N(\Sdev) < \tau_s$, работает только пружина
+($\dev = \Sdev/2\mu$); при $N(\Sdev) = \tau_s$ элемент Сен-Венана начинает
+течь, и деформация растёт при постоянном напряжении.}
+\label{fig:prandtl}
+\end{figure}

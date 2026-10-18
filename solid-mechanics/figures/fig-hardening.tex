@@ -1,0 +1,42 @@
+% Рисунок с доски: упруго-пластическая модель с линейным упрочнением —
+% пружина μ последовательно с блоком (пружина μ1 ∥ элемент Сен-Венана).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=0.9, transform shape]
+  % схема
+  \begin{scope}
+    \draw[thick] (1.6,3.2) -- (1.6,3.0);
+    \pic[rotate=90] at (1.6,2.1) {spring};
+    \node[font=\footnotesize, anchor=west] at (2.05,2.1) {$\mu$};
+    \draw[thick] (1.6,1.2) -- (1.6,1.0);
+
+    \pic[rotate=90] at (0,0) {stvenant};
+    \node[font=\footnotesize, anchor=east] at (-0.55,0) {$\tau_s$};
+    \pic[rotate=90] at (3.2,0) {spring};
+    \node[font=\footnotesize, anchor=west] at (3.65,0) {$\mu_1$};
+
+    \draw[thick] (0,0.9) -- (0,1.0) -- (3.2,1.0) -- (3.2,0.9);
+    \draw[thick] (0,-0.9) -- (0,-1.0) -- (3.2,-1.0) -- (3.2,-0.9);
+    \draw[thick] (1.6,-1.0) -- (1.6,-1.6);
+  \end{scope}
+
+  % диаграмма
+  \begin{scope}[xshift=6.4cm, yshift=-1.6cm]
+    \draw[->] (0,0) -- (5.4,0) node[anchor=north east] {$\gamma$};
+    \draw[->] (0,0) -- (0,4.2) node[anchor=south east] {$\tau$};
+    \draw[very thick, blue!60!black] (0,0) -- (1.5,2.2) -- (4.9,3.6);
+    \draw[dashed, gray] (0,2.2) -- (1.5,2.2);
+    \draw[dashed, gray] (1.5,0) -- (1.5,2.2);
+    \node[anchor=east, font=\footnotesize] at (-0.05,2.2) {$\tau_s$};
+    \node[anchor=north, font=\footnotesize] at (1.5,-0.05)
+      {$\dfrac{\tau_s}{2\mu}$};
+    \node[font=\footnotesize, anchor=west] at (0.3,1.3) {$2\mu$};
+    \node[font=\footnotesize, anchor=north west, align=left] at (3.1,3.5)
+      {$\dfrac{2\mu\mu_1}{\mu+\mu_1}$};
+  \end{scope}
+\end{tikzpicture}
+\caption{Линейное упрочнение: вторая пружина $\mu_1$ параллельно элементу
+сухого трения. До предела наклон диаграммы $2\mu$, после — меньший наклон
+$2\mu\mu_1/(\mu+\mu_1)$.}
+\label{fig:hardening}
+\end{figure}

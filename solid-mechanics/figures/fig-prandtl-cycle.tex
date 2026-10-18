@@ -1,0 +1,39 @@
+% Рисунок с доски: диаграмма знакопеременного нагружения упруго-пластического
+% тела Прандтля — параллелограмм (петля гистерезиса).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=0.95, transform shape]
+  \draw[->] (-4.4,0) -- (4.6,0) node[anchor=north east] {$\gamma$};
+  \draw[->] (0,-2.9) -- (0,2.9) node[anchor=south east] {$\tau$};
+
+  % уровни предела текучести
+  \draw[dashed, gray] (-4.2,1.8) -- (4.2,1.8);
+  \draw[dashed, gray] (-4.2,-1.8) -- (4.2,-1.8);
+  \node[anchor=south east, font=\footnotesize] at (-0.1,1.8) {$\tau_s$};
+  \node[anchor=north east, font=\footnotesize] at (-0.1,-1.8) {$-\tau_s$};
+
+  % 1) первичное нагружение: упругая прямая наклона 2mu
+  \draw[very thick, blue!60!black] (0,0) -- (1.2,1.8);
+  % 2) течение
+  \draw[very thick, blue!60!black] (1.2,1.8) -- (3.6,1.8);
+  % 3) разгрузка: прямая того же наклона
+  \draw[very thick, blue!60!black] (3.6,1.8) -- (2.4,-1.8);
+  % течение в обратную сторону
+  \draw[very thick, blue!60!black] (2.4,-1.8) -- (-0.6,-1.8);
+  % повторное нагружение
+  \draw[very thick, blue!60!black] (-0.6,-1.8) -- (0.6,1.8);
+  \draw[very thick, blue!60!black] (0.6,1.8) -- (3.6,1.8);
+
+  \node[font=\footnotesize, anchor=west] at (0.15,0.95) {$2\mu$};
+  \node[font=\footnotesize, anchor=south] at (2.4,1.9) {течение};
+  \node[font=\footnotesize, anchor=west, align=left] at (3.0,0.3)
+    {разгрузка:\\ $\tau - \tau_s = 2\mu(\gamma - \gamma_{\max})$};
+  \node[anchor=north, font=\footnotesize] at (1.2,-0.05) {$\gamma^*$};
+  \node[anchor=north, font=\footnotesize] at (3.6,-0.05) {$\gamma_{\max}$};
+\end{tikzpicture}
+\caption{Знакопеременное нагружение тела Прандтля: упругая прямая наклона
+$2\mu$, площадка течения при $\tau = \tau_s$, упругая разгрузка с тем же
+наклоном до $\tau = -\tau_s$ и течение в обратную сторону. Цикл замыкается в
+параллелограмм; его площадь — рассеянная за цикл энергия.}
+\label{fig:prandtl-cycle}
+\end{figure}
