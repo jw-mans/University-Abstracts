@@ -1,0 +1,145 @@
+\lecture{Лекция 6}{13.10.2026}
+
+\subsection{Неравенство Фридрихса}
+
+\begin{definition}
+Для $u \in \Wp{p}{\ell}(\Om)$ положим
+\[
+  |u|_{\ell,p,\Om}
+  = \left( \int\limits_\Om \sum_{|\alpha| = \ell} |D^\alpha u|^p\, dx \right)^{1/p}
+\]
+— величина, посчитанная только по \emph{старшим} производным.
+\end{definition}
+
+\begin{remark}
+На самом деле это полунорма, а не норма.
+\end{remark}
+
+\begin{idea}
+Третья аксиома нормы ломается: $|u|_{\ell,p,\Om} = 0$ означает лишь, что все производные
+порядка $\ell$ равны нулю, то есть что $u$ — многочлен степени $< \ell$ (на связной
+области). Такие $u$ ненулевые, а полунорма от них нулевая. На подпространстве
+$\Wpz{p}{\ell}(\Om)$ это исправляется — ровно это и даёт теорема ниже.
+\end{idea}
+
+\begin{theorem}[неравенство Фридрихса]\label{thm:friedrichs}
+Пусть $u \in \Wpz{p}{\ell}(\Om)$ и
+$d = \operatorname{diam}\Om = \sup_{x,y \in \Om} |x-y|$. Тогда
+\[
+  \norm{u}_{\Lp{p}(\Om)} \le d^{\,\ell}\, |u|_{\ell,p,\Om} .
+\]
+\end{theorem}
+
+\begin{idea}
+Схема стандартная для $\Wpz{p}{\ell}$: всё доказывается сначала для $u \in C_0^\infty(\Om)$,
+а затем неравенство замыкается предельным переходом на $\Wpz{p}{\ell}(\Om)$.
+\end{idea}
+
+\begin{proof}
+\textbf{1) Случай $u \in C_0^\infty(\Om)$.} Продолжим $u$ нулём вне $\Om$ и возьмём куб
+$Q = (0,d)^n$ со стороной $d$ так, чтобы $\Om \subset Q$; дальше работаем в $Q$ — это
+удобнее.
+
+\inputfig{figures/fig-cube-omega}
+
+Так как $u|_{x_n = 0} = 0$, по теореме Барроу
+\[
+  u(x) = \int\limits_0^{x_n} \dd{u}{x_n}(x', t)\, dt ,
+  \qquad x = (x_1, \dots, x_{n-1}, x_n) = (x', x_n) .
+\]
+Отсюда, оценивая и применяя неравенство Гёльдера с показателями $p$ и $p^*$,
+\[
+  |u(x)| \le \int\limits_0^{x_n} \left| \dd{u}{x_n}(x',t) \right| dt
+  \le \int\limits_0^{d} \left| \dd{u}{x_n} \right| dt
+  \le \left( \int\limits_0^d 1^{p^*} dt \right)^{1/p^*}
+      \left( \int\limits_0^d \left| \dd{u}{x_n} \right|^p dt \right)^{1/p} ,
+\]
+то есть
+\[
+  |u(x)| \le d^{\,1/p^*} \left( \int\limits_0^d \left| \dd{u}{x_n}(x',t) \right|^p dt \right)^{1/p} .
+\]
+Возведём в степень $p$ и проинтегрируем по $Q$. Внутренний интеграл не зависит от $x_n$,
+поэтому по теоремам Фубини и Тонелли
+\begin{multline*}
+  \int\limits_Q |u(x)|^p\, dx
+  \le d^{\,p/p^*} \int\limits_Q dx \int\limits_0^d \left| \dd{u}{x_n} \right|^p dx_n
+  = d^{\,p/p^*} \int\limits_0^d dx_n \int\limits_{(0,d)^{n-1}} dx'
+      \int\limits_0^d \left| \dd{u}{x_n} \right|^p dx_n \\
+  = d^{\,p/p^*} \int\limits_0^d dx_n \int\limits_Q \left| \dd{u}{x_n} \right|^p dx
+  = d^{\,1 + p/p^*} \int\limits_Q \left| \dd{u}{x_n} \right|^p dx .
+\end{multline*}
+Поскольку $\frac{p}{p^*} = p\left(1 - \frac1p\right) = p - 1$, показатель равен
+$1 + p - 1 = p$, и
+\begin{equation}\label{eq:fried-one}
+  \int\limits_Q |u|^p\, dx \le d^{\,p} \int\limits_Q \left| \dd{u}{x_n} \right|^p dx .
+\end{equation}
+
+Теперь повторим \eqref{eq:fried-one} для $\partial u/\partial x_n$, затем для
+$\partial^2 u/\partial x_n^2$ и так $\ell$ раз (все эти функции тоже из $C_0^\infty(\Om)$):
+\[
+  \int\limits_Q |u|^p\, dx
+  \le d^{\,\ell p} \int\limits_Q \left| \dd{^{\,\ell} u}{x_n^{\,\ell}} \right|^p dx
+  \le d^{\,\ell p}\, |u|^p_{\ell,p,Q} ,
+\]
+так как $|\partial^\ell u/\partial x_n^\ell|^p$ — лишь одно из слагаемых суммы по
+$|\alpha| = \ell$. Извлекая корень и вспоминая, что вне $\Om$ функция $u$ равна нулю,
+получаем
+\[
+  \norm{u}_{\Lp{p}(\Om)} \le d^{\,\ell} |u|_{\ell,p,\Om}
+  \qquad \forall u \in C_0^\infty(\Om) .
+\]
+
+\textbf{2) Замыкание неравенства.} Пусть $u \in \Wpz{p}{\ell}(\Om)$, тогда существуют
+$u_m \in C_0^\infty(\Om)$ с $u_m \to u$ в $\Wp{p}{\ell}(\Om)$; в частности,
+$\norm{u_m - u_k}_{\Wp{p}{\ell}(\Om)} \to 0$ и тем более
+\[
+  |u_m - u_k|_{\ell,p,\Om} \le \norm{u_m - u_k}_{\Wp{p}{\ell}(\Om)} \xrightarrow[m,k \to \infty]{} 0 .
+\]
+К разности $u_m - u_k \in C_0^\infty(\Om)$ применимо уже доказанное неравенство:
+\[
+  \norm{u_m - u_k}_{\Lp{p}(\Om)} \le d^{\,\ell} |u_m - u_k|_{\ell,p,\Om} \longrightarrow 0 ,
+\]
+то есть $\{u_m\}$ фундаментальна в $\Lp{p}(\Om)$ и $u_m \to u$ в $\Lp{p}(\Om)$. Наконец,
+записав неравенство для $u_m$,
+\[
+  \norm{u_m}_{\Lp{p}(\Om)} \le d^{\,\ell} |u_m|_{\ell,p,\Om} ,
+\]
+переходим к пределу: слева по сходимости в $\Lp{p}$, справа — по сходимости в
+$\Wp{p}{\ell}$ (полунорма непрерывна относительно нормы). Получаем
+$\norm{u}_{\Lp{p}(\Om)} \le d^{\,\ell}|u|_{\ell,p,\Om}$.
+\end{proof}
+
+\begin{corollary}\label{cor:fried-equiv}
+На $\Wpz{p}{\ell}(\Om)$ полунорма $|\cdot|_{\ell,p,\Om}$ эквивалентна норме
+$\norm{\cdot}_{\Wp{p}{\ell}(\Om)}$, то есть является нормой.
+\end{corollary}
+
+\begin{proof}
+Неравенство $|u|_{\ell,p,\Om} \le \norm{u}_{\Wp{p}{\ell}(\Om)}$ очевидно. Обратно, для
+$|\beta| = k < \ell$ функция $D^\beta u$ лежит в $\Wpz{p}{\ell-k}(\Om)$ (приближаем её
+функциями $D^\beta u_m \in C_0^\infty(\Om)$), поэтому по теореме~\ref{thm:friedrichs}
+\[
+  \norm{D^\beta u}_{\Lp{p}(\Om)} \le d^{\,\ell-k} |D^\beta u|_{\ell-k,p,\Om}
+  \le C\, d^{\,\ell-k} |u|_{\ell,p,\Om} ,
+\]
+так как каждая производная $D^\gamma D^\beta u$ при $|\gamma| = \ell - k$ есть
+$D^{\gamma+\beta} u$ с $|\gamma + \beta| = \ell$. Суммируя по всем $|\beta| \le \ell$,
+получаем $\norm{u}_{\Wp{p}{\ell}(\Om)} \le C' |u|_{\ell,p,\Om}$.
+\end{proof}
+
+\begin{remark}
+При $p = 2$ пространства $\Wp{2}{\ell}(\Om)$ и $\Wpz{2}{\ell}(\Om)$ гильбертовы
+относительно скалярных произведений
+\[
+  (u,v)_{\Wp{2}{\ell}(\Om)} = \sum_{|\alpha| \le \ell} \int\limits_\Om D^\alpha u\, D^\alpha v\, dx ,
+  \qquad
+  (u,v)_{\Wpz{2}{\ell}(\Om)} = \sum_{|\alpha| = \ell} \int\limits_\Om D^\alpha u\, D^\alpha v\, dx .
+\]
+\end{remark}
+
+\begin{idea}
+Во втором случае суммирование идёт только по $|\alpha| = \ell$ — и это законно именно
+благодаря следствию~\ref{cor:fried-equiv}: порождённая этим скалярным произведением
+норма — та самая полунорма $|\cdot|_{\ell,2,\Om}$, которая на $\Wpz{2}{\ell}$ эквивалентна
+полной норме. На всём $\Wp{2}{\ell}(\Om)$ так делать нельзя: там это лишь полунорма.
+\end{idea}

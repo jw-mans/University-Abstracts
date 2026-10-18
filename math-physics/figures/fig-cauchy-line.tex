@@ -1,0 +1,31 @@
+% Почему u_{phi phi} не вычисляется по данным Коши: вдоль прямой phi = 0
+% дифференцировать можно только по psi, "поперёк" прямой -- нельзя.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[->] (-1.9,0) -- (2.6,0) node[anchor=north east] {$\varphi$};
+  \draw[->] (0,-1.7) -- (0,1.9) node[anchor=south west] {$\psi$};
+
+  % прямая phi = 0 -- это ось psi
+  \draw[very thick, blue!60!black] (0,-1.5) -- (0,1.7);
+  \node[blue!60!black, anchor=west, font=\footnotesize] at (0.12,-1.45)
+    {$\varphi = 0$};
+
+  % разрешённое направление: вдоль прямой
+  \draw[->, teal!70!black, very thick] (0,0.35) -- (0,1.15);
+  \node[teal!70!black, anchor=west, font=\footnotesize] at (0.12,0.85)
+    {можно: $\partial_\psi$};
+
+  % запрещённое направление: поперёк
+  \foreach \y in {-1.0, -0.35, 0.3} {
+    \draw[<->, red!70!black, thick] (-1.5,\y) -- (1.5,\y);
+  }
+  \node[red!70!black, anchor=east, font=\footnotesize] at (-1.6,-0.35)
+    {нельзя: $\partial_\varphi$};
+\end{tikzpicture}
+\caption{Данные Коши заданы на прямой $\varphi = 0$. Дифференцировать их можно
+только вдоль этой прямой, то есть по $\psi$; поперечная производная
+$u_{\varphi\varphi}$ из данных не восстанавливается, и единственный шанс её
+получить — выразить из самого уравнения.}
+\label{fig:cauchy-line}
+\end{figure}

@@ -1,0 +1,29 @@
+% Два семейства характеристик волнового уравнения: x - at = C и x + at = C.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  \draw[->] (-0.3,0) -- (6.4,0) node[anchor=north east] {$x$};
+  \draw[->] (0,-0.3) -- (0,3.4) node[anchor=south east] {$t$};
+
+  \begin{scope}
+    \clip (-0.1,-0.1) rectangle (6.1,3.2);
+    % x - at = C  (наклон вправо)
+    \foreach \c in {-2.0, -0.8, 0.4, 1.6, 2.8, 4.0} {
+      \draw[thick, blue!60!black] (\c,0) -- ({\c+3.4},3.2);
+    }
+    % x + at = C  (наклон влево)
+    \foreach \c in {2.0, 3.2, 4.4, 5.6, 6.8, 8.0} {
+      \draw[thick, teal!70!black] (\c,0) -- ({\c-3.4},3.2);
+    }
+  \end{scope}
+
+  \node[blue!60!black, anchor=west, font=\footnotesize] at (6.0,2.3)
+    {$x - at = C$};
+  \node[teal!70!black, anchor=east, font=\footnotesize] at (0.25,2.75)
+    {$x + at = C$};
+\end{tikzpicture}
+\caption{Два семейства характеристик волнового уравнения. Замена
+$\varphi = x-at$, $\psi = x+at$ выпрямляет именно их — это та же замена, что
+использовалась при выводе формулы Даламбера в \S1 главы~1.}
+\label{fig:two-families}
+\end{figure}

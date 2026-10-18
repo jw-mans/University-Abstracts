@@ -1,0 +1,386 @@
+\subsection{Характеристики УЧП второго порядка}
+
+\begin{warn}
+Параграф идёт под номером \S3 внутри главы, названной в тетради «Уравнения в
+частных производных первого порядка», хотя речь здесь уже о втором порядке.
+Нумерация сохранена как в тетради; возможно, название главы стоит понимать
+шире или лектор начал новую главу, не выписав заголовок.
+
+\medskip
+Ещё одно: в этом параграфе буквы $\varphi, \psi$ обозначают \emph{новые
+независимые переменные}, а не начальные данные, как в главе~1. Данные Коши
+здесь обозначаются прописными $\Phi, \Psi$.
+\end{warn}
+
+Рассмотрим УЧП второго порядка для двух независимых переменных:
+
+\stepcounter{equation}
+\begin{equation}\tag{1}\label{eq:so-main}
+  a(x,y)\, u_{xx} + 2b(x,y)\, u_{xy} + c(x,y)\, u_{yy}
+  = f(x,y,\,u,\,u_x,\,u_y) .
+\end{equation}
+
+\begin{remark}
+Коэффициент при $u_{xy}$ взят с двойкой не случайно: удобно считать, что там
+стоит $b(x,y)\,u_{xy} + b(x,y)\,u_{yx}$, то есть матрица старших коэффициентов
+симметрична.
+\end{remark}
+
+\subsubsection*{Невырожденная замена переменных}
+
+Замена
+\[
+  \begin{cases} x = x(\varphi,\psi), \\ y = y(\varphi,\psi), \end{cases}
+  \qquad J \ne 0 ,
+\]
+причём якобиан отличен от нуля именно для того, чтобы замена была
+невырожденной. Удобнее записать её в обратную сторону:
+\[
+  \begin{cases} \varphi = \varphi(x,y), \\ \psi = \psi(x,y), \end{cases}
+  \qquad J \ne 0 .
+\]
+
+Пересчитываем производные:
+\[
+  u_x = u_\varphi \varphi_x + u_\psi \psi_x , \qquad
+  u_y = u_\varphi \varphi_y + u_\psi \psi_y ,
+\]
+\begin{align*}
+  u_{xx} &= \big(u_{\varphi\varphi}\varphi_x + u_{\varphi\psi}\psi_x\big)\varphi_x
+          + u_\varphi \varphi_{xx}
+          + \big(u_{\psi\varphi}\varphi_x + u_{\psi\psi}\psi_x\big)\psi_x
+          + u_\psi \psi_{xx} \\[4pt]
+         &= \varphi_x^2\, u_{\varphi\varphi}
+          + 2\varphi_x \psi_x\, u_{\varphi\psi}
+          + \psi_x^2\, u_{\psi\psi} + (\dots) .
+\end{align*}
+Аналогично
+\[
+  u_{yy} = \varphi_y^2\, u_{\varphi\varphi}
+         + 2\varphi_y \psi_y\, u_{\varphi\psi}
+         + \psi_y^2\, u_{\psi\psi} + (\dots) ,
+\]
+\[
+  u_{xy} = \varphi_x \varphi_y\, u_{\varphi\varphi}
+         + \big(\varphi_x \psi_y + \varphi_y \psi_x\big) u_{\varphi\psi}
+         + \psi_x \psi_y\, u_{\psi\psi} + (\dots) .
+\]
+
+\begin{idea}
+В скобках $(\dots)$ собраны члены с первыми производными $u$. Свойства
+уравнения в частных производных определяются старшими производными, поэтому
+эти члены здесь не интересны и всюду опускаются.
+\end{idea}
+
+Подставляя в~\eqref{eq:so-main}, получаем уравнение того же вида:
+
+\stepcounter{equation}
+\begin{equation}\tag{2}\label{eq:so-new}
+  \widetilde a(\varphi,\psi)\, u_{\varphi\varphi}
+  + 2\widetilde b(\varphi,\psi)\, u_{\varphi\psi}
+  + \widetilde c(\varphi,\psi)\, u_{\psi\psi}
+  = \widetilde f(\varphi,\psi,\,u,\,u_\varphi,\,u_\psi) ,
+\end{equation}
+где
+\[
+  \widetilde a(\varphi,\psi)
+    = a(x,y)\,\varphi_x^2 + 2b(x,y)\,\varphi_x \varphi_y + c(x,y)\,\varphi_y^2 ,
+\]
+\[
+  \widetilde c(\varphi,\psi)
+    = a(x,y)\,\psi_x^2 + 2b(x,y)\,\psi_x \psi_y + c(x,y)\,\psi_y^2 ,
+\]
+\[
+  \widetilde b(\varphi,\psi)
+    = a(x,y)\,\varphi_x \psi_x
+    + b(x,y)\big(\varphi_x \psi_y + \varphi_y \psi_x\big)
+    + c(x,y)\,\varphi_y \psi_y .
+\]
+
+\inputfig{figures/fig-level-lines}
+
+\begin{idea}
+Главное наблюдение: $\widetilde a$ и $\widetilde c$ — это одна и та же
+квадратичная форма, вычисленная на градиентах $\nabla\varphi$ и $\nabla\psi$
+соответственно. Отсюда вся дальнейшая теория: обнуление этой формы и есть
+условие характеристичности.
+\end{idea}
+
+\subsubsection*{Где задача Коши ломается}
+
+Поставим данные Коши на прямой $\varphi = 0$:
+\[
+  u|_{\varphi=0} = \Phi(\psi), \qquad
+  u_\varphi|_{\varphi=0} = \Psi(\psi) .
+\]
+Тогда сразу известны
+\[
+  u_\psi|_{\varphi=0} = \Phi'(\psi), \qquad
+  u_{\psi\psi}|_{\varphi=0} = \Phi''(\psi), \qquad
+  u_{\varphi\psi}|_{\varphi=0} = \Psi'(\psi) .
+\]
+А вот $u_{\varphi\varphi}|_{\varphi=0}$ отсюда узнать \textbf{нельзя}: на
+прямой $\varphi = 0$ дифференцировать можно только вдоль неё, то есть по
+$\psi$.
+
+\inputfig{figures/fig-cauchy-line}
+
+Остаётся попытаться выразить $u_{\varphi\varphi}$ из самого
+уравнения~\eqref{eq:so-new}. Это получается, пока $\widetilde a \ne 0$. Если же
+\[
+  \widetilde a(\varphi,\psi)\big|_{\varphi=0} = 0 ,
+\]
+то член с $u_{\varphi\varphi}$ выпадает, и уравнение превращается в
+соотношение между уже известными величинами. Возможны два случая:
+
+\begin{enumerate}[label=\arabic*), leftmargin=2em]
+  \item либо уравнение противоречит полученным соотношениям — тогда решения
+        нет;
+  \item либо не противоречит — тогда $u_{\varphi\varphi}|_{\varphi=0}$
+        произвольно, и решение не определено.
+\end{enumerate}
+
+Оба случая плохие: задача поставлена некорректно.
+
+\subsubsection*{Характеристики}
+
+\begin{definition}
+Кривая, задаваемая уравнением $\omega(x,y) = 0$, где $\nabla\omega \ne 0$,
+называется \textbf{характеристической кривой} (характеристикой)
+для~\eqref{eq:so-main}, если выполняется соотношение
+
+\stepcounter{equation}
+\begin{equation}\tag{3}\label{eq:so-char}
+  \Big[\, a(x,y)\,\omega_x^2 + 2b(x,y)\,\omega_x \omega_y
+        + c(x,y)\,\omega_y^2 \,\Big]_{\omega = 0} = 0 .
+\end{equation}
+\end{definition}
+
+\begin{remark}
+Это в точности выражение для $\widetilde a$ (или $\widetilde c$), только буква
+заменена на $\omega$, чтобы не путать характеристику с переменными замены.
+Смысл определения: \textbf{на характеристике нельзя ставить задачу Коши}.
+\end{remark}
+
+\begin{definition}
+Квадратичная форма
+\[
+  a\,\omega_x^2 + 2b\,\omega_x \omega_y + c\,\omega_y^2
+\]
+называется \textbf{характеристической формой} уравнения~\eqref{eq:so-main}
+относительно вектора
+\[
+  \nabla\omega = (\omega_x,\, \omega_y) .
+\]
+\end{definition}
+
+\begin{remark}[замечание 1]
+Соотношение~\eqref{eq:so-char} определяет целое семейство характеристик: если
+$\omega$ ему удовлетворяет, то и
+\[
+  \omega_1(x,y) = \omega(x,y) - C = 0
+\]
+удовлетворяет условию характеристики — градиент у $\omega_1$ тот же самый.
+\end{remark}
+
+\begin{remark}[замечание 2]
+Справедливо интуитивно понятное равенство
+\[
+  a\,\omega_x^2 + 2b\,\omega_x \omega_y + c\,\omega_y^2
+  = \widetilde a\,\omega_\varphi^2
+  + 2\widetilde b\,\omega_\varphi \omega_\psi
+  + \widetilde c\,\omega_\psi^2
+\]
+(проверяется в лоб подстановкой). То есть характеристика переходит в
+характеристику в новых переменных: \textbf{характеристики инвариантны
+относительно произвольной гладкой невырожденной замены переменных}.
+\end{remark}
+
+\subsubsection*{Примеры}
+
+\begin{example}[волновое уравнение]
+\[
+  u_{tt} - a^2 u_{xx} = 0 .
+\]
+Характеристическая форма:
+\[
+  -a^2 \omega_x^2 + \omega_t^2 = 0
+  \iff
+  \big(\omega_t + a\omega_x\big)\big(\omega_t - a\omega_x\big) = 0 .
+\]
+Каждый сомножитель — однородное УЧП первого порядка из \S1, его общее решение
+известно:
+\[
+  \omega = F(x - at)
+  \qquad\text{или}\qquad
+  \omega = F(x + at) ,
+\]
+и условие $\omega = 0$ даёт
+\[
+  x \mp at = C .
+\]
+\end{example}
+
+\inputfig{figures/fig-two-families}
+
+\begin{remark}
+Два семейства характеристик — и это ровно та замена, которую мы уже делали в
+первом семестре и в \S1 главы~1 при выводе формулы Даламбера.
+\end{remark}
+
+\begin{example}[уравнение теплопроводности]
+\[
+  u_t - \alpha u_{xx} = 0 .
+\]
+Характеристическая форма содержит только $\omega_x$:
+\[
+  -\alpha \omega_x^2 = 0
+  \iff \omega = F(t)
+  \iff t = \mathrm{const} .
+\]
+Значит $t = 0$ — характеристика. Но на ней мы задавали \emph{только одно}
+условие $u|_{t=0} = \varphi(x)$, и поэтому всё было хорошо: двух условий (на
+функцию и на производную) на характеристике ставить нельзя.
+\end{example}
+
+\begin{example}[уравнение Пуассона]
+\[
+  u_{xx} + u_{yy} = f(x,y) .
+\]
+Характеристическая форма
+\[
+  \omega_x^2 + \omega_y^2 = 0
+\]
+обращается в нуль только при $\nabla\omega = 0$, что запрещено определением.
+Значит \textbf{вещественных характеристик нет}.
+\end{example}
+
+\subsubsection*{$n$-мерный случай}
+
+Всё переносится дословно. Пусть
+
+\stepcounter{equation}
+\begin{equation}\tag{4}\label{eq:so-nd}
+  \sum_{i,j=1}^{n} a_{ij}(x)\, u_{x_i x_j} = f(x,\,u,\,\nabla u) .
+\end{equation}
+
+\begin{definition}
+Поверхность, задаваемая уравнением $\omega(x) = 0$, где $\nabla\omega \ne 0$,
+называется \textbf{характеристической поверхностью} (характеристикой), если
+выполняется соотношение
+
+\stepcounter{equation}
+\begin{equation}\tag{5}\label{eq:so-nd-char}
+  \Bigg[\, \sum_{i,j=1}^{n} a_{ij}(x)\, \omega_{x_i} \omega_{x_j} \,\Bigg]_{\omega = 0}
+  = 0 ,
+\end{equation}
+а сама сумма называется характеристической квадратичной
+формой~\eqref{eq:so-nd} относительно $\nabla\omega$.
+\end{definition}
+
+\begin{remark}[замечание 1]
+Соотношение~\eqref{eq:so-nd-char} задаёт целое семейство характеристик:
+$\omega_1(x) = \omega(x) - C = 0$.
+\end{remark}
+
+\begin{remark}[замечание 2]
+Характеристики инвариантны относительно произвольной невырожденной гладкой
+замены переменных: при такой замене характеристика переходит в
+характеристику.
+\end{remark}
+
+\begin{remark}[замечание 3]
+Что общего у характеристик уравнений первого и второго порядка (в УЧП первого
+порядка характеристика всегда кривая):
+\begin{itemize}[leftmargin=1.6em]
+  \item на характеристике нельзя ставить задачу Коши — для первого порядка
+        всё так же: уравнение либо станет противоречивым, либо решение не
+        будет единственным;
+  \item разрывы распространяются по характеристикам.
+\end{itemize}
+\end{remark}
+
+\subsubsection*{Канонический вид гиперболического уравнения}
+
+Вернёмся к волновому уравнению:
+\[
+  u_{tt} - a^2 u_{xx} = f(x,t,u) .
+\]
+Замена
+\[
+  \begin{cases} \varphi = x - at, \\ \psi = x + at \end{cases}
+  \qquad\text{даёт}\qquad
+  -4a^2 u_{\varphi\psi} = \widetilde f(\varphi,\psi,u) ,
+\]
+то есть
+\[
+  \widetilde a = 0, \qquad \widetilde c = 0
+  \qquad\Longrightarrow\qquad \text{два семейства характеристик},
+\]
+и уравнение принимает вид $u_{\varphi\psi} = f_1(\dots)$.
+
+\medskip
+Если уравнение~\eqref{eq:so-main} \textbf{гиперболическое}, то у него всегда
+два семейства характеристик
+\[
+  \omega_1(x,y) = C_1, \qquad \omega_2(x,y) = C_2 ,
+\]
+и замена $\varphi = \omega_1(x,y)$, $\psi = \omega_2(x,y)$ всегда приводит
+его к виду
+\[
+  \boxed{\ u_{\varphi\psi} = f_1(\dots)\ }
+\]
+Поэтому в этом случае такой вид называют \textbf{каноническим видом}
+гиперболического УЧП второго порядка с двумя переменными.
+
+\begin{idea}
+Почему так получается: обнуление $\widetilde a$ и $\widetilde c$ — это ровно
+условие~\eqref{eq:so-char} для $\varphi$ и для $\psi$. Взяв в качестве новых
+переменных два независимых семейства характеристик, мы убиваем оба квадрата
+сразу, и в старшей части остаётся единственный смешанный член.
+\end{idea}
+
+\begin{center}
+\textbf{Вопрос.} Какие кривые характеризуют уравнение $u_{xy} = f(\dots)$?
+\end{center}
+
+\begin{center}
+\textbf{Ответ.} $x = \mathrm{const}$ и $y = \mathrm{const}$.
+\end{center}
+
+\begin{exercise}
+Определить тип уравнения, найти характеристики и общее решение:
+\begin{enumerate}[label=\arabic*), leftmargin=2em]
+  \item $u_{xy} - u_{yy} - u_x + u_y = 0$;
+  \item $2u_{xx} + u_{xy} = 1$.
+\end{enumerate}
+\end{exercise}
+
+\begin{idea}[title={Разбор упражнения (на лекции не было)}]
+\textbf{1)} Старшие коэффициенты $a = 0$, $b = \tfrac12$, $c = -1$, значит
+$b^2 - ac = \tfrac14 > 0$ — уравнение гиперболическое. Характеристическая
+форма:
+\[
+  \omega_x\omega_y - \omega_y^2 = \omega_y\big(\omega_x - \omega_y\big) = 0 ,
+\]
+откуда два семейства: $x = C_1$ и $x + y = C_2$. Замена $\varphi = x$,
+$\psi = x+y$ даёт $u_{\varphi\psi} - u_\varphi = 0$; полагая $w = u_\varphi$,
+получаем $w_\psi = w$, то есть $w = A(\varphi)e^{\psi}$, и
+\[
+  u(x,y) = e^{x+y} G(x) + H(x+y)
+\]
+с произвольными гладкими $G, H$.
+
+\medskip
+\textbf{2)} Здесь $a = 2$, $b = \tfrac12$, $c = 0$, снова $b^2 - ac > 0$ —
+гиперболическое. Форма:
+\[
+  2\omega_x^2 + \omega_x\omega_y = \omega_x\big(2\omega_x + \omega_y\big) = 0 ,
+\]
+семейства $y = C_1$ и $x - 2y = C_2$. Замена $\varphi = y$, $\psi = x - 2y$
+приводит к каноническому виду $u_{\varphi\psi} = 1$, откуда
+\[
+  u(x,y) = y\,(x - 2y) + A(y) + B(x - 2y) .
+\]
+Проверка подстановкой проходит: $2u_{xx} + u_{xy} = 2B'' + 1 - 2B'' = 1$.
+\end{idea}

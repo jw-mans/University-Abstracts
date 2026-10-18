@@ -1,0 +1,52 @@
+% Рисунок из тетради: криволинейная сетка линий уровня phi, psi в плоскости (x,y)
+% переходит в обычную прямоугольную сетку в плоскости (phi, psi).
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}]
+  % --- левая панель: плоскость (x,y)
+  \begin{scope}
+    \draw[->] (-0.2,0) -- (4.3,0) node[anchor=north east] {$x$};
+    \draw[->] (0,-0.2) -- (0,3.7) node[anchor=south east] {$y$};
+    \begin{scope}
+      \clip (0,0) rectangle (4.1,3.5);
+      % семейство phi = const
+      \foreach \k in {1.5, 2.4, 3.3, 4.2} {
+        \draw[thick, blue!60!black]
+          plot[variable=\s, domain=0:4.1, samples=30, smooth]
+          (\s, {\k - 0.2*\s*\s});
+      }
+      % семейство psi = const
+      \foreach \m in {0.2, 1.2, 2.2, 3.2} {
+        \draw[thick, teal!70!black]
+          plot[variable=\s, domain=0:3.5, samples=30, smooth]
+          ({\m + 0.18*\s*\s}, \s);
+      }
+    \end{scope}
+    \node[blue!60!black, anchor=west, font=\footnotesize] at (2.55,3.25)
+      {$\varphi = \mathrm{const}$};
+    \node[teal!70!black, anchor=north, font=\footnotesize] at (1.45,-0.25)
+      {$\psi = \mathrm{const}$};
+  \end{scope}
+
+  % --- стрелка замены
+  \draw[<->, thick] (4.9,1.7) -- (6.1,1.7);
+  \node[anchor=south, font=\footnotesize] at (5.5,1.75) {замена};
+
+  % --- правая панель: плоскость (phi, psi)
+  \begin{scope}[xshift=6.9cm]
+    \draw[->] (-0.2,0) -- (3.9,0) node[anchor=north east] {$\varphi$};
+    \draw[->] (0,-0.2) -- (0,3.7) node[anchor=south east] {$\psi$};
+    \foreach \k in {0.6, 1.3, 2.0, 2.7, 3.4} {
+      \draw[thick, blue!60!black] (\k,0.15) -- (\k,3.4);
+    }
+    \foreach \m in {0.6, 1.3, 2.0, 2.7} {
+      \draw[thick, teal!70!black] (0.15,\m) -- (3.7,\m);
+    }
+  \end{scope}
+\end{tikzpicture}
+\caption{Невырожденная замена $\varphi = \varphi(x,y)$, $\psi = \psi(x,y)$
+выпрямляет сетку: криволинейные линии уровня в плоскости $(x,y)$ становятся
+координатными прямыми в плоскости $(\varphi,\psi)$. Условие $J \ne 0$ как раз и
+гарантирует, что сетка нигде не вырождается.}
+\label{fig:level-lines}
+\end{figure}

@@ -1,0 +1,163 @@
+\subsection{Двойственность в пространствах Соболева. Пространства с отрицательными индексами}
+
+\begin{remark}[с лекции]
+Этот параграф дальше в курсе не используется; материал — 70-е годы XX века.
+\end{remark}
+
+\subsubsection*{Общий вид функционала на $\Wp{p}{\ell}$}
+
+\begin{theorem}\label{thm:w-dual}
+Пусть $1 < p < \infty$, $N = \sum_{|\alpha| \le \ell} 1$ и $f \in \big(\Wp{p}{\ell}(\Om)\big)^*$.
+Тогда существует $\underline v = (v_\alpha)_{|\alpha| \le \ell} \in \big[\Lp{p^*}(\Om)\big]^N$
+такой, что
+\[
+  f(u) = \sum_{|\alpha| \le \ell} \int\limits_\Om v_\alpha\, D^\alpha u\, dx
+  \qquad \forall u \in \Wp{p}{\ell}(\Om) ,
+\]
+причём $\norm{\underline v}_{[\Lp{p^*}(\Om)]^N} = \norm{f}_{(\Wp{p}{\ell}(\Om))^*}$.
+\end{theorem}
+
+\begin{idea}
+Это \emph{не} теорема Рисса, а более простой случай: вся работа уже сделана в предыдущем
+параграфе, где $\Wp{p}{\ell}(\Om)$ отождествлено с подпространством
+$\overline{W} \subset \big[\Lp{p}(\Om)\big]^N$. Остаётся продолжить функционал с
+подпространства на всё $\big[\Lp{p}\big]^N$ и применить уже известное описание
+сопряжённого к $\big[\Lp{p}\big]^N$.
+\end{idea}
+
+\begin{warn}
+В тетради в формулировке дважды написано $\Wpz{p}{\ell}$ и $\Wp{p}{\ell}$ вперемешку.
+Доказательство ведётся для полного $\Wp{p}{\ell}(\Om)$ (оператор $P$ определён на нём),
+а переход к $\Wpz{p}{\ell}$ нужен лишь дальше, когда определяются пространства
+с отрицательными индексами.
+\end{warn}
+
+\begin{proof}
+\textbf{1. Оператор $P$.} Положим
+\[
+  P u = (D^\alpha u)_{|\alpha| \le \ell} \in \big[\Lp{p}(\Om)\big]^N ,
+  \qquad
+  \overline{W} = \Big\{ \underline w \in \big[\Lp{p}(\Om)\big]^N \ \Big|\
+  \exists\, u \in \Wp{p}{\ell}(\Om): w_\alpha = D^\alpha u \Big\} .
+\]
+Как показано в предыдущем параграфе, $P$ — изометрический изоморфизм
+$\Wp{p}{\ell}(\Om)$ на $\overline W$, а $\overline W$ — подпространство
+в $\big[\Lp{p}(\Om)\big]^N$ (и потому рефлексивно и сепарабельно при $1 < p < \infty$).
+
+\textbf{2. Перенос функционала на $\overline W$.} Положим
+\[
+  \widetilde f(\underline w) = f\big(P^{-1}\underline w\big), \qquad \underline w \in \overline W .
+\]
+Функционал $\widetilde f$ линеен (как композиция линейных $f$ и $P^{-1}$) и ограничен:
+\[
+  |\widetilde f(\underline w)| = \big| f(P^{-1}\underline w) \big|
+  \le \norm{f}_{(\Wp{p}{\ell})^*} \norm{P^{-1}\underline w}_{\Wp{p}{\ell}(\Om)}
+  = \norm{f}_{(\Wp{p}{\ell})^*} \norm{\underline w}_{[\Lp{p}(\Om)]^N} ,
+\]
+где использована изометричность $P$. Значит,
+$\norm{\widetilde f}_{\overline W^{\,*}} \le \norm{f}$; обратно, подставляя
+$\underline w = Pu$,
+\[
+  |f(u)| = |\widetilde f(Pu)| \le \norm{\widetilde f}\, \norm{Pu}_{[\Lp{p}]^N}
+  = \norm{\widetilde f}\, \norm{u}_{\Wp{p}{\ell}(\Om)} ,
+\]
+то есть $\norm{f} \le \norm{\widetilde f}$ и $\norm{\widetilde f} = \norm{f}$.
+
+\textbf{3. Продолжение и представление.} По теореме Хана--Банаха продолжим $\widetilde f$
+с подпространства $\overline W$ на всё $\big[\Lp{p}(\Om)\big]^N$ без увеличения нормы:
+получим $F \in \big(\big[\Lp{p}(\Om)\big]^N\big)^*$ с $\norm{F} = \norm{\widetilde f} = \norm{f}$.
+По описанию сопряжённого к $\big[\Lp{p}\big]^N$ существует
+$\underline v \in \big[\Lp{p^*}(\Om)\big]^N$ с
+\[
+  F(\underline w) = \sum_{|\alpha| \le \ell} \int\limits_\Om v_\alpha w_\alpha\, dx ,
+  \qquad \norm{\underline v}_{[\Lp{p^*}]^N} = \norm{F} = \norm{f} .
+\]
+Подставляя $\underline w = Pu$, получаем требуемое представление.
+\end{proof}
+
+\begin{idea}
+Вектор $\underline v$, в отличие от скалярного случая, \textbf{не единствен}: продолжение
+по Хану--Банаху с подпространства $\overline W$ на всё $\big[\Lp{p}\big]^N$ неоднозначно,
+и разные продолжения дают разные $\underline v$ с одним и тем же $f$. Единственной
+остаётся только норма.
+\end{idea}
+
+\begin{idea}[title={Чему равно $N$}]
+$N$ — число мультииндексов $\alpha \in \N_0^n$ с $|\alpha| \le \ell$. Добавив фиктивную
+переменную $\alpha_{n+1} = \ell - |\alpha| \ge 0$, получаем биекцию с наборами
+$(\alpha_1, \dots, \alpha_{n+1})$, в сумме дающими ровно $\ell$, поэтому
+\[
+  N = \binom{n + \ell}{n} .
+\]
+В тетради рядом с $N = \sum_{|\alpha|\le\ell} 1$ стоит вопрос «какая формула?» — вот она.
+\end{idea}
+
+\subsubsection*{Пространства $\Wp{p}{-\ell}(\Om)$}
+
+Ограничим функционал на финитные функции. Для $\underline v \in \big[\Lp{p}(\Om)\big]^N$
+распределение
+\[
+  T(\varphi) = \sum_{|\alpha| \le \ell} (-1)^{|\alpha|}\, D^\alpha T_{v_\alpha}(\varphi)
+  = \sum_{|\alpha| \le \ell} \int\limits_\Om v_\alpha\, D^\alpha \varphi\, dx ,
+  \qquad \varphi \in C_0^\infty(\Om) ,
+\]
+оценивается через $\norm{\varphi}_{\ell,p^*,\Om}$, то есть непрерывно по норме
+$\Wp{p^*}{\ell}$. Так как $C_0^\infty(\Om)$ плотно в $\Wpz{p^*}{\ell}(\Om)$ по определению,
+по теореме о продолжении ограниченного оператора с плотной области определения существует
+единственный $f \in \big(\Wpz{p^*}{\ell}(\Om)\big)^*$ с
+\[
+  f(\varphi) = T(\varphi) \quad \forall \varphi \in C_0^\infty(\Om) ,
+  \qquad
+  \norm{f}_{(\Wpz{p^*}{\ell})^*} = \norm{T} .
+\]
+
+\begin{definition}
+Распределение $T$ принадлежит $\Wp{p}{-\ell}(\Om)$, если существует
+$\underline v \in \big[\Lp{p}(\Om)\big]^N$ такое, что
+\[
+  T(\varphi) = \sum_{|\alpha| \le \ell} (-1)^{|\alpha|} D^\alpha T_{v_\alpha}(\varphi)
+  \qquad \forall \varphi \in C_0^\infty(\Om) .
+\]
+Норма:
+\[
+  \norm{T}_{\Wp{p}{-\ell}(\Om)}
+  = \sup \Big\{ |T(\varphi)| \ \Big|\ \varphi \in C_0^\infty(\Om),\ \norm{\varphi}_{\ell,p^*,\Om} = 1 \Big\} .
+\]
+\end{definition}
+
+\begin{warn}
+В тетради показатель у $\Lp{\;}$ в определении читается неразборчиво. Выбран вариант,
+согласованный с утверждением ниже: коэффициенты $v_\alpha$ берутся из $\Lp{p}$, и тогда
+спаривание с $D^\alpha\varphi \in \Lp{p^*}$ корректно по Гёльдеру. При обратном выборе
+показателей утверждение $\Wp{p}{-\ell} \sim \big(\Wpz{p^*}{\ell}\big)^*$ не сходится.
+\end{warn}
+
+\begin{proposition}
+\[
+  \Wp{p}{-\ell}(\Om) \ \sim\ \big(\Wpz{p^*}{\ell}(\Om)\big)^* ,
+\]
+то есть соответствие $T \leftrightarrow f$ выше — биекция, сохраняющая норму.
+\end{proposition}
+
+\begin{proof}
+В одну сторону это только что построенное продолжение $T \mapsto f$ с сохранением нормы.
+В другую: если $f \in \big(\Wpz{p^*}{\ell}(\Om)\big)^*$, то по теореме~\ref{thm:w-dual},
+применённой к $\Wpz{p^*}{\ell}(\Om)$, функционал представляется набором
+$\underline v \in \big[\Lp{p}(\Om)\big]^N$, а его сужение на $C_0^\infty(\Om)$ — это
+в точности распределение $T$ из определения.
+\end{proof}
+
+\begin{idea}[title={Почему индекс отрицательный}]
+$\Wp{p}{\ell}$ — это, грубо говоря, «первообразные порядка $\ell$»: функции, которые
+становятся лучше после интегрирования. $\Wp{p}{-\ell}$ — наоборот, «производные до
+порядка $\ell$» от функций из $\Lp{p}$. Элементы $\Wp{p}{-\ell}$ — уже не функции, а
+сингулярные распределения.
+\end{idea}
+
+\begin{proposition}
+$\Lp{p}(\Om)$ всюду плотно в $\Wp{p}{-\ell}(\Om)$.
+\end{proposition}
+
+\begin{proof}
+\plusplus
+\end{proof}
