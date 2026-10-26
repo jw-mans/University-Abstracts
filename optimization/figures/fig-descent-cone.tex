@@ -1,0 +1,46 @@
+% Условие убывания: направление p_k годится, если оно образует тупой угол
+% с градиентом, то есть лежит в полуплоскости grad^T f . p < 0.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Stealth[length=2.2mm]}, scale=1.0]
+  % линии уровня
+  \foreach \r in {0.55, 1.0, 1.45, 1.9} {
+    \draw[blue!35!black, rotate=22] (0,0) ellipse ({\r*1.6} and {\r*0.95});
+  }
+
+  \coordinate (XK) at (-1.55,-0.95);
+  \fill (XK) circle (2.0pt);
+  \node[font=\footnotesize, anchor=north east] at (XK) {$x_k$};
+
+  % полуплоскость направлений убывания
+  \begin{scope}
+    \clip (XK) circle (2.15);
+    \fill[teal!12, rotate around={-32:(XK)}]
+      ($(XK)+(0,-2.4)$) rectangle ($(XK)+(2.6,2.4)$);
+  \end{scope}
+  % касательная к линии уровня (граница полуплоскости)
+  \draw[dashed, gray, rotate around={-32:(XK)}]
+    ($(XK)+(0,-2.0)$) -- ($(XK)+(0,2.0)$);
+
+  % градиент и антиградиент
+  \draw[->, red!70!black, very thick] (XK) -- ++(-1.05,-0.66);
+  \node[font=\footnotesize, red!70!black, anchor=north east]
+    at ($(XK)+(-1.0,-0.62)$) {$\nabla f(x_k)$};
+  \draw[->, teal!65!black, very thick] (XK) -- ++(1.05,0.66);
+  \node[font=\footnotesize, teal!65!black, anchor=south]
+    at ($(XK)+(1.0,0.68)$) {$-\nabla f(x_k)$};
+
+  % произвольное допустимое направление
+  \draw[->, orange!85!black, very thick] (XK) -- ++(1.5,-0.25);
+  \node[font=\footnotesize, orange!80!black, anchor=west]
+    at ($(XK)+(1.55,-0.25)$) {$p_k$};
+
+  \node[font=\scriptsize, teal!50!black, anchor=west] at (0.45,-1.95)
+    {$\nabla\T f(x_k)\, p_k < 0$};
+\end{tikzpicture}
+\caption{Направление $p_k$ годится как направление спуска ровно тогда, когда
+оно лежит в открытой полуплоскости $\nabla\T f(x_k)\, p_k < 0$ (закрашена).
+Антиградиент — «самое глубокое» направление в ней, его и берут в градиентных
+методах первого порядка.}
+\label{fig:descent-cone}
+\end{figure}

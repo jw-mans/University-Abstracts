@@ -1,0 +1,49 @@
+% Ортогональное разложение x = Px + Qx по подпространствам L и L'.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >={Stealth[length=2.2mm]}]
+
+% подпространство L (прямая под углом 20 градусов)
+\draw[blue!55!black, thick] (-1.6,{-1.6*tan(20)}) -- (4.4,{4.4*tan(20)});
+\node[blue!55!black, font=\footnotesize, anchor=west] at (4.45,{4.4*tan(20)})
+  {$L = \{Px\}$};
+
+% ортогональное подпространство L' (под углом 110 градусов)
+\draw[orange!75!black, thick] ({-1.3*cos(110)},{-1.3*sin(110)})
+                           -- ({3.0*cos(110)},{3.0*sin(110)});
+\node[orange!60!black, font=\footnotesize, anchor=south east]
+  at ({2.9*cos(110)},{2.9*sin(110)}) {$L' = \{Qx\}$};
+
+% отметка прямого угла в начале координат
+\draw[gray] ({0.32*cos(20)},{0.32*sin(20)})
+  -- ({0.32*cos(20)+0.32*cos(110)},{0.32*sin(20)+0.32*sin(110)})
+  -- ({0.32*cos(110)},{0.32*sin(110)});
+
+\fill[black] (0,0) circle (1.2pt);
+
+% вектор x и его проекции
+\coordinate (O) at (0,0);
+\coordinate (Py) at ({3.0*cos(20)},{3.0*sin(20)});     % Px
+\coordinate (Qz) at ({1.6*cos(110)},{1.6*sin(110)});   % Qx
+\coordinate (X)  at ({3.0*cos(20)+1.6*cos(110)},{3.0*sin(20)+1.6*sin(110)});
+
+\draw[black, very thick, ->] (O) -- (X)
+  node[midway, above left, font=\footnotesize, xshift=-2pt] {$x$};
+\draw[blue!55!black, very thick, ->] (O) -- (Py)
+  node[midway, below right, font=\footnotesize, yshift=-2pt] {$y = Px$};
+\draw[orange!75!black, very thick, ->] (O) -- (Qz)
+  node[midway, left, font=\footnotesize, xshift=-1pt] {$z = Qx$};
+
+% пунктиры до параллелограмма
+\draw[gray, dashed] (Py) -- (X);
+\draw[gray, dashed] (Qz) -- (X);
+
+\end{tikzpicture}
+\caption{Ортогональное разложение из леммы~\ref{lem:projector}. Проектор $P$
+отображает на подпространство $L$, дополнительный проектор $Q = E - P$ — на
+ортогональное ему $L'$, и всякий вектор единственным образом представляется
+как $x = Px + Qx$. В методе Розена $L$ — линейная оболочка строк матрицы
+активных ограничений, а $L'$ — её ядро, то есть направления, не выводящие с
+текущей грани.}
+\label{fig:projection-decomposition}
+\end{figure}

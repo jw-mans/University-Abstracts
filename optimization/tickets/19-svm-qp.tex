@@ -1,0 +1,173 @@
+\section{Билет 19. Квадратичное программирование в методе SVM}
+
+\ticketq{Алгоритмы решения задачи квадратичного программирования в методе SVM
+(Support Vector Machine — машина опорных векторов).}
+
+\paragraph{Задача классификации.}
+Обучающая выборка $(x_i, y_i)$, $i = \overline{1,l}$, $x_i \in \R^n$,
+$y_i \in \{-1, 1\}$. Строится разделяющая гиперплоскость $w\T x + b = 0$;
+классификация новой точки — $\sgn(w\T x + b)$. Разделение правильное, если
+\[
+  y_i\,(w\T x_i + b) \ \ge\ 1 , \qquad i = \overline{1,l} .
+\]
+
+\textbf{Зазор.} Расстояние от $x_i$ до гиперплоскости равно
+$\abs{w\T x_i + b}/\norm{w}$; при выполнении условий выше минимальное
+расстояние равно $1/\norm{w}$, а ширина полосы между $w\T x + b = \pm1$ равна
+$2/\norm{w}$. Максимизация зазора $\iff$ минимизация $\tfrac12\norm{w}^2$.
+
+\paragraph{Прямая задача.}
+Линейно разделимый случай и случай \textbf{мягкого зазора} с переменными
+ошибок $\xi_i \ge 0$:
+\[
+  \tfrac12\norm{w}^2 + C\sum_{i=1}^{l}\xi_i \ \to\ \min_{w,b,\xi} ,
+  \qquad
+  y_i(w\T x_i + b) \ge 1 - \xi_i , \qquad \xi_i \ge 0 ,
+\]
+$C > 0$ — параметр штрафа за ошибки. Цель квадратичная, ограничения линейные
+$\Rightarrow$ это \textbf{задача квадратичного программирования}.
+
+\paragraph{Вывод двойственной задачи.}
+Множители $\alpha_i \ge 0$ для $1 - \xi_i - y_i(w\T x_i + b) \le 0$ и
+$\mu_i \ge 0$ для $-\xi_i \le 0$:
+\[
+  L = \tfrac12\norm{w}^2 + C\sum_i \xi_i
+    + \sum_i \alpha_i\big(1 - \xi_i - y_i(w\T x_i + b)\big)
+    - \sum_i \mu_i\xi_i .
+\]
+Условия стационарности:
+\[
+  \nabla_w L = w - \sum_i \alpha_i y_i x_i = 0
+  \ \Rightarrow\ w = \sum_i \alpha_i y_i x_i ;
+\]
+\[
+  \frac{\partial L}{\partial b} = -\sum_i \alpha_i y_i = 0
+  \ \Rightarrow\ \sum_i \alpha_i y_i = 0 ;
+  \qquad
+  \frac{\partial L}{\partial \xi_i} = C - \alpha_i - \mu_i = 0
+  \ \Rightarrow\ 0 \le \alpha_i \le C .
+\]
+Подстановка $w$ в $L$ даёт двойственную задачу (с ядром
+$K(x_i,x_j) = \varphi\T(x_i)\varphi(x_j)$):
+\[
+  W(\alpha) = \sum_{i} \alpha_i
+   - \tfrac12\sum_{i}\sum_{j}\alpha_i\alpha_j y_i y_j K(x_i,x_j)
+   \ \to\ \max_\alpha ,
+\]
+\[
+  \sum_i \alpha_i y_i = 0 , \qquad 0 \le \alpha_i \le C .
+\]
+Решающая функция $F(x) = \sum_i \alpha_i y_i K(x_i, x) + b$, классификация
+$\sgn F(x)$. На практике решают именно двойственную: она зависит только от
+скалярных произведений (позволяет ядра), имеет простые ограничения, и
+большинство $\alpha_i$ равны нулю.
+
+\paragraph{Условия ККТ и опорные векторы.}
+\[
+  \alpha_i\big(y_i(w\T x_i + b) - 1 + \xi_i\big) = 0 ,
+  \qquad (C - \alpha_i)\xi_i = 0 .
+\]
+Отсюда: $\alpha_i = 0$ — объект не влияет на гиперплоскость;
+$0 < \alpha_i < C$ — объект лежит на границе зазора,
+$y_i(w\T x_i + b) = 1$; $\alpha_i = C$ — объект нарушает зазор или
+классифицирован неверно. Объекты с $\alpha_i > 0$ — \textbf{опорные векторы}.
+
+\paragraph{Теорема (выпуклость двойственной задачи).}
+\textit{Двойственная задача SVM — выпуклая задача квадратичного
+программирования.}
+
+\textsc{Док-во.} $W(\alpha) = \sum_i\alpha_i - \tfrac12\alpha\T Q\alpha$,
+$Q_{ij} = y_iy_jK(x_i,x_j)$. Для любого $z$, положив $u_i = z_iy_i$:
+\[
+  z\T Q z = \sum_i\sum_j z_iz_jy_iy_jK(x_i,x_j)
+          = \sum_i\sum_j u_iu_jK(x_i,x_j) \ \ge\ 0 ,
+\]
+так как ядровая матрица Грама положительно полуопределена $\Rightarrow$
+$Q \succeq 0$ $\Rightarrow$ $-\tfrac12\alpha\T Q\alpha$ вогнута, линейная
+часть вогнута (и выпукла) $\Rightarrow$ $W$ вогнута. Максимизация вогнутой
+функции при линейных ограничениях — выпуклая задача. $\blacksquare$
+
+\paragraph{Алгоритмы решения.}
+\begin{csteps}
+  \item \textbf{Метод активного набора.} Часть ограничений ($\alpha_i = 0$ или
+        $\alpha_i = C$) считается активной; на итерации решается КП при
+        активных ограничениях, проверяются условия ККТ, набор пополняется или
+        сокращается. Минусы: хранение матрицы ядра, частая смена набора при
+        большом $l$.
+  \item \textbf{Метод внутренней точки.} Ограничения $0 < \alpha_i < C$
+        заменяются логарифмическим барьером
+        $-\mu\sum_i\ln\alpha_i - \mu\sum_i\ln(C - \alpha_i)$, решается
+        последовательность гладких задач внутри области. Минусы: большие
+        системы линейных уравнений, тяжёл при больших выборках.
+  \item \textbf{Методы декомпозиции.} Оптимизируются не все $\alpha$ сразу, а
+        небольшое рабочее множество $B_k \subset \{1,\dots,l\}$; остальные
+        фиксируются.
+\end{csteps}
+
+\paragraph{Алгоритм SMO.}
+Частный случай декомпозиции: на итерации меняются ровно \emph{две} переменные
+$\alpha_i, \alpha_j$. Две — потому что есть равенство
+$\sum_s \alpha_s y_s = 0$: изменение одной переменной его нарушит.
+
+\textbf{Теорема (сохранение равенства).} \textit{Если
+$y_i\alpha_i^{\text{new}} + y_j\alpha_j^{\text{new}}
+ = y_i\alpha_i^{\text{old}} + y_j\alpha_j^{\text{old}}$, то
+$\sum_s \alpha_s y_s = 0$ сохраняется.}
+
+\textsc{Док-во.} Меняются только компоненты $i$ и $j$, поэтому
+\[
+  \sum_s \alpha_s^{\text{new}}y_s - \sum_s \alpha_s^{\text{old}}y_s
+   = y_i(\alpha_i^{\text{new}} - \alpha_i^{\text{old}})
+   + y_j(\alpha_j^{\text{new}} - \alpha_j^{\text{old}}) = 0
+\]
+по условию теоремы $\Rightarrow$ новая сумма равна старой, то есть нулю.
+$\blacksquare$
+
+\textbf{Откуда формула обновления.} При фиксированных остальных $\alpha$ связь
+$\sum_t\alpha_ty_t = \mathrm{const}$ даёт $\alpha_i = \zeta - y_iy_j\alpha_j$,
+то есть $W$ становится функцией одной переменной $\alpha_j$ — параболой:
+\[
+  \frac{dW}{d\alpha_j} = y_j(E_i - E_j) ,
+  \qquad
+  \frac{d^2W}{d\alpha_j^2} = -\eta \le 0 ,
+  \qquad
+  \eta = K_{ii} + K_{jj} - 2K_{ij} ,
+\]
+где $F(x) = \sum_s\alpha_sy_sK(x_s,x) + b$ и $E_t = F(x_t) - y_t$. Вершина
+параболы и есть новое значение.
+
+\textbf{Формулы.}
+\[
+  \alpha_j^{\text{new}} = \alpha_j^{\text{old}}
+    + \frac{y_j(E_i - E_j)}{\eta} \quad (\eta > 0) ,
+\]
+затем отсечение $L \le \alpha_j^{\text{new}} \le H$:
+\[
+  y_i \ne y_j :\ L = \max(0,\ \alpha_j - \alpha_i) ,\
+                 H = \min(C,\ C + \alpha_j - \alpha_i) ;
+\]
+\[
+  y_i = y_j :\ L = \max(0,\ \alpha_i + \alpha_j - C) ,\
+               H = \min(C,\ \alpha_i + \alpha_j) ,
+\]
+и $\alpha_i^{\text{new}} = \alpha_i^{\text{old}}
+ + y_iy_j\big(\alpha_j^{\text{old}} - \alpha_j^{\text{new}}\big)$ — ровно
+условие теоремы. Свободный член:
+$b^{\text{new}} = b_1$ при $0 < \alpha_i^{\text{new}} < C$,
+$b^{\text{new}} = b_2$ при $0 < \alpha_j^{\text{new}} < C$, иначе
+$(b_1+b_2)/2$, где
+\[
+  b_1 = b - E_i - y_i\Delta\alpha_i K(x_i,x_i) - y_j\Delta\alpha_j K(x_i,x_j) ,
+\]
+\[
+  b_2 = b - E_j - y_i\Delta\alpha_i K(x_i,x_j) - y_j\Delta\alpha_j K(x_j,x_j) .
+\]
+
+\paragraph{Ограничения.}
+Матрица ядра имеет размер $l\times l$ — при больших $l$ её хранение
+невозможно; активные методы и методы внутренней точки для таких выборок
+слишком дороги; SMO делает дешёвые итерации, но их может потребоваться много,
+и качество зависит от выбора пары $(i,j)$; при плохом $C$ модель
+переобучается или недообучается; при неудачном ядре данные плохо разделяются.
+
+\seefull{гл.~4, \S1--\S4 (численный пример SMO в \S4)}

@@ -1,0 +1,135 @@
+\section{Билет 7. Градиентные методы второго порядка}
+
+\ticketq{Градиентные методы второго порядка с различными способами выбора
+шага.}
+
+\paragraph{Постановка и вывод направления.}
+$f(x) \to \min$, $x \in \R^n$, $f \in C^2$; $g_k = \nabla f(x_k)$,
+$H_k = \nabla^2 f(x_k)$. В окрестности $x_k$ функция заменяется квадратичной
+моделью ($p = x - x_k$):
+\[
+  \psi_k(x_k + p) = f(x_k) + g_k\T p + \tfrac12 p\T H_k p .
+\]
+Необходимое условие минимума модели:
+\[
+  \nabla_p \psi_k = g_k + H_k p = 0
+  \ \Rightarrow\ H_k p_k = -g_k
+  \ \Rightarrow\ p_k = -H_k^{-1} g_k ,
+  \qquad x_{k+1} = x_k + \alpha_k p_k .
+\]
+
+\paragraph{Теорема (направление Ньютона — направление спуска).}
+\textit{$H_k \succ 0$, $g_k \ne 0$ $\Rightarrow$ $g_k\T p_k < 0$.}
+
+\textsc{Док-во.} $g_k\T p_k = -g_k\T H_k^{-1}g_k$; из $H_k \succ 0$ следует
+$H_k^{-1} \succ 0$ $\Rightarrow$ $g_k\T H_k^{-1}g_k > 0$ $\Rightarrow$
+$g_k\T p_k < 0$. В количественной форме, подставив $g_k = -H_kp_k$:
+\[
+  g_k\T p_k = -p_k\T H_k p_k \ \le\ -m\norm{p_k}^2 < 0 . \ \blacksquare
+\]
+
+\paragraph{Теорема (квадратичная задача за одну итерацию).}
+\textit{Если $f(x) = \tfrac12 x\T A x + b\T x + c$, $A = A\T \succ 0$, то
+метод Ньютона с $\alpha_k = 1$ находит минимум за один шаг.}
+
+\textsc{Док-во.} $\nabla f = Ax + b$, $H = A$ $\Rightarrow$
+$p_k = -A^{-1}(Ax_k + b)$, откуда
+\[
+  x_{k+1} = x_k - A^{-1}Ax_k - A^{-1}b = -A^{-1}b ,
+\]
+а из $\nabla f(x_*) = Ax_* + b = 0$ следует $x_* = -A^{-1}b = x_{k+1}$.
+$\blacksquare$
+
+\paragraph{Способы выбора шага.}
+\begin{csteps}
+  \item $\alpha_k \equiv 1$ — \textbf{чистый метод Ньютона}. Быстр вблизи
+        $x_*$, но вдали может увеличить $f$.
+  \item \textbf{Дробление}: $\alpha_0 = 1$, $\lambda \in (0,1)$,
+        $\eps \in (0, \tfrac12]$, условие приёма
+        \[
+          f(x_k + \alpha p_k) - f(x_k) \le \alpha\,\eps\,\nabla\T f(x_k)p_k ,
+        \]
+        иначе $\alpha := \lambda\alpha$ — \textbf{демпфированный Ньютон}.
+  \item \textbf{Наискорейший спуск вдоль $p_k$}:
+        $\alpha_k = \argmin_{\alpha>0} f(x_k + \alpha p_k)$.
+\end{csteps}
+
+\textbf{Почему $\eps \le \tfrac12$.} Для квадратичной $f$ вдоль
+ньютоновского направления $f(x_k + \alpha p) - f(x_k) =
+\nabla\T f\,p\,(\alpha - \alpha^2/2)$, при $\alpha = 1$ это
+$\tfrac12\nabla\T f\,p$. Условие приёма даёт
+\[
+  \tfrac12\nabla\T f\,p \le \eps\,\nabla\T f\,p
+  \ \iff\ \eps \le \tfrac12
+\]
+(неравенство переворачивается, так как $\nabla\T f\,p < 0$). При
+$\eps > \tfrac12$ дробление отвергало бы идеальный единичный шаг и метод терял
+бы квадратичную скорость.
+
+\paragraph{Теорема (квадратичная сходимость).}
+\textit{Пусть}
+\textit{1) $m\norm{z}^2 \le z\T H(y)z \le M\norm{z}^2$, $0 < m \le M$;}
+\textit{2) $\norm{H(x) - H(y)} \le R\norm{x-y}$,}
+\textit{и шаг выбирается дроблением. Тогда $x_k \to x_*$ при любом $x_0$,
+причём}
+\[
+  \norm{x_{k+1} - x_*} \ \le\ \frac{R}{m}\,\norm{x_k - x_*}^2 .
+\]
+\textsc{Док-во (глобальная часть).} Из $\norm{H} \le M$:
+$f(x_k+\alpha p_k) - f(x_k) \le \alpha g_k\T p_k + \tfrac{M}{2}\alpha^2\norm{p_k}^2$,
+а $g_k\T p_k \le -m\norm{p_k}^2$. Условие дробления выполнено, как только
+$\tfrac{M}{2}\alpha^2\norm{p_k}^2 \le (1-\eps)\alpha\,\abs{g_k\T p_k}$, то есть
+при $\alpha \le 2(1-\eps)m/M$ $\Rightarrow$ дробление конечно и
+$\alpha_k \ge \bar\alpha > 0$. Тогда, учитывая
+$\norm{p_k} = \norm{H_k^{-1}g_k} \ge \norm{g_k}/M$,
+\[
+  f(x_k) - f(x_{k+1}) \ \ge\ \eps\bar\alpha m \norm{p_k}^2
+   \ \ge\ \frac{\eps\bar\alpha m}{M^2}\,\norm{g_k}^2 ,
+\]
+и дальше как в билете~6: $f(x_k)$ убывает и ограничена снизу $\Rightarrow$
+$\sum_k\norm{g_k}^2 < \infty$ $\Rightarrow$ $\norm{g_k}\to0$, а по сильной
+выпуклости $x_k \to x_*$.
+
+\textsc{Док-во (квадратичная часть).} $e_k = x_k - x_*$, $\alpha_k = 1$,
+$\nabla f(x_*) = 0$. Пользуясь $g_k = \int_0^1 H(x_*+te_k)e_k\,dt$:
+\[
+  e_{k+1} = e_k - H_k^{-1}g_k
+   = H_k^{-1}\int_0^1 \big(H_k - H(x_*+te_k)\big)e_k\,dt ,
+\]
+а из липшицевости $\norm{H_k - H(x_*+te_k)} \le R(1-t)\norm{e_k}$ и
+$\int_0^1(1-t)dt = \tfrac12$ получаем
+$\norm{e_{k+1}} \le \tfrac{R}{2m}\norm{e_k}^2$. $\blacksquare$
+
+Условие~1) даёт существование, единственность $x_*$ и обратимость $H$
+(направление определено и является спуском); условие~2) — липшицевость
+\emph{гессиана} — отвечает за квадратичную оценку. Глобальность обеспечивает
+дробление: вдали от $x_*$ шаг уменьшается и $f$ убывает, вблизи единичный шаг
+проходит проверку при $\eps \le \tfrac12$.
+
+\paragraph{Модификации (экономия на гессиане).}
+\begin{csteps}
+  \item \textbf{Фиксированная матрица:} $H_0 = \nabla^2 f(x_0)$,
+        $x_{k+1} = x_k - \alpha_k H_0^{-1}\nabla f(x_k)$ — одно разложение на
+        весь счёт.
+  \item \textbf{Периодическое обновление:} гессиан фиксируется на $t$ итераций,
+        \[
+          x_{lt+i+1} = x_{lt+i} - \alpha_{lt+i}H^{-1}(x_{lt})\nabla f(x_{lt+i}),
+          \quad i = \overline{0,t-1} .
+        \]
+        $t = 1$ — обычный Ньютон, $t = \infty$ — фиксированная матрица.
+  \item \textbf{Левенберг--Марквардт:} $(H_k + \lambda_k E)p_k = -g_k$.
+        $\lambda_k \to 0$ — Ньютон; $\lambda_k \to \infty$ —
+        $p_k \approx -\frac{1}{\lambda_k}g_k$, градиентный шаг малой длины.
+        Слагаемое $\lambda_k E$ делает матрицу положительно определённой даже
+        там, где $H_k$ таковой не является.
+\end{csteps}
+Модификации 1--2 сохраняют сходимость (направление остаётся спуском, пока
+матрица $\succ 0$), но теряют квадратичную скорость: оценка опиралась на то,
+что модель построена \emph{в текущей} точке.
+
+\paragraph{Ограничения методов второго порядка.}
+Нужно вычислять $H_k$ и решать $H_k p_k = -g_k$ — дорого при большом $n$;
+при $H_k \not\succ 0$ направление может не быть спуском, и дробление этого не
+исправляет; при плохом $x_0$ чистый метод может расходиться.
+
+\seefull{гл.~2, \S20--\S22 и \S24}

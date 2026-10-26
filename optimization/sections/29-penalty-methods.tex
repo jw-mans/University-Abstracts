@@ -1,0 +1,406 @@
+\subsection{Методы штрафных функций}
+\label{subsec:penalty}
+
+\subsubsection*{Метод внешних штрафных функций (МВШФ)}
+
+\[
+  \begin{cases}
+    \varphi(x) \to \min , & x \in S , \\
+    S = \big\{\, x \mid \psi_i(x) \le 0,\ i = \overline{1,m} ;
+        \quad \chi_j(x) = 0,\ j = \overline{1,l} \,\big\} , \\
+    x \in V \subset \R^n , & V \ \text{— область определения} .
+  \end{cases}
+\]
+
+\paragraph{1) Одно неравенство.}
+Пусть $S = \{\, x \mid \psi(x) \le 0 \,\}$. Положим
+\[
+  \alpha(x) =
+  \begin{cases}
+    0 , & \psi(x) \le 0 , \\
+    \big(\psi(x)\big)^p , & \psi(x) > 0 ,
+  \end{cases}
+  \qquad p \ge 1 \ (\text{обычно } p = 2) ,
+\]
+и составим функцию
+\[
+  \varphi(x) + \mu\,\alpha(x) , \qquad \mu > 0 .
+\]
+Здесь $\alpha(x)$ — \textbf{штрафная функция}, $\mu$ — \textbf{параметр
+штрафа}. Основное свойство:
+\[
+  \mu\,\alpha(x) = 0 \quad \forall x \in S ,
+  \qquad
+  \mu\,\alpha(x) \ne 0 \quad \forall x \notin S .
+\]
+
+Вспомогательная задача:
+\[
+  \big(\varphi(x) + \mu\,\alpha(x)\big) \to \min
+  \qquad\Longleftrightarrow\qquad
+  \Big(\varphi(x)
+    + \mu\, \underbrace{\max\nolimits^{p}\{0,\ \psi(x)\}}_{\alpha(x)}\Big)
+  \to \min .
+\]
+Решается последовательность вспомогательных задач при возрастающем $\mu$; пусть
+эти решения — $\{x_\mu\}$.
+
+\begin{idea}[title={Почему $p \ge 1$ и почему обычно $p = 2$}]
+При $p < 1$ функция $\max^p\{0,\psi\}$ не выпукла, и вспомогательная задача
+перестаёт быть выпуклой даже для выпуклых $\varphi$ и $\psi$ — методы из
+предыдущих глав становятся неприменимы.
+
+При $p = 1$ штраф $\max\{0,\psi(x)\}$ выпукл, но \emph{негладок} в точках
+границы ($\psi(x) = 0$) — там у него излом, а именно туда и сходятся
+приближения. Градиентные методы на такой функции работают плохо.
+
+При $p = 2$ функция $\max^2\{0,\psi(x)\}$ уже непрерывно дифференцируема
+(производная равна $2\max\{0,\psi\}\nabla\psi$ и обращается в нуль на границе),
+выпукла при выпуклой $\psi$ — и при этом растёт достаточно быстро. Это
+компромисс между гладкостью и «силой» штрафа, поэтому $p = 2$ — стандартный
+выбор.
+\end{idea}
+
+\paragraph{2) Одно равенство.}
+Пусть $S = \{\, x \mid \chi(x) = 0 \,\}$. Берём
+\[
+  \alpha(x) = \abs{\chi(x)}^{\,p}
+\]
+и рассматриваем ту же вспомогательную задачу
+$\varphi(x) + \mu\,\alpha(x) \to \min$, $\mu > 0$.
+
+\paragraph{3) Общий случай.}
+\[
+  \alpha(x) = \sum_{i=1}^{m} \xi_i \max\nolimits^{p}\{0,\ \psi_i(x)\}
+            + \sum_{j=1}^{l} \eta_j \abs{\chi_j(x)}^{\,p} ,
+  \qquad \xi_i > 0 ,\ \eta_j > 0
+\]
+— \textbf{штрафные коэффициенты}. Функция $\alpha(x)$ — штрафная; решается
+вспомогательная задача
+\[
+  \varphi(x) + \mu\,\alpha(x) \ \to\ \min ,
+\]
+и получается решение $x_\mu$; далее $\mu$ увеличивают и повторяют.
+
+\begin{idea}
+Коэффициенты $\xi_i, \eta_j$ и общий множитель $\mu$ играют разные роли.
+Коэффициенты $\xi_i, \eta_j$ фиксированы и выравнивают ограничения между собой
+(они могут быть записаны в разных единицах и иметь разный масштаб), а $\mu$
+растёт по ходу работы и постепенно «ужесточает» всю систему сразу. Именно
+увеличение $\mu$ и означает «улучшаем свойства этих задач»: при малом $\mu$
+вспомогательная задача хорошо обусловлена, но её решение далеко от $S$; при
+большом $\mu$ решение почти допустимо, но функция становится овражной. Поэтому
+решают не одну задачу, а серию, беря решение предыдущей как начальное
+приближение следующей.
+\end{idea}
+
+\subsubsection*{Свойства вспомогательных задач}
+
+Рассмотрим общую постановку. Построим вспомогательную задачу
+\[
+  \varphi(x) + \mu\,\alpha(x) \to \min , \qquad \mu > 0 , \quad x \in V ,
+\]
+пусть $x_\mu$ — её решение, и
+\[
+  P(\mu) = \varphi(x_\mu) + \mu\,\alpha(x_\mu) .
+\]
+
+\begin{lemma}\label{lem:penalty}
+Пусть $\varphi$, $\psi_i$, $\chi_j$ непрерывны (то есть все функции, входящие в
+постановку задачи), и для всякого $\mu > 0$ существует решение $x_\mu$
+вспомогательной задачи. Тогда
+\begin{enumerate}[label=\arabic*),left=0pt]
+  \item $\displaystyle \min_{x \in S} \varphi(x) \ \ge\ \sup_{\mu > 0} P(\mu)$;
+  \item $\alpha(x_\mu)$ — невозрастающая функция от $\mu$;
+  \item $\varphi(x_\mu)$ — неубывающая функция от $\mu$;
+  \item $P(\mu)$ — неубывающая функция от $\mu$;
+  \item $\displaystyle \lim_{\mu \to \infty} P(\mu) = \sup_{\mu > 0} P(\mu)$.
+\end{enumerate}
+\end{lemma}
+
+\lecture{Лекция 9}{}
+
+\begin{proof}
+\textbf{1)} Для любой допустимой точки $x \in S$ штраф равен нулю:
+$\alpha(x) = 0$. Так как $x_\mu$ минимизирует $\varphi + \mu\alpha$ на $V
+\supset S$,
+\[
+  P(\mu) = \min_{z \in V}\big(\varphi(z) + \mu\alpha(z)\big)
+  \ \le\ \varphi(x) + \mu\underbrace{\alpha(x)}_{=\,0} = \varphi(x) .
+\]
+Беря минимум по $x \in S$ и затем супремум по $\mu$, получаем требуемое.
+
+\medskip
+\textbf{2)--4)} Пусть $0 < \mu_1 < \mu_2$. По определению $x_{\mu_1}, x_{\mu_2}$
+как решений:
+\[
+  \varphi(x_{\mu_1}) + \mu_1 \alpha(x_{\mu_1})
+  \ \le\ \varphi(x_{\mu_2}) + \mu_1 \alpha(x_{\mu_2}) ,
+\]
+\[
+  \varphi(x_{\mu_2}) + \mu_2 \alpha(x_{\mu_2})
+  \ \le\ \varphi(x_{\mu_1}) + \mu_2 \alpha(x_{\mu_1}) .
+\]
+Складывая, получаем
+$(\mu_1 - \mu_2)\alpha(x_{\mu_1}) \le (\mu_1 - \mu_2)\alpha(x_{\mu_2})$, и так
+как $\mu_1 - \mu_2 < 0$,
+\[
+  \alpha(x_{\mu_1}) \ \ge\ \alpha(x_{\mu_2})
+  \qquad \text{— пункт 2)} .
+\]
+Подставляя это в первое неравенство,
+\[
+  \varphi(x_{\mu_1}) \ \le\ \varphi(x_{\mu_2})
+    + \mu_1\big(\alpha(x_{\mu_2}) - \alpha(x_{\mu_1})\big)
+  \ \le\ \varphi(x_{\mu_2})
+  \qquad \text{— пункт 3)} .
+\]
+Наконец,
+\begin{align*}
+  P(\mu_2) &= \varphi(x_{\mu_2}) + \mu_2\alpha(x_{\mu_2})
+   \ \ge\ \varphi(x_{\mu_2}) + \mu_1\alpha(x_{\mu_2}) \\
+  &\ge \varphi(x_{\mu_1}) + \mu_1\alpha(x_{\mu_1}) = P(\mu_1)
+   \qquad \text{— пункт 4)} ,
+\end{align*}
+где последнее неравенство — это первое неравенство оптимальности.
+
+\medskip
+\textbf{5)} По пункту~4) функция $P$ не убывает, по пункту~1) она ограничена
+сверху величиной $\min_S \varphi$. Монотонная ограниченная функция имеет предел
+при $\mu \to \infty$, и этот предел равен её супремуму.
+\end{proof}
+
+\begin{idea}
+Смысл пунктов леммы: $P(\mu)$ — растущая снизу оценка оптимума
+$\min_S\varphi$ (пункты~1 и~4), приближения становятся всё «допустимее»
+(штраф $\alpha(x_\mu)$ убывает, пункт~2), но значение самой целевой функции
+при этом растёт (пункт~3) — приближения подходят к $S$ \emph{снаружи}, со
+стороны меньших значений $\varphi$. Пункт~5 говорит, что последовательность
+нижних оценок исчерпывает всё, что из этой схемы можно выжать.
+\end{idea}
+
+\subsubsection*{Теорема о сходимости метода внешних штрафов}
+
+\begin{theorem}\label{thm:penalty}
+Пусть
+\begin{enumerate}[label=\arabic*),left=0pt,nosep]
+  \item исходная задача имеет решение $x_*$;
+  \item выполнены условия леммы~\ref{lem:penalty};
+  \item $\{x_\mu\} \subset M$, где $M$ — компакт.
+\end{enumerate}
+Тогда
+\begin{enumerate}[label=\arabic*),left=0pt,nosep]
+  \item $\displaystyle \min_{x \in S}\varphi(x) = \lim_{\mu \to +\infty} P(\mu)$;
+  \item любая предельная точка последовательности $\{x_{\mu_k}\}$
+        ($\mu_k \to +\infty$) является решением исходной задачи;
+  \item $\mu\,\alpha(x_\mu) \xrightarrow[\mu \to +\infty]{} 0$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Шаг 1 (ключевое утверждение).} Покажем, что
+\begin{equation}\label{eq:penalty-key}
+  \forall \eps > 0 \quad \exists \mu > 0 : \qquad \alpha(x_\mu) \le \eps .
+\end{equation}
+
+От противного: пусть существует $\eps > 0$ такое, что
+$\alpha(x_\mu) > \eps$ \emph{при всех} $\mu > 0$. Возьмём $\mu_1 = 1$ и
+обозначим $x_1 = x_{\mu_1}$. По пункту~1) леммы~\ref{lem:penalty} для любой
+точки $y \in S$
+\begin{equation}\label{eq:penalty-2}
+  \varphi(y) \ \ge\ \min_{x \in S}\varphi(x) \ \ge\ \sup_{\mu > 0} P(\mu)
+  \ \ge\ P(\mu_1) = \varphi(x_1) + \mu_1 \alpha(x_1) \ \ge\ \varphi(x_1) .
+\end{equation}
+Выберем
+\begin{equation}\label{eq:penalty-3}
+  \mu \ \ge\ 1 + \frac{1}{\eps}\big(\varphi(y) - \varphi(x_1)\big) \ \ge\ 1 ,
+\end{equation}
+что возможно, так как правая часть конечна и не меньше единицы
+по~\eqref{eq:penalty-2}. Так как $\mu \ge 1 = \mu_1$, по пункту~3) леммы
+\begin{equation}\label{eq:penalty-4}
+  \varphi(x_\mu) \ \ge\ \varphi(x_1) .
+\end{equation}
+Тогда, пользуясь $\alpha(x_\mu) > \eps$, \eqref{eq:penalty-3}
+и~\eqref{eq:penalty-4},
+\begin{align*}
+  \min_{x \in S}\varphi(x)
+  \ \ge\ \sup_{\mu>0} P(\mu)
+  \ \ge\ \underbrace{\varphi(x_\mu)}_{\ge\ \varphi(x_1)}
+       + \underbrace{\mu\,\alpha(x_\mu)}_{>\ \mu\eps}
+  &\ >\ \varphi(x_1)
+       + \Big(1 + \tfrac{1}{\eps}\big(\varphi(y) - \varphi(x_1)\big)\Big)\eps \\
+  &\ =\ \varphi(x_1) + \eps + \varphi(y) - \varphi(x_1)
+   \ =\ \varphi(y) + \eps .
+\end{align*}
+Неравенство верно для \emph{любой} $y \in S$; подставляя $y = x_*$, получаем
+$\min_S \varphi > \min_S \varphi + \eps$ — противоречие.
+Значит~\eqref{eq:penalty-key} верно.
+
+\medskip
+\textbf{Шаг 2.} По пункту~2) леммы функция $\alpha(x_\mu)$ не возрастает, она
+неотрицательна, и по~\eqref{eq:penalty-key} принимает сколь угодно малые
+значения. Следовательно
+\[
+  \alpha(x_\mu) \xrightarrow[\mu \to +\infty]{} 0 .
+\]
+
+\medskip
+\textbf{Шаг 3 (пункты 1 и 2 теоремы).} Пусть $\mu_k \to +\infty$. Так как
+$\{x_\mu\} \subset M$ — компакт, существует сходящаяся подпоследовательность
+$x_{\mu_k} \to \bar{x}$. По непрерывности $\alpha$ и шагу~2
+\[
+  \alpha(\bar{x}) = 0 \qquad\Longrightarrow\qquad \bar{x} \in S
+  \qquad\Longrightarrow\qquad \varphi(\bar{x}) \ge \varphi(x_*) .
+\]
+С другой стороны,
+\[
+  P(\mu_k) = \varphi(x_{\mu_k}) + \mu_k \alpha(x_{\mu_k}) \ \ge\ \varphi(x_{\mu_k})
+  \qquad\Longrightarrow\qquad
+  \lim_{k \to \infty} P(\mu_k) \ \ge\ \varphi(\bar{x}) .
+\]
+Собирая всё вместе и пользуясь пунктом~5) леммы,
+\[
+  \underline{\min_{x \in S}\varphi(x)}
+  \ \ge\ \sup_{\mu > 0} P(\mu)
+  \ =\ \lim_{\mu \to +\infty} P(\mu)
+  \ \ge\ \varphi(\bar{x})
+  \ \ge\ \underline{\varphi(x_*)} .
+\]
+Крайние члены цепочки равны, значит все неравенства в ней — равенства. Отсюда
+сразу пункт~1) теоремы и $\varphi(\bar{x}) = \varphi(x_*)$, то есть $\bar{x}$ —
+решение исходной задачи (пункт~2).
+
+\medskip
+\textbf{Шаг 4 (пункт 3 теоремы).} Из определения $P$
+\[
+  \mu\,\alpha(x_\mu) = P(\mu) - \varphi(x_\mu) .
+\]
+При $\mu \to +\infty$ имеем $P(\mu) \to \min_S\varphi = \varphi(x_*)$ (шаг~3).
+Функция $\varphi(x_\mu)$ не убывает (пункт~3 леммы) и ограничена сверху:
+$\varphi(x_\mu) \le P(\mu) \le \min_S\varphi$, значит имеет предел; вдоль
+подпоследовательности из шага~3 этот предел равен
+$\varphi(\bar{x}) = \varphi(x_*)$. Следовательно обе величины в правой части
+стремятся к $\varphi(x_*)$, и $\mu\,\alpha(x_\mu) \to 0$.
+\end{proof}
+
+\begin{corollary*}
+Если $\alpha(x_\mu) = 0$ для некоторого $\mu > 0$, то $x_\mu$ — решение исходной
+задачи.
+\end{corollary*}
+
+\begin{proof}
+Из $\alpha(x_\mu) = 0$ следует $x_\mu \in S$. Тогда по пункту~1) леммы
+\[
+  \varphi(x_\mu) = \varphi(x_\mu) + \mu\,\alpha(x_\mu) = P(\mu)
+  \ \le\ \sup_{\mu > 0} P(\mu) \ \le\ \min_{x \in S}\varphi(x) ,
+\]
+то есть $\min_S\varphi \ge \varphi(x_\mu)$. Но $x_\mu \in S$, поэтому
+$\varphi(x_\mu) \ge \min_S\varphi$. Значит $\varphi(x_\mu) = \min_S\varphi$.
+\end{proof}
+
+\begin{idea}
+Содержательно следствие говорит: если на какой-то конечной величине штрафа
+решение вспомогательной задачи само оказалось допустимым — дальше увеличивать
+$\mu$ незачем, задача уже решена точно. На практике это случается редко
+(именно поэтому $\mu$ и приходится гнать к бесконечности), но служит признаком
+останова «по счастливому случаю».
+\end{idea}
+
+\subsubsection*{Алгоритм метода внешних штрафов}
+
+\begin{algo}[title={Метод внешних штрафных функций}]
+\textbf{I. Начальный этап.} Задать $\mu_1 > 0$, $\eps > 0$, $\lambda > 1$ и
+начальную точку $x_1$. Положить $k = 1$.
+
+\medskip
+\textbf{II. Основной этап.}
+\begin{steps}
+  \item Решить вспомогательную задачу с параметром $\mu_k$, стартуя из точки
+        $x_k$:
+        \[
+          \varphi(x) + \mu_k\,\alpha(x) \ \to\ \min ,
+        \]
+        пусть $x_{\mu_k}$ — её решение.
+  \item Проверка:
+        \[
+          \begin{aligned}
+            &\mu_k\,\alpha(x_{\mu_k}) < \eps
+             &&\Longrightarrow\quad \text{останов} ; \\
+            &\mu_k\,\alpha(x_{\mu_k}) \ge \eps
+             &&\Longrightarrow\quad x_{k+1} := x_{\mu_k} , \quad
+               \mu_{k+1} = \mu_k \lambda , \quad k := k+1 .
+          \end{aligned}
+        \]
+        Во втором случае — возврат к шагу~1.
+\end{steps}
+\end{algo}
+
+\begin{idea}
+Почему критерий останова именно $\mu_k\alpha(x_{\mu_k}) < \eps$. По пункту~3)
+теоремы~\ref{thm:penalty} эта величина стремится к нулю, то есть критерий
+заведомо когда-нибудь сработает. При этом
+\[
+  \mu\,\alpha(x_\mu) = P(\mu) - \varphi(x_\mu) \ \ge\ 0
+\]
+— это зазор между двумя оценками оптимума, которые даёт текущая итерация, а обе
+они по теореме сходятся к $\min_S\varphi$. Малость зазора означает
+одновременно и то, что точка почти допустима ($\alpha$ мал), и то, что оценки
+сошлись. Старт следующей вспомогательной задачи из $x_{\mu_k}$ — обычный тёплый
+старт: при большом $\mu$ функция $\varphi + \mu\alpha$ становится овражной, и
+хорошее начальное приближение критично.
+\end{idea}
+
+\begin{example}[работа алгоритма]\label{ex:penalty}
+\[
+  \varphi(x) = (x-3)^2 \to \min , \qquad \psi(x) = x - 1 \le 0 ,
+\]
+то есть $S = \{x \le 1\}$, очевидное решение $x_* = 1$,
+$\min_S\varphi = 4$. Берём квадратичный штраф
+$\alpha(x) = \max^2\{0,\ x-1\}$ и вспомогательную задачу
+\[
+  F_\mu(x) = (x-3)^2 + \mu \max\nolimits^2\{0,\ x-1\} \ \to\ \min .
+\]
+Минимум лежит в области $x > 1$ (при $x \le 1$ функция $(x-3)^2$ убывает), там
+\[
+  F_\mu'(x) = 2(x-3) + 2\mu(x-1) = 0
+  \qquad\Longrightarrow\qquad
+  x_\mu = \frac{3 + \mu}{1 + \mu} .
+\]
+Прямой подстановкой:
+\[
+  \varphi(x_\mu) = \frac{4\mu^2}{(1+\mu)^2} ,
+  \qquad
+  \alpha(x_\mu) = \frac{4}{(1+\mu)^2} ,
+  \qquad
+  \mu\,\alpha(x_\mu) = \frac{4\mu}{(1+\mu)^2} ,
+  \qquad
+  P(\mu) = \frac{4\mu}{1 + \mu} .
+\]
+Видно всё, что обещают лемма и теорема: $x_\mu \downarrow 1 = x_*$,
+$\alpha(x_\mu) \downarrow 0$, $\varphi(x_\mu) \uparrow 4$,
+$P(\mu) \uparrow 4 = \min_S\varphi$, $\mu\alpha(x_\mu) \to 0$.
+
+\medskip
+Прогон при $\mu_1 = 1$, $\lambda = 10$, $\eps = 0{,}1$:
+\begin{center}
+\begin{tabular}{cccccc}
+\toprule
+$k$ & $\mu_k$ & $x_{\mu_k}$ & $\alpha(x_{\mu_k})$
+    & $\mu_k \alpha(x_{\mu_k})$ & проверка \\
+\midrule
+1 & $1$   & $2$        & $1$              & $1$       & $\ge \eps$ \\
+2 & $10$  & $1{,}1818$ & $0{,}0331$       & $0{,}331$ & $\ge \eps$ \\
+3 & $100$ & $1{,}0198$ & $3{,}92\cdot10^{-4}$ & $0{,}0392$ & $< \eps$ — останов \\
+\bottomrule
+\end{tabular}
+\end{center}
+Ответ: $x \approx 1{,}02$, $\varphi \approx 3{,}92$ при точных
+$x_* = 1$, $\varphi(x_*) = 4$.
+\end{example}
+
+\begin{idea}
+Пример показывает и слабое место метода: точка $x_{\mu_k}$ \emph{никогда} не
+попадает в $S$ — она лишь приближается к границе снаружи. Если допустимость
+обязательна (например, вне $S$ функция $\varphi$ вообще не определена),
+внешний штраф не годится, и нужен барьер — следующий параграф.
+\end{idea}

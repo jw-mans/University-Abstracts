@@ -1,0 +1,261 @@
+\lecture{Лекция 5}{}
+
+\subsection{Уточнённые оценки шага и скорости}
+
+Теорема~\ref{thm:grad-rate} оставила коэффициент сжатия в виде
+$q = 1 - \eps\,\alpha_k\, m\big(1 + \frac{m}{M}\big)$ — через сам шаг $\alpha_k$.
+Доведём выкладку до оценки, в которой $\alpha_k$ уже не участвует.
+
+\subsubsection*{Одношаговая оценка через гессиан}
+
+Запишем приращение за итерацию по формуле Тейлора с остаточным членом в форме
+Лагранжа:
+\begin{align*}
+  f(x_{k+1}) - f(x_k)
+  &= f\big(x_k - \alpha_k \nabla f(x_k)\big) - f(x_k) \\
+  &= f(x_k) - \alpha_k \nabla\T f(x_k)\,\nabla f(x_k)
+     + \tfrac{1}{2}\alpha_k^2\, \nabla\T f(x_k)\, H(\bar{x}_k)\, \nabla f(x_k)
+     - f(x_k) ,
+\end{align*}
+где
+\[
+  \bar{x}_k = x_k + \theta\,(x_{k+1} - x_k)
+            = x_k - \theta\,\alpha_k \nabla f(x_k) , \qquad \theta \in (0,1) .
+\]
+Подставляя верхнюю границу гессиана $z\T H z \le M\norm{z}^2$, получаем
+\begin{equation}\label{eq:one-step-M}
+  f(x_{k+1}) - f(x_k)
+  \ \le\ -\alpha_k \norm{\nabla f(x_k)}^2
+          + \frac{M}{2}\alpha_k^2 \norm{\nabla f(x_k)}^2
+  = \norm{\nabla f(x_k)}^2 \Big( \frac{M}{2}\alpha_k^2 - \alpha_k \Big) .
+\end{equation}
+
+\begin{idea}
+Это та же лемма~\ref{lem:grad-main}, но в более сильной форме. Там квадратичный
+член оценивался через липшицеву константу градиента и давал $R\alpha^2$; здесь
+используется разложение второго порядка, и коэффициент получается вдвое меньше:
+$\frac{M}{2}\alpha^2$. Для дважды дифференцируемой $f$ константа Липшица
+градиента как раз равна наибольшему собственному числу гессиана, $R = M$,
+так что~\eqref{eq:one-step-M} строго точнее~\eqref{eq:grad-main}.
+Поэтому и пороги для шага дальше получаются вдвое мягче:
+$\frac{2}{M}(1-\eps)$ вместо $\frac{1-\eps}{R}$.
+\end{idea}
+
+\subsubsection*{Границы для принятого шага}
+
+Напомним условие приёма шага~\eqref{eq:armijo}:
+\[
+  f(x_{k+1}) - f(x_k) \ \le\ -\eps\, \alpha_k \norm{\nabla f(x_k)}^2 ,
+  \qquad \eps \in (0,1) .
+\]
+Из~\eqref{eq:one-step-M} видно, что для его выполнения достаточно
+\[
+  -\alpha_k + \frac{M}{2}\alpha_k^2 \ \le\ -\eps\,\alpha_k
+  \qquad\Longrightarrow\qquad
+\]
+\begin{equation}\label{eq:alpha-upper-M}
+  \alpha_k \ \le\ \frac{2}{M}\,(1 - \eps) .
+\end{equation}
+
+\begin{remark}
+Алгоритм дробления: $\alpha_{k+1} = \alpha_k \lambda$, где $\lambda \in (0,1)$ —
+параметр дробления. Оценки при этом остаются справедливы.
+\end{remark}
+
+\begin{idea}[title={Почему дробление не портит оценки}]
+Повтор рассуждения шага~4 теоремы~\ref{thm:grad-split}, но уже с константой $M$.
+Шаг, \emph{не} прошедший проверку, обязан нарушать~\eqref{eq:alpha-upper-M}:
+\[
+  -\eps\,\alpha < -\alpha + \frac{\alpha^2}{2}M
+  \qquad\Longleftrightarrow\qquad
+  \alpha > \frac{2}{M}(1 - \eps) .
+\]
+Последним отвергнутым был шаг $\alpha_k / \lambda$, поэтому
+\begin{equation}\label{eq:alpha-lower-M}
+  \frac{\alpha_k}{\lambda} > \frac{2}{M}(1 - \eps)
+  \qquad\Longrightarrow\qquad
+  \alpha_k > \frac{2}{M}\,\lambda\,(1 - \eps) .
+\end{equation}
+Итого принятый шаг зажат между двумя положительными константами:
+сверху~\eqref{eq:alpha-upper-M} гарантирует, что дробление конечно,
+снизу~\eqref{eq:alpha-lower-M} — что убывание функции за итерацию отделено от
+нуля. Это и значит «оценки справедливы».
+\end{idea}
+
+\subsubsection*{Коэффициент сжатия без $\alpha_k$}
+
+Подставим нижнюю границу шага и оценку~\eqref{eq:rate-5} в $q$ из
+теоремы~\ref{thm:grad-rate}:
+\[
+  q = 1 - \eps\,\alpha_k\, m\Big(1 + \frac{m}{M}\Big)
+    \ \le\ 1 - \eps(1-\eps)\,\frac{2m}{M}\Big(1 + \frac{m}{M}\Big) .
+\]
+Выражение $\eps(1-\eps)$ максимально при $\eps = \tfrac12$, где равно $\tfrac14$,
+поэтому наилучшая оценка —
+\begin{equation}\label{eq:q-min}
+  \eps_{\max} = \frac{1}{2} ,
+  \qquad
+  q_{\min} = 1 - \frac{1}{2}\,\frac{m}{M}\Big(1 + \frac{m}{M}\Big) ,
+  \qquad 0 < \frac{m}{M} \le 1 .
+\end{equation}
+
+\begin{idea}[title={Почему $0 \le q_{\min} < 1$}]
+Обозначим $t = m/M$. Из $0 < m \le M$ следует $t \in (0,1]$, и
+\[
+  q_{\min} = 1 - \tfrac{1}{2}\,t\,(1 + t) .
+\]
+Функция $t \mapsto \tfrac12 t(1+t)$ строго возрастает на $(0,1]$ от $0$ до $1$,
+значит $q_{\min} \in [0, 1)$ — сходимость геометрическая. Крайние случаи:
+\begin{itemize}[nosep,left=0pt]
+  \item $t = 1$ (то есть $m = M$, линии уровня — сферы): $q_{\min} = 0$ —
+        метод попадает в минимум за один шаг;
+  \item $t \to 0$ (сильно вытянутые линии уровня): $q_{\min} \to 1$ —
+        сходимость сколь угодно медленная.
+\end{itemize}
+Множитель $\lambda$ из~\eqref{eq:alpha-lower-M} здесь опущен; строго говоря
+$q = 1 - \eps(1-\eps)\frac{2m\lambda}{M}\big(1 + \frac{m}{M}\big)$, и
+записанная оценка отвечает предельному случаю $\lambda \to 1$ (дробление мелкое,
+принятый шаг почти максимально допустимый).
+\end{idea}
+
+Дальше всё как в шаге~6 теоремы~\ref{thm:grad-rate}:
+\[
+  f(x_k) - f(x_*) \ \le\ q\,\big(f(x_{k-1}) - f(x_*)\big)
+  \ \le\ \dots \ \le\ q^{k}\big(f(x_0) - f(x_*)\big) ,
+\]
+а вместе с левой частью~\eqref{eq:rate-2}
+\[
+  \frac{m}{2}\norm{x_k - x_*}^2 \ \le\ f(x_k) - f(x_*)
+  \ \le\ q^{k}\big(f(x_0) - f(x_*)\big)
+  \quad\Longrightarrow\quad
+  \norm{x_k - x_*} \le C\, q^{k/2} ,
+\]
+\[
+  C = \sqrt{\frac{2}{m}\big(f(x_0) - f(x_*)\big)} .
+\]
+
+\subsection{Скорость наискорейшего спуска}
+
+\begin{theorem}\label{thm:steepest-rate}
+Для метода наискорейшего спуска справедливы оценки
+\[
+  f(x_{k+1}) - f(x_*) \ \le\ q\,\big(f(x_k) - f(x_*)\big) ,
+  \qquad
+  \norm{x_k - x_*} \ \le\ C\, q^{k/2} , \quad C < +\infty ,
+\]
+\[
+  q = 1 - \frac{m}{2M}\Big(1 + \frac{m}{M}\Big) .
+\]
+\end{theorem}
+
+\begin{proof}
+Пусть $\alpha_k$ — шаг, полученный по методу наискорейшего спуска, то есть
+$\alpha_k = \argmin_{\alpha \ge 0} f\big(x_k - \alpha \nabla f(x_k)\big)$,
+а $\alpha$ — любое. По определению минимума и оценке~\eqref{eq:one-step-M},
+записанной для произвольного $\alpha$,
+\begin{align*}
+  f(x_{k+1}) - f(x_k)
+  &= f\big(x_k - \alpha_k \nabla f(x_k)\big) - f(x_k)
+   \ \le\ f\big(x_k - \alpha \nabla f(x_k)\big) - f(x_k) \\
+  &\le \Big(-\alpha + \frac{M}{2}\alpha^2\Big) \norm{\nabla f(x_k)}^2 .
+\end{align*}
+Неравенство верно при любом $\alpha$, поэтому возьмём лучшее:
+\[
+  -\alpha + \frac{M}{2}\alpha^2 \ \to\ \min_{\alpha > 0}
+  \qquad\Longrightarrow\qquad
+  \alpha_* = \frac{1}{M} , \qquad
+  -\alpha_* + \frac{M}{2}\alpha_*^2 = -\frac{1}{2M} .
+\]
+Отсюда
+\[
+  f(x_{k+1}) - f(x_k) \ \le\ -\,\frac{\norm{\nabla f(x_k)}^2}{2M} ,
+\]
+а с учётом~\eqref{eq:rate-5}
+\[
+  f(x_{k+1}) - f(x_k)
+  \ \le\ -\,\frac{1}{2M}\Big(1 + \frac{m}{M}\Big) m \big(f(x_k) - f(x_*)\big) .
+\]
+Наконец,
+\[
+  f(x_{k+1}) - f(x_*) = \big(f(x_{k+1}) - f(x_k)\big) + \big(f(x_k) - f(x_*)\big)
+  \le \Big(1 - \frac{m}{2M}\Big(1 + \frac{m}{M}\Big)\Big)
+      \big(f(x_k) - f(x_*)\big) ,
+\]
+то есть $q = 1 - \frac{m}{2M}\big(1 + \frac{m}{M}\big)$. Оценка по аргументу
+получается из~\eqref{eq:rate-2} так же, как выше:
+\[
+  \norm{x_k - x_*} \le q^{k/2}\, C_* ,
+  \qquad
+  C_* = \sqrt{\frac{2}{m}\big(f(x_0) - f(x_*)\big)} .
+  \qedhere
+\]
+\end{proof}
+
+\begin{idea}[title={Почему $q$ совпало с $q_{\min}$ дробления}]
+Это не совпадение. В методе дробления лучшее значение достигалось при
+$\eps = \tfrac12$, а допустимый шаг при таком $\eps$ —
+$\alpha \le \frac{2}{M}\big(1 - \tfrac12\big) = \frac{1}{M}$. Ровно это же
+значение $\alpha_* = 1/M$ минимизирует квадратичную мажоранту
+$-\alpha + \frac{M}{2}\alpha^2$ в доказательстве выше. Обе выкладки
+оптимизируют одну и ту же верхнюю оценку, поэтому и дают один и тот же $q$.
+
+Содержательно: наискорейший спуск по построению не хуже любого фиксированного
+шага, в том числе $\alpha = 1/M$; оценка для него поэтому наследуется от оценки
+для шага $1/M$. Реальная скорость наискорейшего спуска может быть лучше, но
+доказать это через ту же мажоранту нельзя.
+\end{idea}
+
+\subsubsection*{Ортогональность соседних градиентов}
+
+\begin{idea}[title={Откуда этот материал}]
+На лекции зигзагообразная траектория наискорейшего спуска была нарисована
+(рис.~\ref{fig:zigzag}), но не обоснована. Утверждение ниже объясняет её
+точно: соседние градиенты перпендикулярны.
+\end{idea}
+
+\begin{theorem}\label{thm:steepest-orthogonal}
+Пусть в методе наискорейшего спуска шаг $\alpha_k$ найден точно и минимум по
+$\alpha$ достигается во внутренней точке ($\alpha_k > 0$). Тогда
+\[
+  \nabla\T f(x_{k+1})\,\nabla f(x_k) = 0 .
+\]
+\end{theorem}
+
+\begin{proof}
+Обозначим $g_k = \nabla f(x_k)$ и введём функцию одной переменной
+\[
+  \varphi(\alpha) = f\big(x_k - \alpha g_k\big) .
+\]
+По определению наискорейшего спуска $\alpha_k = \argmin_{\alpha > 0}
+\varphi(\alpha)$, и если минимум внутренний, то $\varphi'(\alpha_k) = 0$. По
+правилу дифференцирования сложной функции
+\[
+  \varphi'(\alpha) = \nabla\T f\big(x_k - \alpha g_k\big)\,(-g_k) ,
+\]
+а так как $x_{k+1} = x_k - \alpha_k g_k$, подстановка $\alpha = \alpha_k$ даёт
+\[
+  0 = \varphi'(\alpha_k) = -\nabla\T f(x_{k+1})\, g_k
+  \qquad\Longrightarrow\qquad
+  \nabla\T f(x_{k+1})\,\nabla f(x_k) = 0 . \qedhere
+\]
+\end{proof}
+
+\begin{idea}
+Отсюда и берётся зигзаг: направление очередного шага $-\nabla f(x_{k+1})$
+перпендикулярно предыдущему, то есть траектория всё время поворачивает ровно на
+прямой угол. На вытянутых линиях уровня (большое $M/m$) такие повороты очень
+мелко «пилят» вдоль оврага, что и объясняет медленную сходимость с
+$q \to 1$ из теоремы~\ref{thm:steepest-rate}.
+
+Содержательно условие $\varphi'(\alpha_k) = 0$ означает: двигаться вдоль
+текущего направления больше нечего — вся информация о нём исчерпана. Но на
+следующем шаге метод про него забывает, и часть продвижения приходится
+отыгрывать заново. Именно это исправляют методы сопряжённых градиентов
+(\S\ref{subsec:conjugate-gradients}): там соседние направления делают
+ортогональными не в обычном смысле, а в метрике гессиана, и для квадратичной
+функции зигзаг исчезает вовсе.
+\end{idea}
+
+Итак, оценки получены и для шага, и для сходимости, и для её скорости. Отсюда
+естественный вопрос: нельзя ли взять \emph{постоянный} шаг и не решать на каждой
+итерации одномерную задачу?

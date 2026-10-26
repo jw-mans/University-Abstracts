@@ -1,0 +1,298 @@
+\subsection{Метод Зойтендейка}
+\label{subsec:zoutendijk}
+
+\[
+  \varphi_0(x) \longrightarrow \min_{x \in S} ,
+  \qquad
+  S = \big\{\, x \in \R^n \ \big|\ \varphi_i(x) \le 0,\ i = \overline{1,m},
+      \quad Ax = b \,\big\} ,
+\]
+где $A = A[l, n]$, $b = b[l]$, $l < n$.
+
+\medskip
+\noindent\textbf{Основная идея:} в точке $x \in S$ искать возможное направление
+спуска (определение~\ref{def:feasible-direction}).
+
+\subsubsection*{Предположения}
+
+\begin{enumerate}[label=\arabic*),left=0pt]
+  \item $\varphi_i(x)$ — выпуклые, $i = \overline{0,m}$;
+  \item $\varphi_i(x)$ — непрерывно дифференцируемые, $i = \overline{0,m}$;
+  \item $\norm{\nabla \varphi_i(x)} \le K$ \ $(\exists K > 0)$,
+        $i = \overline{0,m}$;
+  \item $\norm{\nabla\varphi_i(x) - \nabla\varphi_i(y)} \le R\norm{x - y}$,
+        $R > 0$, $\forall x, y \in \R^n$;
+  \item $S$ — компакт;
+  \item $\exists\, \bar{x} \in S$: $\varphi_i(\bar{x}) < 0$, $i = \overline{1,m}$,
+        $A\bar{x} = b$ — \textbf{условие Слейтера}.
+\end{enumerate}
+
+\subsubsection*{Активные и почти активные ограничения}
+
+Пусть $M = \{1, 2, \dots, m\}$ и для $x \in S$
+\[
+  I_0(x) = \{\, i \in M \mid \varphi_i(x) = 0 \,\} ,
+  \qquad
+  I_1(x) = \{\, i \in M \mid \varphi_i(x) < 0 \,\} .
+\]
+Для $\delta > 0$ введём
+\[
+  I_\delta(x) = \{\, i \in M \mid -\delta \le \varphi_i(x) \le 0 \,\}
+  \qquad \text{— почти активные ограничения.}
+\]
+
+\begin{idea}
+Зачем нужен «зазор» $\delta$. Если учитывать только активные ограничения
+$I_0(x)$, направление может оказаться возможным лишь формально: ограничение,
+до которого остаётся ничтожно мало, тут же станет активным, и допустимая длина
+шага окажется почти нулевой — метод заклинит у границы. Включая в рассмотрение
+все ограничения, до которых меньше $\delta$, мы гарантируем шаг конечной длины.
+Цена — направление получается более «осторожным»; поэтому $\delta$ по ходу
+работы уменьшают (шаг~2$^\circ$ алгоритма ниже).
+\end{idea}
+
+\subsubsection*{Вспомогательная задача поиска направления}
+
+Пусть $x \in S$, $\delta > 0$, $\xi_i > 0$, $i = \overline{0,m}$.
+Вспомогательная задача:
+\[
+  \eta \longrightarrow \min_{\mathbb{H}} ,
+\]
+\[
+  \mathbb{H} = \Big\{\, \eta \ \Big|\
+    \nabla\T\varphi_i(x)\, s \le \xi_i\, \eta,\ i \in I_\delta(x) \cup \{0\} ;
+    \quad A s = 0 ; \quad \norm{s}_\infty \le 1 \,\Big\} ,
+\]
+где $\norm{s}_\infty \le 1$ означает
+$-1 \le s^{(i)} \le 1$, $i = \overline{1,n}$.
+
+При $s = 0$, $\eta = 0$ все условия выполнены — пара допустима, поэтому решение
+$s_\delta$, $\eta_\delta$ вспомогательной задачи удовлетворяет
+\[
+  \eta_\delta \le 0 .
+\]
+
+\begin{idea}
+Переменная $\eta$ — это «насколько уверенно» направление $s$ одновременно
+уменьшает цель и уводит от всех почти активных ограничений: неравенства
+$\nabla\T\varphi_i(x)s \le \xi_i\eta$ при $\eta < 0$ означают, что по направлению
+$s$ убывает и $\varphi_0$, и каждое почти активное $\varphi_i$. Минимизация
+$\eta$ — поиск наилучшего такого направления.
+
+Условие $As = 0$ держит точку на плоскости $Ax = b$, а $\norm{s}_\infty \le 1$
+нормирует задачу: без него при $\eta < 0$ можно было бы бесконечно растягивать
+$s$ и $\eta \to -\infty$. Коэффициенты $\xi_i > 0$ — веса, позволяющие
+по-разному взвешивать цель и ограничения. Вся задача линейна по $(\eta, s)$,
+то есть решается симплекс-методом из~\S1.
+
+Случай $\eta_\delta = 0$ означает, что возможного направления спуска нет — это
+и будет признаком оптимальности.
+\end{idea}
+
+\subsubsection*{Лемма о длине шага}
+
+\begin{lemma}\label{lem:zoutendijk-step}
+Если $\eta_\delta(x) < 0$, то существует $\alpha > 0$ такое, что
+\begin{equation}\label{eq:zout-goal}
+  \begin{cases}
+    \varphi_0\big(x + \alpha s_\delta(x)\big)
+      \le \varphi_0(x) + \tfrac12 \alpha\, \xi_0\, \eta_\delta(x) , \\[4pt]
+    \varphi_i\big(x + \alpha s_\delta(x)\big) \le 0 , & i \in I_\delta(x) , \\[4pt]
+    \varphi_i\big(x + \alpha s_\delta(x)\big) \le 0 , & i \notin I_\delta(x) .
+  \end{cases}
+\end{equation}
+То есть $s_\delta(x)$ — возможное направление спуска.
+\end{lemma}
+
+\begin{proof}
+По формуле конечных приращений
+\[
+  \varphi_0\big(x + \alpha s_\delta(x)\big)
+  = \varphi_0(x) + \alpha\,\nabla\T\varphi_0(\tilde{x})\, s_\delta(x) ,
+  \qquad
+  \tilde{x} = x + \theta\,\alpha\, s_\delta(x) , \quad \theta \in [0,1] .
+\]
+Прибавим и вычтем $\alpha \nabla\T\varphi_0(x) s_\delta(x)$:
+\[
+  \varphi_0\big(x + \alpha s_\delta(x)\big)
+  = \varphi_0(x) + \alpha\,\nabla\T\varphi_0(x)\, s_\delta(x)
+    + \alpha\big(\nabla\varphi_0(\tilde{x}) - \nabla\varphi_0(x)\big)\T s_\delta(x) .
+\]
+Последнее слагаемое оцениваем неравенством Коши--Буняковского и условием~4):
+\[
+  \alpha\,\norm{\nabla\varphi_0(\tilde{x}) - \nabla\varphi_0(x)}\cdot
+  \norm{s_\delta(x)}
+  \le \alpha R \underbrace{\norm{\tilde{x} - x}}_{=\ \theta\alpha\norm{s_\delta(x)}}
+      \norm{s_\delta(x)}
+  \le \alpha^2 R\, \norm{s_\delta(x)}^2 .
+\]
+Наконец, по построению множества $\mathbb{H}$ выполнено
+$\nabla\T\varphi_0(x)\, s_\delta(x) \le \xi_0\, \eta_\delta(x)$, откуда
+\begin{equation}\label{eq:zout-2}
+  \varphi_0\big(x + \alpha s_\delta(x)\big)
+  \ \le\ \varphi_0(x) + \alpha\,\xi_0\,\eta_\delta(x)
+         + \alpha^2 R\,\norm{s_\delta(x)}^2 .
+\end{equation}
+
+Для $i \in I_\delta(x)$ точно та же выкладка даёт
+\begin{equation}\label{eq:zout-3}
+  \varphi_i\big(x + \alpha s_\delta(x)\big)
+  \ \le\ \varphi_i(x) + \alpha\,\xi_i\,\eta_\delta(x)
+         + \alpha^2 R\,\norm{s_\delta(x)}^2 .
+\end{equation}
+
+Для $i \notin I_\delta(x)$, то есть $\varphi_i(x) < -\delta$, используем
+условие~3):
+\begin{equation}\label{eq:zout-4}
+  \begin{aligned}
+    \varphi_i\big(x + \alpha s_\delta(x)\big)
+    &= \varphi_i(x) + \alpha\,\nabla\T\varphi_i(\tilde{x})\, s_\delta(x) \\
+    &\le \varphi_i(x)
+       + \alpha\,\norm{\nabla\varphi_i(\tilde{x})}\cdot\norm{s_\delta(x)}
+     \ <\ -\delta + \alpha K \norm{s_\delta(x)} .
+  \end{aligned}
+\end{equation}
+
+Теперь подберём $\alpha > 0$ так, чтобы выполнялось~\eqref{eq:zout-goal}.
+\begin{itemize}[left=0pt]
+  \item Из~\eqref{eq:zout-2} достаточно
+        $\alpha\xi_0\eta_\delta(x) + \alpha^2 R\norm{s_\delta(x)}^2
+         \le \tfrac12 \alpha \xi_0 \eta_\delta(x)$, то есть
+        \begin{equation}\label{eq:zout-6}
+          \alpha \ \le\ -\frac{1}{2}\cdot
+          \frac{\xi_0\,\eta_\delta(x)}{R\,\norm{s_\delta(x)}^2} .
+        \end{equation}
+  \item Из~\eqref{eq:zout-3} при $i \in I_\delta(x)$ имеем $\varphi_i(x) \le 0$,
+        поэтому достаточно
+        $\alpha\xi_i\eta_\delta(x) + \alpha^2 R\norm{s_\delta(x)}^2 \le 0$, то есть
+        \begin{equation}\label{eq:zout-7}
+          \alpha \ \le\ -\frac{\xi_i\,\eta_\delta(x)}{R\,\norm{s_\delta(x)}^2} .
+        \end{equation}
+  \item Из~\eqref{eq:zout-4} при $i \notin I_\delta(x)$ достаточно
+        $-\delta + \alpha K \norm{s_\delta(x)} \le 0$, то есть
+        \begin{equation}\label{eq:zout-8}
+          \alpha \ \le\ \frac{\delta}{K\,\norm{s_\delta(x)}} .
+        \end{equation}
+\end{itemize}
+Так как $\eta_\delta(x) < 0$, правые части
+\eqref{eq:zout-6}--\eqref{eq:zout-8} положительны, и годится любое
+$\alpha > 0$, не превосходящее их минимума.
+
+Равенства сохраняются при любом $\alpha$:
+\[
+  A\big(x + \alpha s_\delta(x)\big)
+  = Ax + \alpha \underbrace{A s_\delta(x)}_{=\,0} = b .
+  \qedhere
+\]
+\end{proof}
+
+\begin{idea}
+Три оценки имеют разный смысл. Условие~\eqref{eq:zout-6} требует, чтобы шаг был
+достаточно коротким и квадратичная поправка $\alpha^2 R\norm{s_\delta}^2$ не
+съела линейное убывание — остаётся хотя бы его половина. Условие
+\eqref{eq:zout-7} не даёт выйти за почти активные ограничения, а
+\eqref{eq:zout-8} — за «далёкие»: до них запас ровно $\delta$, а скорость
+изменения $\varphi_i$ не больше $K\norm{s_\delta}$.
+
+Именно здесь работает весь набор предположений: липшицевость градиентов~4) даёт
+квадратичную поправку, ограниченность градиентов~3) — оценку
+\eqref{eq:zout-8}, а $\eta_\delta < 0$ — положительность всех трёх границ.
+\end{idea}
+
+\begin{theorem}\label{thm:zoutendijk}
+Если $x \ne x_*$, $x \in S$, то $\eta_\delta(x) < 0$ для достаточно малых
+$\delta > 0$.
+\end{theorem}
+
+\begin{idea}
+Содержательно: пока точка не оптимальна, возможное направление спуска
+существует — надо лишь взять достаточно узкую полосу почти активных
+ограничений. Вместе с леммой~\ref{lem:zoutendijk-step} это и даёт сходимость:
+на каждом шаге либо есть направление с $\eta_k < 0$ и целевая функция
+убывает на конечную величину, либо $\delta$ уменьшается. Условие Слейтера~6)
+нужно именно здесь — без внутренней точки конус возможных направлений может
+выродиться.
+\end{idea}
+
+\subsubsection*{Алгоритм}
+
+Пусть заданы $\xi_0$ и $\{\xi_i\}_{i=1}^{m}$: $\xi_i > 0$ для всех
+$i = \overline{0,m}$; $x_0$ — начальное приближение, $\delta_0 > 0$,
+$\lambda \in (0,1)$.
+
+\medskip
+\noindent\textbf{Общий шаг в точке $x_k$.}
+
+\begin{steps}
+  \item \textbf{Поиск возможного направления спуска:}
+        $\eta \to \min_{\mathbb{H}}$, где
+        \[
+          \mathbb{H} = \Big\{\, \eta \ \Big|\
+            \nabla\T\varphi_0(x_k)\, s \le \xi_0 \eta ; \quad
+            \nabla\T\varphi_i(x_k)\, s \le \xi_i \eta,\ i \in I_{\delta_k}(x_k) ;
+        \]
+        \[
+            A s = 0 ; \quad \norm{s}_\infty \le 1 \,\Big\} .
+        \]
+        Решение обозначаем $\eta_{\delta_k} \equiv \eta_k$,
+        $s_{\delta_k} \equiv s_k$.
+  \item \textbf{Выбор шага, построение $x_{k+1}$, $\delta_{k+1}$:}
+        \begin{itemize}[left=0pt,nosep]
+          \item[$1^\circ$] $\eta_k < -\delta_k$ — далеко от границы, двигаемся:
+                \[
+                  x_{k+1} = x_k + \alpha_k s_k , \qquad \delta_{k+1} = \delta_k ,
+                \]
+                где $\alpha_k$ выбирается по принципу дробления;
+          \item[$2^\circ$] $0 > \eta_k \ge -\delta_k$ — направление слишком
+                слабое, сужаем полосу:
+                \[
+                  x_{k+1} = x_k , \qquad \delta_{k+1} = \lambda\,\delta_k .
+                \]
+        \end{itemize}
+        В обоих случаях $k := k+1$ и возврат к шагу~1.
+\end{steps}
+
+\medskip
+\noindent\textbf{Условие останова:}
+\[
+  \delta_k < \delta_{0k} ,
+  \qquad
+  \delta_{0k} = -\max_{i \notin I_0(x_k)} \varphi_i(x_k) ,
+\]
+и $\eta_k = 0$. Тогда $x_k$ — решение.
+
+\begin{idea}
+Величина $\delta_{0k}$ — расстояние (по значению функций) до ближайшего
+\emph{неактивного} ограничения: для $i \notin I_0(x_k)$ все $\varphi_i(x_k) < 0$,
+и $-\max$ по ним даёт наименьший запас. Неравенство $\delta_k < \delta_{0k}$
+означает, что полоса почти активных ограничений сузилась настолько, что
+$I_{\delta_k}(x_k) = I_0(x_k)$ — в рассмотрении остались только по-настоящему
+активные ограничения. Если при этом $\eta_k = 0$, то возможного направления
+спуска нет даже в точном смысле, и $x_k$ оптимальна.
+
+Логика всего алгоритма: пункт $1^\circ$ продвигает точку, пункт $2^\circ$
+уточняет модель. Каждый проход через $2^\circ$ уменьшает $\delta$ в $\lambda$
+раз, так что либо точка движется с ощутимым убыванием $\varphi_0$, либо
+$\delta_k \to 0$ и срабатывает условие останова.
+\end{idea}
+
+\subsubsection*{Как найти начальное приближение}
+
+Решается вспомогательная задача
+\[
+  \eta \longrightarrow \min_{\eta \in \mathbb{H}} ,
+  \qquad
+  \mathbb{H} = \big\{\, \eta \ \big|\ \varphi_i(x) - \eta \le 0,\
+    i = \overline{1,m} \ \ \&\ \ Ax = b \,\big\} .
+\]
+По условию Слейтера существует $\bar{x}$: $\varphi_i(\bar{x}) < 0$ и
+$A\bar{x} = b$, поэтому $\min \eta < 0$. Берём приближение $x$, удовлетворяющее
+$Ax = b$.
+
+\begin{idea}
+Это та же идея, что и у вспомогательной задачи симплекс-метода (\S4): вместо
+поиска допустимой точки «наугад» минимизируется максимальная невязка
+$\eta = \max_i \varphi_i(x)$. Отрицательное значение минимума означает, что
+найденная точка строго внутри всех неравенств — ровно то, что нужно для старта
+метода, работающего с почти активными ограничениями.
+\end{idea}

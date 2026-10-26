@@ -1,0 +1,49 @@
+% График q(alpha) = max{|1 - alpha*m|, |1 - alpha*M|}.
+% Для наглядности взяты m = 1, M = 3; масштаб по alpha — 3 единицы на 1.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >={Stealth[length=2mm]}]
+
+\def\sx{3.2}  % масштаб по оси alpha
+\def\sy{2.6}  % масштаб по оси q
+
+% оси
+\draw[->] (-0.15, 0) -- ({1.15*\sx}, 0) node[right, font=\footnotesize] {$\alpha$};
+\draw[->] (0, -0.15) -- (0, {1.35*\sy}) node[above, font=\footnotesize] {$q$};
+\node[font=\scriptsize, anchor=east] at (-0.06, {1*\sy}) {$1$};
+\draw (0,{1*\sy}) -- (-0.06,{1*\sy});
+
+% ветвь |1 - alpha*m| при m = 1: из (0,1) в (1,0), дальше вверх
+\draw[blue!55!black, thick]
+  (0,{1*\sy}) -- ({1*\sx},0) -- ({1.12*\sx},{0.12*\sy});
+\node[blue!55!black, font=\scriptsize, anchor=south west]
+  at ({1.0*\sx},{0.08*\sy}) {$\abs{1 - \alpha m}$};
+
+% ветвь |1 - alpha*M| при M = 3: из (0,1) в (1/3,0), дальше круто вверх
+\draw[orange!75!black, thick]
+  (0,{1*\sy}) -- ({0.3333*\sx},0) -- ({0.7667*\sx},{1.3*\sy});
+\node[orange!60!black, font=\scriptsize, anchor=south east]
+  at ({0.76*\sx},{1.18*\sy}) {$\abs{1 - \alpha M}$};
+
+% точка пересечения: alpha = 2/(m+M) = 0.5, q = (M-m)/(M+m) = 0.5
+\fill[black] ({0.5*\sx},{0.5*\sy}) circle (1.6pt);
+\draw[gray, dashed] ({0.5*\sx},0) -- ({0.5*\sx},{0.5*\sy})
+                                  -- (0,{0.5*\sy});
+\node[font=\scriptsize, anchor=north] at ({0.5*\sx},-0.08)
+  {$2/(m+M)$};
+\node[font=\scriptsize, anchor=east] at (-0.06,{0.5*\sy})
+  {$\frac{M-m}{M+m}$};
+
+% отметки 1/M и 1/m
+\node[font=\scriptsize, anchor=north] at ({0.3333*\sx},-0.08) {$1/M$};
+\node[font=\scriptsize, anchor=north] at ({1*\sx},-0.08) {$1/m$};
+
+\end{tikzpicture}
+\caption{Выбор постоянного шага. Коэффициент сжатия
+$q(\alpha) = \max\{\abs{1-\alpha m},\, \abs{1-\alpha M}\}$ идёт по верхней из двух
+ломаных: до точки пересечения — по ветви $\abs{1-\alpha m}$, после — по
+$\abs{1-\alpha M}$. Минимум достигается в точке пересечения
+$\alpha = \frac{2}{m+M}$ и равен $q_{\min} = \frac{M-m}{M+m}$. Сходимость есть,
+пока $q < 1$, то есть при $0 < \alpha < 2/M$.}
+\label{fig:q-alpha}
+\end{figure}

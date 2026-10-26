@@ -1,0 +1,360 @@
+\subsection{Градиентные методы первого порядка}
+
+\subsubsection*{Откуда берётся антиградиент}
+
+Пусть строится последовательность $\{x_k\}$ и пробная точка
+\[
+  x = x_k + \alpha p_k .
+\]
+Разложение по формуле Тейлора:
+\[
+  f(x) = f(x_k) + \alpha\, \nabla\T f(x_k)\, p_k
+       + \tfrac12 \alpha^2\, p_k\T H(\bar x_k)\, p_k ,
+  \qquad
+  \bar x_k = x_k + \theta\,(x - x_k), \quad \theta \in [0,1] .
+\]
+
+При \emph{малом} $\alpha$ знак приращения определяется линейным членом,
+поэтому
+\[
+  f(x) < f(x_k)
+  \qquad\Longleftarrow\qquad
+  \nabla\T f(x_k)\, p_k < 0 .
+\]
+
+\inputfig{figures/fig-descent-cone}
+
+Для градиентных методов первого порядка берут
+\[
+  \boxed{\ p_k = -\nabla f(x_k)\ } \qquad \text{— антиградиент},
+  \qquad \norm{\nabla f(x_k)} \ne 0 .
+\]
+
+\begin{idea}
+Проверка условия убывания для этого выбора тривиальна:
+$\nabla\T f(x_k)\,p_k = -\norm{\nabla f(x_k)}^2 < 0$, пока градиент не нулевой.
+Более того, среди всех направлений фиксированной длины антиградиент даёт
+наибольшее по модулю отрицательное значение $\nabla\T f(x_k)\,p_k$ — отсюда и
+название «наискорейший спуск» для варианта с точным шагом.
+\end{idea}
+
+\subsubsection*{Три метода}
+
+Направление у всех одно и то же, \textbf{разные методы отличаются способом
+выбора шага}:
+
+\begin{enumerate}[label=\arabic*), leftmargin=2em]
+  \item метод с дроблением шага;
+  \item метод наискорейшего спуска;
+  \item метод с постоянным шагом.
+\end{enumerate}
+
+Первые два — \textbf{шаговые методы}, устроенные по общей схеме:
+\[
+  1^\circ \ \text{находится направление спуска};
+  \qquad
+  2^\circ \ \text{находится шаг} .
+\]
+
+\begin{exercise}
+Разобрать самостоятельно метод с постоянным шагом ($\alpha_k \equiv \alpha$).
+\end{exercise}
+
+\begin{idea}
+Подсказка к упражнению: оценка~\eqref{eq:grad-main} ниже при $\alpha_k \equiv
+\alpha$ сразу даёт
+$f(x_{k+1}) - f(x_k) \le -\alpha(1-\alpha R)\norm{\nabla f(x_k)}^2$, так что
+метод работает при $0 < \alpha < 1/R$, а наилучшая гарантия получается при
+$\alpha = 1/(2R)$. Недостаток очевиден: нужна константа Липшица $R$, которую
+на практике не знают.
+\end{idea}
+
+\subsubsection*{Градиентный метод с дроблением шага}
+
+Итерация:
+\[
+  x_0 \ \longrightarrow\ x_{k+1} = x_k - \alpha_k \nabla f(x_k) .
+\]
+Шаг $\alpha_k$ подбирается \emph{дроблением}: начиная с $\alpha^{(0)}$,
+пробное значение умножается на $\lambda \in (0,1)$ до тех пор, пока не будет
+выполнено условие достаточного убывания.
+
+\begin{algo}[title={Градиентный метод с дроблением шага}]
+\textbf{Вход:} $x_0$, начальный шаг $\alpha^{(0)}$, коэффициент дробления
+$\lambda \in (0,1)$, параметр $\eps \in (0,1)$, точность $\delta$.
+
+\begin{steps}
+  \item Если $\norm{\nabla f(x_k)} < \delta$ — остановиться.
+  \item Положить $\alpha := \alpha^{(0)}$.
+  \item Вычислить $x = x_k - \alpha \nabla f(x_k)$ и проверить условие
+        дробления
+        \[
+          f(x) - f(x_k) \ \le\ -\eps\,\alpha\, \norm{\nabla f(x_k)}^2 .
+        \]
+  \item Если условие не выполнено — положить $\alpha := \alpha\lambda$ и
+        вернуться к шагу~3.
+  \item Иначе принять
+        $\alpha_k = \alpha = \alpha^{(0)}\lambda^{\,i_k}$ (где $i_k$ — число
+        дроблений) и $x_{k+1} = x$.
+  \item Увеличить $k$ и вернуться к шагу~1.
+\end{steps}
+\end{algo}
+
+\inputfig{figures/fig-step-halving}
+
+\begin{idea}
+Зачем нужен множитель $\eps$: без него условие $f(x) < f(x_k)$ выполнялось бы
+при сколь угодно малом $\alpha$, и метод мог бы «застрять», делая всё более
+мелкие шаги с всё меньшим выигрышем. Условие с $-\eps\alpha\norm{\nabla f}^2$
+требует убывания, \emph{пропорционального} сделанному шагу, — именно это
+даст в теореме оценку $\alpha_k$ снизу.
+\end{idea}
+
+\subsubsection*{Градиентный метод наискорейшего спуска}
+
+Здесь шаг выбирается точно — решением задачи одномерной минимизации
+(\S9--\S10):
+\[
+  \big(f(x_{k+1}) - f(x_k)\big) \longrightarrow \min_{\alpha}
+  \quad\Longleftrightarrow\quad
+  f(x_{k+1}) \longrightarrow \min_{\alpha}
+\]
+\[
+  \Longleftrightarrow\quad
+  f\big(x_k - \alpha \nabla f(x_k)\big) \longrightarrow \min_{\alpha \ge 0} .
+\]
+
+\begin{algo}[title={Градиентный метод наискорейшего спуска}]
+\textbf{Вход:} $x_0$, точность $\delta$.
+
+\begin{steps}
+  \item Если $\norm{\nabla f(x_k)} < \delta$ — остановиться.
+  \item Положить $p_k = -\nabla f(x_k)$.
+  \item Решить задачу одномерной минимизации
+        \[
+          \alpha_k = \arg\min_{\alpha \ge 0} f(x_k + \alpha p_k)
+        \]
+        любым методом из \S10.
+  \item Положить $x_{k+1} = x_k + \alpha_k p_k$, увеличить $k$ и вернуться
+        к шагу~1.
+\end{steps}
+\end{algo}
+
+\inputfig{figures/fig-zigzag}
+
+\begin{idea}
+Переход «$f(x_{k+1}) - f(x_k) \to \min$» $\iff$ «$f(x_{k+1}) \to \min$»
+законен потому, что $f(x_k)$ от $\alpha$ не зависит — это просто константа,
+сдвигающая минимизируемую функцию.
+\end{idea}
+
+\subsubsection*{Основная оценка}
+
+Обе теоремы о сходимости опираются на одно неравенство, поэтому выведем его
+отдельно.
+
+\begin{lemma}\label{lem:grad-main}
+Пусть $f \in C^1(\R^n)$ и градиент липшицев:
+\[
+  \norm{\nabla f(x) - \nabla f(y)} \le R\,\norm{x-y},
+  \qquad R = \mathrm{const} > 0 .
+\]
+Тогда для любого $\alpha > 0$
+\begin{equation}\label{eq:grad-main}
+  f\big(x_k - \alpha \nabla f(x_k)\big) - f(x_k)
+  \ \le\ -\alpha\,(1 - \alpha R)\, \norm{\nabla f(x_k)}^2 .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Положим $x = x_k - \alpha \nabla f(x_k)$, так что
+$x - x_k = -\alpha\nabla f(x_k)$. По формуле конечных приращений
+\[
+  f(x) - f(x_k) = \nabla\T f(x_{\mathrm{cp}})\,(x - x_k),
+  \qquad
+  x_{\mathrm{cp}} = x_k + \theta\,(x - x_k), \quad \theta \in [0,1] .
+\]
+Прибавим и вычтем $\nabla\T f(x_k)(x-x_k)$:
+\[
+  f(x) - f(x_k)
+  = \underbrace{\nabla\T f(x_k)\,(x-x_k)}_{=\ -\alpha\norm{\nabla f(x_k)}^2}
+  + \big(\nabla f(x_{\mathrm{cp}}) - \nabla f(x_k)\big)\T (x - x_k) .
+\]
+Второе слагаемое оцениваем неравенством Коши—Буняковского и условием
+Липшица:
+\[
+  \big(\nabla f(x_{\mathrm{cp}}) - \nabla f(x_k)\big)\T (x - x_k)
+  \le \norm{\nabla f(x_{\mathrm{cp}}) - \nabla f(x_k)}\cdot\norm{x-x_k}
+  \le R\,\norm{x_{\mathrm{cp}} - x_k}\cdot\norm{x - x_k} .
+\]
+Но $\norm{x_{\mathrm{cp}} - x_k} = \theta\norm{x-x_k} \le \norm{x-x_k}$,
+поэтому оценка продолжается до
+\[
+  R\,\norm{x-x_k}^2 = R\,\alpha^2 \norm{\nabla f(x_k)}^2 .
+\]
+Складывая,
+\[
+  f(x) - f(x_k)
+  \le -\alpha\norm{\nabla f(x_k)}^2 + R\alpha^2\norm{\nabla f(x_k)}^2
+  = \norm{\nabla f(x_k)}^2\,\big(R\alpha^2 - \alpha\big) ,
+\]
+что и есть~\eqref{eq:grad-main}.
+\end{proof}
+
+\subsubsection*{Сходимость метода с дроблением шага}
+
+\begin{theorem}\label{thm:grad-split}
+Пусть
+\begin{itemize}[leftmargin=1.6em, topsep=2pt]
+  \item $f \in C^1(\R^n)$;
+  \item $f$ ограничена снизу;
+  \item градиент липшицев с константой $R > 0$.
+\end{itemize}
+Пусть $\{x_k\}$ строится градиентным методом с дроблением шага. Тогда
+\[
+  \norm{\nabla f(x_k)} \xrightarrow[k \to \infty]{} 0
+\]
+независимо от выбора начального приближения.
+\end{theorem}
+
+\begin{proof}
+\textbf{Шаг 1. Дробление конечно.} Условие приёма шага
+\begin{equation}\label{eq:armijo}
+  f(x) - f(x_k) \le -\eps\,\alpha\,\norm{\nabla f(x_k)}^2
+\end{equation}
+заведомо выполнено, если правая часть~\eqref{eq:grad-main} не превосходит
+правой части~\eqref{eq:armijo}:
+\[
+  -\alpha(1-\alpha R) \le -\eps\alpha
+  \iff 1 - \alpha R \ge \eps
+  \iff \alpha \le \frac{1-\eps}{R} .
+\]
+Значит после конечного числа дроблений пробный шаг попадёт в этот диапазон и
+будет принят.
+
+\medskip
+\textbf{Шаг 2. Монотонность.} Беря $\alpha = \alpha_k$, $x = x_{k+1}$,
+получаем из~\eqref{eq:armijo}
+\[
+  f(x_{k+1}) - f(x_k) \le -\eps\,\alpha_k \norm{\nabla f(x_k)}^2 < 0 ,
+\]
+то есть $f(x_k)$ строго убывает. Ограниченная снизу убывающая
+последовательность сходится, поэтому
+\begin{equation}\label{eq:grad-diff0}
+  f(x_k) - f(x_{k+1}) \xrightarrow[k \to \infty]{} 0 .
+\end{equation}
+
+\medskip
+\textbf{Шаг 3. Оценка градиента сверху.} Переписывая~\eqref{eq:armijo}:
+\begin{equation}\label{eq:grad-upper}
+  \norm{\nabla f(x_k)}^2 \ \le\ \frac{f(x_k) - f(x_{k+1})}{\eps\,\alpha_k} .
+\end{equation}
+
+\medskip
+\textbf{Шаг 4. Оценка шага снизу.} Пусть $i_k \ge 1$, то есть хотя бы одно
+дробление было. Тогда предыдущее пробное значение
+$\widetilde\alpha = \alpha_k/\lambda$ было \emph{отвергнуто}:
+\[
+  f\big(x_k - \widetilde\alpha \nabla f(x_k)\big) - f(x_k)
+  \ >\ -\eps\,\widetilde\alpha\,\norm{\nabla f(x_k)}^2 .
+\]
+С другой стороны, по лемме~\ref{lem:grad-main} левая часть не превосходит
+$-\widetilde\alpha(1 - \widetilde\alpha R)\norm{\nabla f(x_k)}^2$. Сравнивая,
+\[
+  -\widetilde\alpha(1 - \widetilde\alpha R) > -\eps\,\widetilde\alpha
+  \iff 1 - \widetilde\alpha R < \eps
+  \iff \widetilde\alpha > \frac{1-\eps}{R} ,
+\]
+откуда
+\[
+  \alpha_k = \lambda\,\widetilde\alpha > \lambda\,\frac{1-\eps}{R} .
+\]
+Если же $i_k = 0$, то $\alpha_k = \alpha^{(0)}$. В обоих случаях
+\begin{equation}\label{eq:alpha-lower}
+  \alpha_k \ \ge\ \bar\alpha := \min\left\{\alpha^{(0)},\ \lambda\,\frac{1-\eps}{R}\right\} > 0 .
+\end{equation}
+
+\medskip
+\textbf{Шаг 5. Завершение.} Подставляя~\eqref{eq:alpha-lower}
+в~\eqref{eq:grad-upper}:
+\[
+  \norm{\nabla f(x_k)}^2
+  \ \le\ \frac{f(x_k) - f(x_{k+1})}{\eps\,\bar\alpha}
+  \xrightarrow[k \to \infty]{} 0
+\]
+в силу~\eqref{eq:grad-diff0}. Значит $\norm{\nabla f(x_k)} \to 0$. Начальное
+приближение нигде не использовалось, то есть сходимость глобальная.
+\end{proof}
+
+\begin{idea}[title={Зачем нужны обе оценки шага}]
+В тетради доказательство обрывается на словах «\emph{одновременно получили
+верхнюю и нижнюю оценки}» со знаками вопроса; шаг~5 восстановлен.
+
+\medskip
+Смысл восклицания такой: оценка $\alpha \le \frac{1-\eps}{R}$
+\emph{сверху} гарантирует, что дробление когда-нибудь закончится, а оценка
+$\alpha_k > \lambda\frac{1-\eps}{R}$ \emph{снизу} гарантирует, что принятый
+шаг не окажется слишком мелким. Вторая нужна именно для того, чтобы в
+неравенстве~\eqref{eq:grad-upper} можно было избавиться от $\alpha_k$ в
+знаменателе: без неё дробь могла бы не стремиться к нулю.
+
+\medskip
+Случай $i_k = 0$ в тетради не оговорён — там выкладка неявно считает, что
+хотя бы одно дробление произошло. Это дополнено выше.
+\end{idea}
+
+\begin{idea}
+Обратите внимание, что доказано: стремление к нулю \emph{градиента}, а не
+сходимость $x_k$ к точке минимума. Без дополнительных предположений большего
+и не получить — $f$ может вообще не иметь минимума (например, монотонно
+убывать к своей нижней грани). Сходимость самих точек даёт следующий
+параграф, где добавляется сильная выпуклость.
+\end{idea}
+
+\subsubsection*{Сходимость метода наискорейшего спуска}
+
+\begin{theorem}\label{thm:steepest}
+Пусть выполнены условия теоремы~\ref{thm:grad-split}, а $\alpha_k$ выбирается
+по принципу наискорейшего спуска. Тогда
+\[
+  \norm{\nabla f(x_k)} \xrightarrow[k \to \infty]{} 0
+\]
+независимо от выбора начального приближения.
+\end{theorem}
+
+\begin{proof}
+По лемме~\ref{lem:grad-main} для любого $\alpha > 0$
+\[
+  f\big(x_k - \alpha\nabla f(x_k)\big) - f(x_k)
+  \le -\alpha(1-\alpha R)\norm{\nabla f(x_k)}^2 .
+\]
+Правая часть как функция $\alpha$ — парабола $R\alpha^2 - \alpha$, умноженная
+на $\norm{\nabla f(x_k)}^2$; её минимум достигается при
+\[
+  \alpha = \frac{1}{2R},
+  \qquad\text{и равен}\qquad
+  -\frac{1}{4R}\,\norm{\nabla f(x_k)}^2 .
+\]
+Шаг $\alpha_k$ выбран из условия наименьшего значения $f$, поэтому для любого
+$\alpha$
+\[
+  f(x_k + \alpha_k p_k) - f(x_k) \ \le\ f(x_k + \alpha p_k) - f(x_k),
+  \qquad p_k = -\nabla f(x_k) .
+\]
+Берём $\alpha = \tfrac{1}{2R}$:
+\[
+  f(x_{k+1}) - f(x_k) \ \le\ -\frac{1}{4R}\,\norm{\nabla f(x_k)}^2 .
+\]
+Отсюда $f(x_k)$ строго убывает и ограничена снизу, значит
+$f(x_k) - f(x_{k+1}) \to 0$, а
+\begin{equation}\label{eq:steepest-bound}
+  \norm{\nabla f(x_k)}^2 \ \le\ 4R\,\big(f(x_k) - f(x_{k+1})\big)
+  \xrightarrow[k\to\infty]{} 0 .
+\end{equation}
+\end{proof}
+
+\begin{idea}
+Фокус доказательства в том, что \emph{знать} оптимальный шаг не требуется:
+$\alpha_k$ не вычисляется явно, он лишь не хуже «пробного» $\alpha = 1/(2R)$.
+Именно поэтому константа Липшица входит в оценку, но не в сам метод.
+\end{idea}

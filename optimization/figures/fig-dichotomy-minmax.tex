@@ -1,0 +1,36 @@
+% Почему в дихотомии обе пробные точки берутся у середины:
+% max{b - x_1, x_2 - a} минимален, когда обе точки сходятся к (a+b)/2.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=8.4cm, height=5.0cm,
+  axis lines=middle,
+  xmin=-0.35, xmax=4.6, ymin=-0.35, ymax=4.6,
+  xtick={0.4,2.3,4.2}, xticklabels={$a$,$\frac{a+b}{2}$,$b$},
+  ytick=\empty, clip=false,
+  xlabel={положение пробной точки},
+  xlabel style={font=\footnotesize, anchor=north east},
+]
+  % длина b - x_1  (убывает по x_1)
+  \addplot[very thick, blue!60!black, domain=0.4:4.2, samples=2] {4.2 - x};
+  % длина x_2 - a  (растёт по x_2)
+  \addplot[very thick, teal!70!black, domain=0.4:4.2, samples=2] {x - 0.4};
+
+  \node[font=\footnotesize, blue!60!black, anchor=south east]
+    at (axis cs:1.05,3.3) {$b - x_1$};
+  \node[font=\footnotesize, teal!70!black, anchor=south west]
+    at (axis cs:3.5,3.1) {$x_2 - a$};
+
+  \draw[dashed, gray] (axis cs:2.3,0) -- (axis cs:2.3,1.9);
+  \fill[red!70!black] (axis cs:2.3,1.9) circle (2.0pt);
+  \node[font=\scriptsize, red!70!black, anchor=west] at (axis cs:2.4,2.1)
+    {минимум $\max$};
+\end{axis}
+\end{tikzpicture}
+\caption{Длина оставшегося интервала равна $b - x_1$ в одном исходе и
+$x_2 - a$ в другом. Худший из исходов минимален, когда обе точки берутся у
+середины отрезка; разнести их приходится лишь на малое $\eps$, чтобы значения
+функции в них были различимы.}
+\label{fig:dichotomy-minmax}
+\end{figure}

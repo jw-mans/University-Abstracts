@@ -1,0 +1,65 @@
+% Лемма о сокращении интервала неопределённости: два случая сравнения
+% f(x_1) и f(x_2) для унимодальной функции.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.6cm},
+  width=7.0cm, height=4.6cm,
+  axis lines=middle,
+  xmin=0.1, xmax=5.5, ymin=-0.55, ymax=3.3,
+  xtick=\empty, ytick=\empty, clip=false,
+  samples=90, domain=0.4:5.2,
+  title style={font=\footnotesize, yshift=-3pt},
+]
+% --- случай 1: f(x_1) >= f(x_2)
+\nextgroupplot[title={$1^\circ$: $f(x_1) \ge f(x_2) \Rightarrow x_* \in [x_1,b]$}]
+  \addplot[very thick, blue!60!black] {0.55*(x-2.3)^2 + 0.5};
+  % отбрасываемая часть
+  \draw[gray!55, fill=gray!15] (axis cs:0.4,-0.45) rectangle (axis cs:1.0,-0.15);
+  \draw[very thick, teal!70!black] (axis cs:1.0,-0.3) -- (axis cs:5.2,-0.3);
+  \node[font=\scriptsize, anchor=north, teal!70!black] at (axis cs:3.1,-0.36)
+    {остаётся};
+
+  \draw[dashed, gray] (axis cs:1.0,0) -- (axis cs:1.0,1.43);
+  \draw[dashed, gray] (axis cs:2.0,0) -- (axis cs:2.0,0.55);
+  \fill (axis cs:1.0,1.43) circle (1.6pt);
+  \fill (axis cs:2.0,0.55) circle (1.6pt);
+  \node[font=\scriptsize, anchor=south] at (axis cs:1.0,1.5)  {$f(x_1)$};
+  \node[font=\scriptsize, anchor=south west] at (axis cs:2.0,0.6) {$f(x_2)$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:1.0,-0.02) {$x_1$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:2.0,-0.02) {$x_2$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:0.4,-0.02) {$a$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:5.2,-0.02) {$b$};
+  \fill[red!70!black] (axis cs:2.3,0.5) circle (1.6pt);
+  \node[font=\scriptsize, anchor=north west, red!70!black] at (axis cs:2.34,0.48)
+    {$x_*$};
+
+% --- случай 2: f(x_1) < f(x_2)
+\nextgroupplot[title={$2^\circ$: $f(x_1) < f(x_2) \Rightarrow x_* \in [a,x_2]$}]
+  \addplot[very thick, blue!60!black] {0.55*(x-2.3)^2 + 0.5};
+  \draw[gray!55, fill=gray!15] (axis cs:4.0,-0.45) rectangle (axis cs:5.2,-0.15);
+  \draw[very thick, teal!70!black] (axis cs:0.4,-0.3) -- (axis cs:4.0,-0.3);
+  \node[font=\scriptsize, anchor=north, teal!70!black] at (axis cs:2.1,-0.36)
+    {остаётся};
+
+  \draw[dashed, gray] (axis cs:2.6,0) -- (axis cs:2.6,0.55);
+  \draw[dashed, gray] (axis cs:4.0,0) -- (axis cs:4.0,2.09);
+  \fill (axis cs:2.6,0.55) circle (1.6pt);
+  \fill (axis cs:4.0,2.09) circle (1.6pt);
+  \node[font=\scriptsize, anchor=south east] at (axis cs:2.6,0.6) {$f(x_1)$};
+  \node[font=\scriptsize, anchor=south] at (axis cs:4.0,2.16) {$f(x_2)$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:2.6,-0.02) {$x_1$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:4.0,-0.02) {$x_2$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:0.4,-0.02) {$a$};
+  \node[font=\scriptsize, anchor=north] at (axis cs:5.2,-0.02) {$b$};
+  \fill[red!70!black] (axis cs:2.3,0.5) circle (1.6pt);
+  \node[font=\scriptsize, anchor=north east, red!70!black] at (axis cs:2.26,0.48)
+    {$x_*$};
+\end{groupplot}
+\end{tikzpicture}
+\caption{Лемма о сокращении интервала неопределённости. Двух вычислений
+функции хватает, чтобы выбросить часть отрезка: серым показано отброшенное,
+зелёным — оставшийся интервал неопределённости.}
+\label{fig:unimodal}
+\end{figure}

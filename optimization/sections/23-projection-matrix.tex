@@ -1,0 +1,143 @@
+\lecture{Лекция 7}{}
+
+\subsection{Матрица проектирования}
+
+Рассматривается задача
+\[
+  \begin{cases}
+    \varphi(x) \to \min , & x \in \R^n , \\
+    Cx = d , & C \ \text{размера } l \times n,\ d \in \R^{l} , \\
+    F(x) \le g , & F \ \text{размера } m \times n,\ g \in \R^{m} ,
+  \end{cases}
+\]
+где $\varphi$ может быть нелинейной. К такой задаче применяется \textbf{метод
+Розена}. Всюду далее $\varphi(x)$ — выпуклая и непрерывно дифференцируемая.
+
+\begin{definition}\label{def:projector}
+Матрица $P$ размера $n \times n$ называется \textbf{матрицей проектирования}
+(проектором), если
+\[
+  1^\circ\ P = P\T ,
+  \qquad\qquad
+  2^\circ\ P \cdot P = P .
+\]
+\end{definition}
+
+\begin{example}\label{ex:projector}
+Пусть $A$ — матрица размера $m \times n$ полного строчного ранга. Тогда
+\[
+  P = \underbrace{A\T}_{n \times m}
+      \underbrace{\big(A A\T\big)^{-1}}_{m \times m}
+      \underbrace{A}_{m \times n}
+  \qquad (n \times n)
+\]
+— матрица проектирования.
+\end{example}
+
+\begin{proof}
+$1^\circ$ Транспонируем, пользуясь $(XYZ)\T = Z\T Y\T X\T$:
+\[
+  \Big(A\T \big(A A\T\big)^{-1} A\Big)\T
+  = A\T \Big(\big(A A\T\big)^{-1}\Big)\T \big(A\T\big)\T
+  = A\T \Big(\big(A A\T\big)\T\Big)^{-1} A
+  = A\T \big(A A\T\big)^{-1} A = P .
+\]
+Здесь использовано, что матрица $A A\T$ симметрична,
+$\big(A A\T\big)\T = \big(A\T\big)\T A\T = A A\T$, а обратная к симметричной сама
+симметрична: $\big(X^{-1}\big)\T = \big(X\T\big)^{-1}$.
+
+$2^\circ$
+\[
+  P \cdot P
+  = A\T \big(A A\T\big)^{-1}
+    \underbrace{A \cdot A\T \big(A A\T\big)^{-1}}_{=\ E} A
+  = A\T \big(A A\T\big)^{-1} A = P .
+  \qedhere
+\]
+\end{proof}
+
+\begin{idea}
+Обратимость $A A\T$ — это и есть требование полного строчного ранга $A$: строки
+матрицы ограничений должны быть линейно независимы. Для метода Розена это
+означает, что среди активных ограничений нет дублирующих друг друга — иначе
+матрицу нужно предварительно чистить.
+
+Геометрически $P = A\T(AA\T)^{-1}A$ проектирует на линейную оболочку строк $A$,
+а дополнительный проектор $Q = E - P$ (см. лемму ниже) — на \emph{ядро} $A$,
+то есть на множество направлений, вдоль которых $Ax$ не меняется. Именно $Q$
+и понадобится в методе.
+\end{idea}
+
+\begin{lemma}\label{lem:projector}
+Пусть $P$ — матрица проектирования размера $n \times n$. Тогда
+\begin{enumerate}[label=$\arabic*^\circ$,left=0pt]
+  \item $Q \equiv E - P$ — матрица проектирования;
+  \item $x\T P x \ge 0$ \ $\forall x$ (то есть $P$ положительно полуопределена);
+  \item множества
+        \[
+          L \equiv \{\, y \mid y = Px \,\} ,
+          \qquad
+          L' \equiv \{\, z \mid z = Qx \,\}
+        \]
+        — ортогональные подпространства, причём
+        \[
+          \forall x \ \ \exists!\ \langle y, z\rangle :
+          \quad x = y + z , \quad y \in L , \quad z \in L' .
+        \]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+\textbf{1.1)} $Q\T = E\T - P\T = E - P = Q$.
+
+\medskip
+\textbf{1.2)}
+$Q \cdot Q = (E-P)(E-P) = E - P - P + P\cdot P = E - P = Q$.
+
+\medskip
+\textbf{2)} Пользуясь обоими свойствами проектора,
+\[
+  x\T P x = x\T P \cdot P x = x\T P\T P x = \norm{P x}^2 \ \ge\ 0 .
+\]
+
+\medskip
+\textbf{3.1) Ортогональность.} Что $L$ и $L'$ — подпространства, очевидно
+(образы линейных отображений). Пусть $y \in L$, $z \in L'$, то есть
+$y = Px_1$, $z = Qx_2$. Тогда
+\[
+  y\T z = (P x_1)\T (Q x_2) = x_1\T P\T Q\, x_2
+        = x_1\T P (E - P)\, x_2
+        = x_1\T \big(P - P\cdot P\big) x_2 = 0 .
+\]
+
+\medskip
+\textbf{3.2) Существование и единственность разложения.} Существование:
+\[
+  x = Px + (E - P)x = Px + Qx ,
+\]
+и первое слагаемое лежит в $L$, второе — в $L'$. Единственность: пусть
+\[
+  x = y + z , \quad y \in L,\ z \in L' ,
+  \qquad
+  x = y_1 + z_1 , \quad y_1 \in L,\ z_1 \in L' .
+\]
+Вычитая, получаем $0 = (y - y_1) + (z - z_1)$, где $y - y_1 \in L$,
+$z - z_1 \in L'$. Два ортогональных вектора в сумме дают нуль только если оба
+нулевые, значит $y = y_1$, $z = z_1$.
+\end{proof}
+
+\inputfig{figures/fig-projection-decomposition}
+
+\begin{idea}
+Пункт~2$^\circ$ — именно то, что понадобится для доказательства убывания:
+\[
+  \nabla\T\varphi\, P\, \nabla\varphi = \norm{P\nabla\varphi}^2 \ \ge\ 0 ,
+\]
+причём строго больше нуля, пока проекция градиента ненулевая.
+
+Пункт~3$^\circ$ — геометрический смысл всей конструкции: пространство
+распадается в прямую ортогональную сумму $\R^n = L \oplus L'$, и проектор $P$
+просто отбрасывает составляющую вдоль $L'$. В методе Розена $L'$ — это ядро
+матрицы активных ограничений, то есть множество направлений, остающихся на
+грани допустимого множества.
+\end{idea}

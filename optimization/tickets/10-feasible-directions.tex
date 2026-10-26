@@ -1,0 +1,158 @@
+\section{Билет 10. Метод возможных направлений}
+
+\ticketq{Метод возможных направлений.}
+
+\paragraph{Постановка.}
+\[
+  \varphi_0(x) \to \min_{x \in S} ,
+  \qquad
+  S = \{\, x \in \R^n \mid \varphi_i(x) \le 0,\ i = \overline{1,m};\ Ax = b \,\} ,
+\]
+Метод строит допустимые точки $x_k \in S$ с убыванием цели по схеме
+$x_{k+1} = x_k + \alpha_k s_k$, где $s_k$ — возможное направление спуска,
+$\alpha_k > 0$ — шаг. Требуется допустимая начальная точка $x_0 \in S$.
+
+\textbf{Предположения:} $\varphi_i$ выпуклы и дифференцируемы, градиенты
+ограничены и липшицевы,
+\[
+  \norm{\nabla\varphi_i(x)} \le K , \qquad
+  \norm{\nabla\varphi_i(x) - \nabla\varphi_i(y)} \le R\norm{x-y} ,
+\]
+$S$ компактно, выполнено условие невырожденности.
+
+\paragraph{Определения.}
+Ненулевой $s$ — \textbf{возможное направление} в $x \in S$, если
+$\exists\,\delta > 0 : x + \alpha s \in S$ при всех $0 < \alpha < \delta$.
+Если дополнительно $\varphi_0(x + \alpha s) < \varphi_0(x)$, то $s$ —
+\textbf{возможное направление спуска}.
+
+Ограничения в точке $x$: \textbf{активные}
+$I_0(x) = \{i \mid \varphi_i(x) = 0\}$; \textbf{пассивные}
+$\{i \mid \varphi_i(x) < 0\}$; \textbf{почти активные}
+$I_\delta(x) = \{i \mid -\delta \le \varphi_i(x) \le 0\}$ — учитываются,
+чтобы точка не подходила вплотную к границе.
+
+\paragraph{Лемма (о возможном направлении).}
+\textit{Пусть $x \in S$ и}
+\[
+  \nabla\T\varphi_i(x)\,s < 0 \ \ \forall i \in I_0(x) ,
+  \qquad As = 0 .
+\]
+\textit{Тогда $s$ — возможное направление в $x$.}
+
+\textsc{Док-во.} \emph{Равенства:} $Ax = b$, $As = 0$ $\Rightarrow$
+$A(x + \alpha s) = b + \alpha\cdot 0 = b$ при любом $\alpha$.
+
+\emph{Активные $i \in I_0(x)$:} $\varphi_i(x) = 0$, по формуле Тейлора
+\[
+  \varphi_i(x + \alpha s) = \alpha\,\nabla\T\varphi_i(x)s + o(\alpha) ,
+\]
+главный член отрицателен $\Rightarrow$ $\varphi_i(x+\alpha s) < 0$ при малом
+$\alpha > 0$.
+
+\emph{Пассивные:} $\varphi_i(x) < 0$ и $\varphi_i$ непрерывна $\Rightarrow$
+$\varphi_i(x + \alpha s) < 0$ при малом $\alpha$.
+
+Значит $x + \alpha s \in S$. $\blacksquare$
+
+\paragraph{Лемма (о направлении спуска).}
+\textit{$\nabla\T\varphi_0(x)s < 0$ $\Rightarrow$ $s$ — направление спуска.}
+
+\textsc{Док-во.}
+$\varphi_0(x+\alpha s) - \varphi_0(x) = \alpha\nabla\T\varphi_0(x)s + o(\alpha)$;
+главный линейный член отрицателен $\Rightarrow$ при малом $\alpha > 0$ разность
+отрицательна. $\blacksquare$
+
+Итого: одновременное выполнение $\nabla\T\varphi_0(x)s < 0$,
+$\nabla\T\varphi_i(x)s < 0$ ($i \in I_0$), $As = 0$ даёт возможное направление
+спуска.
+
+\paragraph{Вспомогательная задача Зойтендейка.}
+Направление ищется как решение задачи ЛП: при $\xi_i > 0$, $i = \overline{0,m}$,
+\[
+  \eta \to \min_{\mathbb{H}} ,
+  \quad
+  \mathbb{H} = \Big\{ \eta \ \Big|\
+    \nabla\T\varphi_i(x)s \le \xi_i\eta,\ i \in I_\delta(x)\cup\{0\} ;\
+    As = 0 ;\ \norm{s}_\infty \le 1 \Big\} .
+\]
+Пара $s = 0$, $\eta = 0$ допустима $\Rightarrow$ $\eta_\delta \le 0$.
+
+\textbf{Смысл.} При $\eta < 0$ и $\xi_i > 0$ имеем $\xi_i\eta < 0$, то есть
+$\nabla\T\varphi_0 s < 0$ и $\nabla\T\varphi_i s < 0$ — по леммам $s$ есть
+возможное направление спуска. Условие $As = 0$ сохраняет равенства, а
+$\norm{s}_\infty \le 1$ нормирует задачу: без него $s$ можно было бы
+растягивать и $\eta \to -\infty$. Случай $\eta_\delta = 0$ означает, что
+возможного направления спуска нет, то есть точка приближённо стационарна.
+
+\paragraph{Лемма (оценки вдоль направления).}
+\textit{При $\alpha > 0$, $\norm{s_\delta} \le 1$:}
+\[
+  \varphi_0(x + \alpha s_\delta) \le \varphi_0(x) + \alpha\xi_0\eta_\delta
+    + \alpha^2 R\norm{s_\delta}^2 ,
+  \quad
+  \varphi_i(x + \alpha s_\delta) \le \varphi_i(x)
+    + \alpha\nabla\T\varphi_i(x)s_\delta + \alpha^2 R\norm{s_\delta}^2 ,
+\]
+\textit{и $A(x+\alpha s_\delta) = b$.} Первое — из липшицевости градиента и
+ограничения $\nabla\T\varphi_0 s \le \xi_0\eta_\delta$.
+
+\paragraph{Допустимость и убывание при $\eta_\delta < 0$.}
+Разбор по трём группам даёт явные границы шага:
+\begin{csteps}
+  \item $i \in I_\delta(x)$ (почти активные): $\varphi_i(x) \le 0$ и
+        $\nabla\T\varphi_i s_\delta \le \xi_i\eta_\delta < 0$, поэтому
+        $\varphi_i(x+\alpha s_\delta) \le \alpha\xi_i\eta_\delta + \alpha^2 R
+         \le 0$ при $\alpha \le \xi_i\abs{\eta_\delta}/R$;
+  \item $i \notin I_\delta(x)$ (с запасом): $\varphi_i(x) < -\delta$ и
+        $\norm{\nabla\varphi_i} \le K$, поэтому
+        $\varphi_i(x+\alpha s_\delta) \le -\delta + \alpha K + \alpha^2 R \le 0$
+        при малом $\alpha$;
+  \item цель: $\varphi_0(x+\alpha s_\delta) - \varphi_0(x)
+        \le \alpha\xi_0\eta_\delta + \alpha^2 R
+        \le \tfrac12\alpha\xi_0\eta_\delta$ при
+        $\alpha \le \xi_0\abs{\eta_\delta}/(2R)$.
+\end{csteps}
+Значит дробление $\alpha_k = \alpha_0\lambda^{\,j}$ конечно, шаг ограничен
+снизу величиной, зависящей от $\abs{\eta_\delta}$, а $\varphi_0(x_k)$ строго
+убывает. При $\eta_\delta = 0$ допустимого направления спуска нет —
+выполняются условия оптимальности, и $\delta$ уменьшают. $\blacksquare$
+
+\paragraph{Алгоритм.}
+Задать $x_0 \in S$, $\eps > 0$, $\delta_0 > 0$, $\lambda \in (0,1)$.
+\begin{csteps}
+  \item Найти $I_0(x_k)$ и $I_{\delta_k}(x_k)$.
+  \item Решить вспомогательную задачу; получить $s_k$, $\eta_k$.
+  \item $\eta_k \ge 0$: направления нет — уменьшить $\delta_k := \lambda\delta_k$
+        (при $\delta_k < \eps$ — конец, $x_k$ приближённо стационарна),
+        к~шагу~1.
+  \item $\eta_k < 0$: найти шаг дроблением — $\alpha_k = \alpha_0\lambda^{\,j}$
+        с наименьшим $j$, при котором
+        \[
+          x_k + \alpha_k s_k \in S
+          \quad\text{и}\quad
+          \varphi_0(x_k + \alpha_k s_k) - \varphi_0(x_k)
+            \le \tfrac12\,\alpha_k\,\xi_0\,\eta_k .
+        \]
+  \item $x_{k+1} = x_k + \alpha_k s_k$; останов при
+        $\norm{x_{k+1}-x_k} < \eps$, иначе $k := k+1$, к~шагу~1.
+\end{csteps}
+
+\paragraph{Начальное приближение.}
+Если $x_0$ неизвестна, решается вспомогательная задача
+\[
+  \eta \to \min , \qquad \varphi_i(x) - \eta \le 0,\ i = \overline{1,m},
+  \qquad Ax = b .
+\]
+По условию Слейтера существует $\bar{x}$ с $\varphi_i(\bar{x}) < 0$,
+$A\bar{x} = b$ $\Rightarrow$ $\min\eta < 0$, и найденная точка строго внутри
+всех неравенств — ровно то, что нужно для старта. Это та же идея, что у
+вспомогательной задачи симплекс-метода.
+
+\paragraph{Ограничения.}
+Нужна допустимая $x_0$; на каждой итерации решается задача ЛП; при сложных
+нелинейных ограничениях трудно выбрать допустимый шаг; без учёта почти
+активных ограничений метод неустойчив около границы; для невыпуклых задач —
+только локальный минимум.
+
+\seefull{гл.~3, \S1 и \S4 (численный пример в \S4)}

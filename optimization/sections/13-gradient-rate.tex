@@ -1,0 +1,228 @@
+\subsection{Скорость сходимости при сильной выпуклости}
+
+Теоремы \ref{thm:grad-split} и \ref{thm:steepest} дают только
+$\norm{\nabla f(x_k)} \to 0$. Чтобы получить сходимость самих точек и оценку
+скорости, добавим двустороннюю оценку на гессиан.
+
+\begin{theorem}\label{thm:grad-rate}
+Пусть $f \in C^2(\R^n)$ и существуют константы $m, M$ такие, что
+\[
+  m\norm{z}^2 \ \le\ z\T H(y)\, z \ \le\ M\norm{z}^2 ,
+  \qquad 0 < m \le M, \qquad \forall\, z, y \in \R^n .
+\]
+Пусть $\{x_k\}$ строится градиентным методом с дроблением шага. Тогда при
+любом начальном приближении $x_0$
+\[
+  x_k \xrightarrow[k \to \infty]{} x_* , \qquad
+  f(x_k) \xrightarrow[k \to \infty]{} f(x_*) ,
+\]
+где $x_*$ — точка минимума, причём
+\[
+  f(x_{k+1}) - f(x_*) \le q\,\big(f(x_k) - f(x_*)\big), \qquad q \in (0,1) ,
+\]
+\[
+  f(x_k) - f(x_*) \le q^k\big(f(x_0) - f(x_*)\big) ,
+  \qquad
+  \norm{x_k - x_*} \le C\, q^{k/2}, \quad C < +\infty .
+\]
+\end{theorem}
+
+\begin{idea}
+Условие $m\norm{z}^2 \le z\T H z$ — это \textbf{сильная выпуклость}: гессиан
+равномерно положительно определён. Верхняя оценка $M$ говорит, что кривизна не
+бывает и слишком большой. Отношение $M/m$ — число обусловленности задачи;
+именно оно, как видно из итоговой оценки, и определяет скорость.
+
+\medskip
+Попутно отсюда следует, что $M \le R$: липшицевость градиента с константой
+$R$ как раз ограничивает гессиан сверху.
+\end{idea}
+
+\subsubsection*{Шаг 1: множество Лебега ограничено}
+
+Пусть $\bar x \in \R^n$ и
+\[
+  Y = \{\, x \mid f(x) \le f(\bar x) \,\} .
+\]
+Множество $Y$ замкнуто (функция $f$ непрерывна). Покажем, что оно ограничено.
+
+Разложение по Тейлору в точке $\bar x$:
+\[
+  f(x) = f(\bar x) + \nabla\T f(\bar x)(x - \bar x)
+       + \tfrac12 (x-\bar x)\T H(\hat x)(x - \bar x) ,
+  \qquad \hat x = \bar x + \theta(x - \bar x), \ \theta \in [0,1] .
+\]
+Для $x \in Y$ имеем $f(x) \le f(\bar x)$, и, пользуясь нижней оценкой на
+гессиан,
+\[
+  f(\bar x) \ \ge\ f(x)
+  \ \ge\ f(\bar x) + \nabla\T f(\bar x)(x-\bar x)
+         + \frac{m}{2}\norm{x - \bar x}^2 ,
+\]
+откуда
+\[
+  \nabla\T f(\bar x)(x-\bar x) + \frac{m}{2}\norm{x-\bar x}^2 \le 0
+  \qquad\Longrightarrow\qquad
+  \frac{m}{2}\norm{x-\bar x}^2 \le \norm{\nabla f(\bar x)}\cdot\norm{x-\bar x} ,
+\]
+то есть
+\[
+  \norm{x - \bar x} \ \le\ \frac{2}{m}\,\norm{\nabla f(\bar x)} .
+\]
+
+\begin{idea}
+Итак, $Y$ замкнуто и ограничено, то есть компактно. Значит минимум $f$
+достигается, а из строгой выпуклости (следствия $m > 0$) он единственный —
+это и есть $x_*$. Заодно вся последовательность $\{x_k\}$ лежит в
+компакте $Y$ с $\bar x = x_0$, поскольку $f(x_k)$ убывает.
+\end{idea}
+
+\subsubsection*{Шаг 2: две оценки через $m$ и $M$}
+
+Разложим $f$ в точке минимума, где $\nabla f(x_*) = 0$:
+\[
+  f(x) = f(x_*) + \underbrace{\nabla\T f(x_*)(x - x_*)}_{=\,0}
+       + \tfrac12 (x - x_*)\T H(\bar{\bar x})(x - x_*) ,
+  \qquad \bar{\bar x} = x_* + \theta(x - x_*) ,
+\]
+откуда $f(x) - f(x_*) = \tfrac12 (x-x_*)\T H(\bar{\bar x})(x-x_*)$ и
+\begin{equation}\label{eq:rate-2}
+  \frac{m}{2}\norm{x - x_*}^2 \ \le\ f(x) - f(x_*)
+  \ \le\ \frac{M}{2}\norm{x - x_*}^2 ,
+\end{equation}
+в частности
+\begin{equation}\label{eq:rate-3}
+  \norm{x - x_*}^2 \ \ge\ \frac{2}{M}\big(f(x) - f(x_*)\big) .
+\end{equation}
+
+Теперь разложим, наоборот, $f(x_*)$ вокруг произвольной точки $x$:
+\[
+  f(x_*) = f(x) + \nabla\T f(x)(x_* - x)
+         + \tfrac12 (x_* - x)\T H(\bar x)(x_* - x) ,
+  \qquad \bar x = x + \theta(x_* - x) ,
+\]
+то есть
+\begin{equation}\label{eq:rate-1}
+  \begin{aligned}
+    f(x) - f(x_*)
+    &= \nabla\T f(x)(x - x_*) - \tfrac12 (x - x_*)\T H(\bar x)(x - x_*) \\[2pt]
+    &\le \norm{\nabla f(x)}\cdot\norm{x - x_*} - \frac{m}{2}\norm{x-x_*}^2 .
+  \end{aligned}
+\end{equation}
+
+\subsubsection*{Шаг 3: оценка расстояния через градиент}
+
+Соединяя левое неравенство~\eqref{eq:rate-2} с~\eqref{eq:rate-1}:
+\[
+  \frac{m}{2}\norm{x-x_*}^2
+  \ \le\ \norm{\nabla f(x)}\cdot\norm{x-x_*} - \frac{m}{2}\norm{x-x_*}^2 ,
+\]
+то есть $m\norm{x-x_*}^2 \le \norm{\nabla f(x)}\cdot\norm{x-x_*}$, откуда
+\begin{equation}\label{eq:rate-4}
+  \norm{x - x_*} \ \le\ \frac{\norm{\nabla f(x)}}{m} .
+\end{equation}
+
+\subsubsection*{Шаг 4: градиент снизу}
+
+Подставим~\eqref{eq:rate-4} в первое слагаемое~\eqref{eq:rate-1},
+а~\eqref{eq:rate-3} — во второе:
+\[
+  f(x) - f(x_*)
+  \ \le\ \frac{\norm{\nabla f(x)}^2}{m}
+       - \frac{m}{2}\cdot\frac{2}{M}\big(f(x) - f(x_*)\big)
+  = \frac{\norm{\nabla f(x)}^2}{m}
+       - \frac{m}{M}\big(f(x) - f(x_*)\big) ,
+\]
+то есть $\left(1 + \dfrac{m}{M}\right)\big(f(x)-f(x_*)\big)
+\le \dfrac{\norm{\nabla f(x)}^2}{m}$, окончательно
+\begin{equation}\label{eq:rate-5}
+  \norm{\nabla f(x)}^2 \ \ge\ m\left(1 + \frac{m}{M}\right)
+  \big(f(x) - f(x_*)\big) .
+\end{equation}
+
+\subsubsection*{Шаг 5: геометрическое убывание}
+
+Для метода с дроблением шага выполняются
+\[
+  x_{k+1} = x_k - \alpha_k \nabla f(x_k) ,
+  \qquad
+  f(x_{k+1}) - f(x_k) \le -\eps\,\alpha_k \norm{\nabla f(x_k)}^2 .
+\]
+Беря в~\eqref{eq:rate-5} точку $x = x_k$:
+\begin{equation}\label{eq:rate-6}
+  \norm{\nabla f(x_k)}^2 \ \ge\ m\left(1 + \frac{m}{M}\right)
+  \big(f(x_k) - f(x_*)\big) .
+\end{equation}
+Тогда
+\[
+  \begin{aligned}
+    \big(f(x_{k+1}) - f(x_*)\big) - \big(f(x_k) - f(x_*)\big)
+      &= f(x_{k+1}) - f(x_k)
+       \ \le\ -\eps\,\alpha_k \norm{\nabla f(x_k)}^2 \\[4pt]
+      &\overset{\eqref{eq:rate-6}}{\le}\
+       -\eps\,\alpha_k\, m\left(1 + \frac{m}{M}\right)
+       \big(f(x_k) - f(x_*)\big) ,
+  \end{aligned}
+\]
+откуда
+\[
+  \boxed{\
+  f(x_{k+1}) - f(x_*) \ \le\ q\,\big(f(x_k) - f(x_*)\big) ,
+  \qquad
+  q = 1 - \eps\,\alpha_k\, m\left(1 + \frac{m}{M}\right) . \ }
+\]
+
+\subsubsection*{Шаг 6: итог}
+
+Итерируя полученное неравенство,
+\[
+  f(x_k) - f(x_*) \ \le\ q^k \big(f(x_0) - f(x_*)\big) ,
+\]
+а из левой части~\eqref{eq:rate-2} при $x = x_k$
+\[
+  \frac{m}{2}\norm{x_k - x_*}^2 \le f(x_k) - f(x_*) \le q^k\big(f(x_0)-f(x_*)\big)
+  \qquad\Longrightarrow\qquad
+  \norm{x_k - x_*} \le C\, q^{k/2} ,
+\]
+где
+\[
+  C = \sqrt{\frac{2\big(f(x_0) - f(x_*)\big)}{m}} < +\infty .
+\]
+В частности $x_k \to x_*$ и $f(x_k) \to f(x_*)$. \hfill$\blacksquare$
+
+\begin{idea}[title={Почему $q$ действительно лежит в $(0,1)$}]
+\textbf{Сверху.} По оценке~\eqref{eq:alpha-lower} из
+теоремы~\ref{thm:grad-split} шаг отделён от нуля: $\alpha_k \ge \bar\alpha > 0$.
+Значит
+\[
+  q \le 1 - \eps\,\bar\alpha\, m\left(1 + \frac{m}{M}\right) < 1 ,
+\]
+и этот равномерный по $k$ множитель и надо брать в оценке $q^k$.
+
+\medskip
+\textbf{Снизу.} Неотрицательность $q$ получается даром. Действительно,
+$f(x_{k+1}) \ge f(x_*)$, поэтому
+\[
+  \begin{aligned}
+    f(x_k) - f(x_*)
+      &\ \ge\ f(x_k) - f(x_{k+1})
+       \ \ge\ \eps\,\alpha_k \norm{\nabla f(x_k)}^2 \\[4pt]
+      &\ \overset{\eqref{eq:rate-6}}{\ge}\
+       \eps\,\alpha_k\, m\left(1+\frac{m}{M}\right)\big(f(x_k) - f(x_*)\big) ,
+  \end{aligned}
+\]
+и, сокращая на положительное $f(x_k) - f(x_*)$, получаем
+$\eps\,\alpha_k m\left(1+\frac{m}{M}\right) \le 1$, то есть $q \ge 0$.
+\end{idea}
+
+\begin{idea}[title={Что это за скорость}]
+По значениям функции убывание геометрическое со знаменателем $q$, по
+расстоянию до минимума — со знаменателем $\sqrt q$. И то и другое — это
+\textbf{линейная} скорость в смысле определения из \S11 (показатель $p=1$).
+
+\medskip
+Чем хуже обусловленность, тем медленнее: при $M \gg m$ множитель
+$1 + m/M \to 1$, а сам $m$ мал, так что $q$ подбирается к единице. Это
+аналитическое отражение того самого зигзага на вытянутых линиях уровня
+(рис.~\ref{fig:zigzag}).
+\end{idea}

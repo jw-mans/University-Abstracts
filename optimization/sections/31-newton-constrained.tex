@@ -1,0 +1,215 @@
+\subsection{Метод Ньютона решения задач с ограничениями}
+\label{subsec:newton-constrained}
+
+\begin{idea}[title={Откуда этот материал}]
+Этот параграф и три следующих на разобранных лекциях не записывались, но входят
+в список экзаменационных вопросов. Они восстановлены в обозначениях курса.
+\end{idea}
+
+\[
+  \varphi(x) \to \min , \qquad x \in \R^n ,
+  \qquad\text{при}\qquad
+  h_i(x) = 0 , \quad i = \overline{1,m} ,
+\]
+или в векторной форме $h(x) = 0$, $h = (h_1, \dots, h_m)\T$. Если в задаче есть
+неравенства $g_j(x) \le 0$, то в методе активного набора активные ограничения
+на текущей итерации рассматриваются как равенства $g_j(x) = 0$.
+
+\subsubsection*{Функция Лагранжа и условия ККТ}
+
+\[
+  L(x, \lambda) = \varphi(x) + \lambda\T h(x) ,
+  \qquad
+  \lambda = (\lambda_1, \dots, \lambda_m)\T \quad\text{— множители Лагранжа},
+\]
+\[
+  \nabla_x L(x,\lambda) = \nabla\varphi(x) + J\T(x)\,\lambda ,
+  \qquad
+  J(x) = h'(x) =
+  \begin{pmatrix}
+    \nabla\T h_1(x) \\ \vdots \\ \nabla\T h_m(x)
+  \end{pmatrix}
+  \quad\text{— матрица Якоби.}
+\]
+
+\begin{theorem}[необходимые условия Лагранжа]\label{thm:lagrange-nec}
+Пусть $x_*$ — локальное решение задачи $\varphi(x) \to \min$, $h(x) = 0$;
+$\varphi$, $h_i$ дифференцируемы, а градиенты ограничений линейно независимы:
+$\rank J(x_*) = m$. Тогда существует $\lambda_*$ такой, что
+\[
+  \nabla\varphi(x_*) + J\T(x_*)\,\lambda_* = 0 ,
+  \qquad h(x_*) = 0 .
+\]
+\end{theorem}
+
+\begin{proof}
+Так как $x_*$ — локальное решение на множестве $h(x) = 0$, допустимые
+направления $s$ в первом приближении удовлетворяют $J(x_*)s = 0$. Если бы для
+какого-то такого $s$ выполнялось $\nabla\T\varphi(x_*)s < 0$, то движение из
+$x_*$ вдоль $s$ уменьшало бы $\varphi$, не нарушая ограничений в первом
+порядке. Заменив $s$ на $-s$ (вектор $-s$ тоже лежит в ядре), получаем, что
+обязано быть
+\[
+  \nabla\T\varphi(x_*)\, s = 0 \qquad\forall s : J(x_*)s = 0 ,
+\]
+то есть $\nabla\varphi(x_*)$ ортогонален ядру $J(x_*)$. Ортогональное дополнение
+к ядру матрицы совпадает с линейной оболочкой её строк, поэтому существует
+$\lambda_*$ с $\nabla\varphi(x_*) = -J\T(x_*)\lambda_*$. Допустимость
+$h(x_*) = 0$ выполняется по условию.
+\end{proof}
+
+Необходимые условия записываются как система нелинейных уравнений
+\begin{equation}\label{eq:kkt-system}
+  F(x,\lambda) = 0 ,
+  \qquad
+  F(x,\lambda) =
+  \begin{pmatrix}
+    \nabla_x L(x,\lambda) \\ h(x)
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    \nabla\varphi(x) + J\T(x)\lambda \\ h(x)
+  \end{pmatrix} .
+\end{equation}
+Метод Ньютона для задач с ограничениями — это обычный метод Ньютона,
+применённый к системе~\eqref{eq:kkt-system}.
+
+\subsubsection*{Ньютоновская система}
+
+Поправка $(p_k, \Delta\lambda_k)$ находится из $F'(x_k,\lambda_k)
+\big(p_k;\ \Delta\lambda_k\big) = -F(x_k, \lambda_k)$. Матрица производной
+имеет блочный вид
+\[
+  F'(x_k,\lambda_k) =
+  \begin{pmatrix} W_k & J_k\T \\ J_k & 0 \end{pmatrix} ,
+  \qquad
+  J_k = J(x_k) , \qquad W_k = \nabla^2_{xx} L(x_k, \lambda_k) ,
+\]
+то есть
+\begin{equation}\label{eq:newton-kkt}
+  \begin{pmatrix} W_k & J_k\T \\ J_k & 0 \end{pmatrix}
+  \begin{pmatrix} p_k \\ \Delta\lambda_k \end{pmatrix}
+  = -\begin{pmatrix} \nabla_x L(x_k,\lambda_k) \\ h(x_k) \end{pmatrix} ,
+\end{equation}
+после чего $x_{k+1} = x_k + \alpha_k p_k$,
+$\lambda_{k+1} = \lambda_k + \alpha_k \Delta\lambda_k$. В классическом варианте
+$\alpha_k = 1$.
+
+\begin{theorem}\label{thm:newton-kkt-lin}
+Система~\eqref{eq:newton-kkt} получается линеаризацией условий ККТ
+$\nabla_x L(x,\lambda) = 0$, $h(x) = 0$.
+\end{theorem}
+
+\begin{proof}
+Разложим первую группу условий в окрестности $(x_k, \lambda_k)$:
+\[
+  \nabla_x L(x_k + p, \lambda_k + \Delta\lambda)
+  \approx \nabla_x L(x_k,\lambda_k) + W_k p + J_k\T \Delta\lambda .
+\]
+Требование обращения в нуль даёт
+$W_k p + J_k\T\Delta\lambda = -\nabla_x L(x_k,\lambda_k)$ — первая строка
+системы. Линеаризуя ограничения, $h(x_k + p) \approx h(x_k) + J_k p$, и
+требуя $h(x_k+p) = 0$, получаем $J_k p = -h(x_k)$ — вторая строка.
+\end{proof}
+
+\subsubsection*{Достаточное условие второго порядка}
+
+Для точки $x_*$, удовлетворяющей условиям Лагранжа, вводится касательное
+подпространство
+\[
+  T = \{\, s \mid J(x_*)\,s = 0 \,\} .
+\]
+
+\begin{theorem}\label{thm:second-order-suff}
+Если $\nabla_x L(x_*,\lambda_*) = 0$, $h(x_*) = 0$ и для всякого ненулевого
+$s \in T$
+\[
+  s\T \nabla^2_{xx} L(x_*, \lambda_*)\, s > 0 ,
+\]
+то $x_*$ — строгий локальный минимум задачи с ограничениями.
+\end{theorem}
+
+\begin{proof}
+Пусть $x$ — допустимая точка вблизи $x_*$, $d = x - x_*$. Обе точки допустимы,
+значит в первом приближении $J(x_*)d = 0$, то есть $d \in T$. Разложим функцию
+Лагранжа:
+\[
+  L(x, \lambda_*) = L(x_*,\lambda_*)
+    + \underbrace{\nabla_x\T L(x_*,\lambda_*)\,d}_{=\,0}
+    + \tfrac12\, d\T \nabla^2_{xx}L(x_*,\lambda_*)\, d + o\big(\norm{d}^2\big) .
+\]
+Для допустимых точек $h(x) = h(x_*) = 0$, поэтому $L(x,\lambda_*) = \varphi(x)$
+и $L(x_*,\lambda_*) = \varphi(x_*)$. Следовательно
+\[
+  \varphi(x) - \varphi(x_*)
+  = \tfrac12\, d\T \nabla^2_{xx}L(x_*,\lambda_*)\, d + o\big(\norm{d}^2\big) > 0
+\]
+при достаточно малом ненулевом $d$, то есть $\varphi(x) > \varphi(x_*)$.
+\end{proof}
+
+\begin{algo}[title={Метод Ньютона для задачи с равенствами}]
+\begin{steps}
+  \item Задать $x_0$, $\lambda_0$, $\eps > 0$.
+  \item Вычислить $\nabla\varphi(x_k)$, $J_k = J(x_k)$,
+        $W_k = \nabla^2_{xx}L(x_k,\lambda_k)$.
+  \item Вычислить невязку ККТ
+        $r_k = \big(\nabla_x L(x_k,\lambda_k);\ h(x_k)\big)$.
+  \item Если $\norm{r_k} < \eps$ — остановиться.
+  \item Решить систему~\eqref{eq:newton-kkt}.
+  \item $x_{k+1} = x_k + \alpha_k p_k$,
+        $\lambda_{k+1} = \lambda_k + \alpha_k \Delta\lambda_k$.
+  \item $k := k+1$, перейти к шагу~2.
+\end{steps}
+\end{algo}
+
+\begin{idea}[title={Глобализация и неравенства}]
+При $\alpha_k = 1$ метод сходится квадратично, но лишь локально: полный шаг
+может и увеличить $\varphi$, и увести от допустимого множества. В
+глобализованном варианте берут $0 < \alpha_k \le 1$ и дробят шаг по мере
+невязки
+\[
+  \Phi(x,\lambda) = \tfrac12 \norm{F(x,\lambda)}^2 ,
+  \qquad
+  \alpha := \beta\alpha, \ \ 0 < \beta < 1 ,
+\]
+пока не выполнится $\Phi(x_k + \alpha p_k, \lambda_k + \alpha\Delta\lambda_k)
+< \Phi(x_k,\lambda_k)$.
+
+Неравенства $g_i(x) \le 0$ обрабатываются активным набором
+$I(x) = \{\, i \mid g_i(x) = 0 \,\}$: активные ограничения считаются
+равенствами, для них строится $L(x,\lambda) = \varphi(x)
++ \sum_{i \in I(x)} \lambda_i g_i(x)$ и решается та же система. После решения
+проверяются знаки множителей: должно быть $\lambda_i \ge 0$; ограничение с
+$\lambda_i < 0$ удаляется из активного набора. Это в точности та же логика,
+что в методе Розена (\S\ref{subsec:rosen}).
+\end{idea}
+
+\begin{example}
+$\varphi(x) = (x_1-2)^2 + (x_2-1)^2 \to \min$ при $h(x) = x_1^2 + x_2 - 1 = 0$.
+Тогда
+\[
+  \nabla_x L = \begin{pmatrix} 2(x_1-2) + 2\lambda x_1 \\ 2(x_2-1)+\lambda \end{pmatrix} ,
+  \qquad
+  J(x) = \begin{pmatrix} 2x_1 & 1 \end{pmatrix} ,
+  \qquad
+  W = \begin{pmatrix} 2+2\lambda & 0 \\ 0 & 2 \end{pmatrix} .
+\]
+Старт $x_0 = (0;1)\T$, $\lambda_0 = 0$ (точка допустима, $h(x_0) = 0$).
+Система~\eqref{eq:newton-kkt} даёт $p_0 = (2;0)\T$, $\Delta\lambda_0 = 0$,
+откуда $x_1 = (2;1)\T$: значение упало с $4$ до $0$, но
+$h(x_1) = 4 \ne 0$ — точка стала недопустимой.
+
+Вторая итерация: $J_1 = (4\ \ 1)$, система даёт
+$\Delta\lambda_1 = \tfrac{8}{17}$, $p_1 = \big(-\tfrac{16}{17};\,-\tfrac{4}{17}\big)\T$,
+откуда $x_2 = \big(\tfrac{18}{17};\,\tfrac{13}{17}\big)\T$,
+$h(x_2) = \tfrac{256}{289} \approx 0{,}886$. Невязка ограничения упала с $4$ до
+$0{,}886$.
+\end{example}
+
+\begin{idea}
+Пример показывает главную особенность метода: он решает \emph{систему ККТ}, а
+не минимизирует функцию, поэтому промежуточные точки допустимыми не являются и
+значение $\varphi$ может вести себя немонотонно. Сходимость контролируется не
+по $\varphi$, а по норме невязки $\norm{F(x,\lambda)}$ — отсюда и мера
+$\Phi$ в глобализованном варианте.
+\end{idea}

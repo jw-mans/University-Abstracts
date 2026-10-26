@@ -1,0 +1,37 @@
+% Двухшаговая схема минимизации в R^n: из x_k по направлению p_k делается шаг
+% alpha_k, попадаем в x_{k+1} с меньшим значением целевой функции.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Stealth[length=2.2mm]}, scale=1.0]
+  % линии уровня целевой функции
+  \foreach \r in {0.5, 1.0, 1.5, 2.1} {
+    \draw[blue!45!black, rotate=28] (2.6,1.5) ellipse ({\r*1.35} and {\r*0.72});
+  }
+  \fill[blue!45!black] (2.6,1.5) circle (1.6pt);
+  \node[font=\scriptsize, anchor=west, blue!45!black] at (2.72,1.46) {$x_*$};
+
+  % точка x_k и направление p_k
+  \coordinate (XK)  at (0.55,0.25);
+  \coordinate (XK1) at (2.05,1.05);
+  \coordinate (P)   at (3.25,1.70);
+
+  \draw[->, orange!80!black, very thick] (XK) -- (P);
+  \fill[orange!80!black] (XK)  circle (2.0pt);
+  \fill[orange!80!black] (XK1) circle (2.0pt);
+
+  \node[font=\footnotesize, anchor=north east, orange!70!black] at (XK) {$x_k$};
+  \node[font=\footnotesize, anchor=north west, orange!70!black] at (2.12,1.02)
+    {$x_{k+1}$};
+  \node[font=\footnotesize, anchor=south west, orange!70!black] at (3.2,1.68)
+    {$p_k$};
+
+  \node[font=\footnotesize, anchor=west] at (4.5,0.8)
+    {$x_{k+1} = x_k + \alpha_k p_k$};
+  \node[font=\footnotesize, anchor=west] at (4.5,0.2)
+    {$\varphi(x_{k+1}) < \varphi(x_k)$};
+\end{tikzpicture}
+\caption{Двухшаговая схема: сначала выбирается направление убывания $p_k$,
+затем вдоль него ищется шаг $\alpha_k$. Поиск $\alpha_k$ — это и есть задача
+одномерной минимизации функции $\alpha \mapsto \varphi(x_k + \alpha p_k)$.}
+\label{fig:descent-step}
+\end{figure}

@@ -1,0 +1,37 @@
+% Метод равномерного поиска: сетка узлов, минимальный узел x_j и новый
+% интервал неопределённости [x_{j-1}, x_{j+1}].
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Stealth[length=2.2mm]}, x=1.05cm]
+  \draw[thick] (0,0) -- (8,0);
+  \foreach \i in {0,...,8} {
+    \draw[thick] (\i,-0.13) -- (\i,0.13);
+  }
+  \node[font=\scriptsize, anchor=north] at (0,-0.2) {$a = x_0$};
+  \node[font=\scriptsize, anchor=north] at (8,-0.2) {$x_n = b$};
+  \node[font=\scriptsize, anchor=north] at (3,-0.2) {$x_{j-1}$};
+  \node[font=\scriptsize, anchor=north] at (4,-0.2) {$x_j$};
+  \node[font=\scriptsize, anchor=north] at (5,-0.2) {$x_{j+1}$};
+
+  % шаг h
+  \draw[<->, gray] (6,0.45) -- (7,0.45);
+  \node[font=\scriptsize, anchor=south, gray] at (6.5,0.47) {$h$};
+
+  % узел минимума
+  \fill[red!70!black] (4,0) circle (2.2pt);
+  \node[font=\scriptsize, anchor=south, red!70!black] at (4,0.6)
+    {$f(x_j) = \min\limits_i f(x_i)$};
+  \draw[->, red!70!black] (4,0.52) -- (4,0.14);
+
+  % новый интервал
+  \draw[very thick, teal!70!black] (3,-0.75) -- (5,-0.75);
+  \draw[teal!70!black] (3,-0.62) -- (3,-0.88);
+  \draw[teal!70!black] (5,-0.62) -- (5,-0.88);
+  \node[font=\scriptsize, anchor=north, teal!70!black] at (4,-0.9)
+    {новый интервал неопределённости, длина $2h$};
+\end{tikzpicture}
+\caption{Равномерный поиск: на сетке с шагом $h = (b-a)/n$ находится узел
+$x_j$ с наименьшим значением, после чего интервал неопределённости
+сокращается до $[x_{j-1},\, x_{j+1}]$ — в $n/2$ раз за один проход.}
+\label{fig:uniform-grid}
+\end{figure}

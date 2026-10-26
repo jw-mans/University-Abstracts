@@ -1,0 +1,113 @@
+%  Методы оптимизации — конспект лекций
+%  Компиляция: pdflatex main.tex  (дважды, из-за ссылок и оглавления)
+
+\documentclass[12pt,a4paper]{article}
+
+\input{preamble}
+
+\title{\textbf{Методы оптимизации}\\[0.3em]\large Конспект лекций}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{idea}[title={Обозначения в конспекте}]
+Блок \textbf{«Пояснение»} — то, чего не было на лекции: интуиция, обоснование
+пропущенных шагов, связи с другими темами.
+
+\medskip
+Маркер \plusplus{} вместо доказательства — так помечено в тетради; эти доказательства
+дописываются позже.
+\end{idea}
+
+\begin{idea}[title={Индексная запись}]
+Весь курс использует индексную запись векторов и матриц через множества индексов:
+\begin{gather*}
+  M = \{1, \dots, m\} \ \text{— индексы ограничений}, \\
+  N = \{1, \dots, n\} \ \text{— индексы переменных} .
+\end{gather*}
+Тогда $x[N]$ — вектор-столбец длины $n$, $b[M]$ — вектор-столбец длины $m$,
+$A[M,N]$ — матрица $m \times n$. Для подмножеств $N' \subset N$, $M' \subset M$
+запись $x[N']$ означает подвектор из компонент с индексами из $N'$, а $A[M',N']$ —
+подматрицу на пересечении соответствующих строк и столбцов. В частности,
+$a_j[M]$ — $j$-й столбец матрицы $A$, а $A[M,\Np]$ — набор столбцов с индексами
+из $\Np$. Размеры: $\abs{M} = m$, $\abs{N} = n$.
+\end{idea}
+
+\tableofcontents
+\newpage
+
+% Нумерация: section = глава, subsection = параграф (§)
+\renewcommand{\thesubsection}{\S\arabic{subsection}}
+
+\input{sections/01-lp-forms}
+\input{sections/02-support-vectors}
+\input{sections/03-extreme-points}
+\input{sections/04-simplex-intro}
+\input{sections/04a-simplex-method}
+\input{sections/04b-simplex-examples}
+
+\newpage
+\input{sections/05-transport-problem}
+\input{sections/06-initial-plan}
+\input{sections/07-potentials}
+\input{sections/08-transport-duality}
+\input{sections/08a-transport-extra}
+
+\newpage
+\input{sections/09-one-dim-min}
+\input{sections/10-direct-search}
+\input{sections/10a-direct-search-example}
+
+\newpage
+\input{sections/11-multidim-basics}
+\input{sections/12-gradient-methods}
+\input{sections/13-gradient-rate}
+
+\newpage
+\input{sections/14-step-estimates}
+\input{sections/15-constant-step}
+\input{sections/16-coordinate-descent}
+\input{sections/16a-hooke-jeeves-example}
+\input{sections/17-second-order}
+
+\newpage
+\input{sections/18-second-order-variants}
+\input{sections/19-quasi-newton}
+\input{sections/19a-quasi-newton-theory}
+\input{sections/19b-quasi-newton-example}
+\input{sections/20-marquardt-cg}
+
+\newpage
+\input{sections/21-constrained-overview}
+\input{sections/22-zoutendijk}
+\input{sections/22a-zoutendijk-example}
+
+\newpage
+\input{sections/23-projection-matrix}
+\input{sections/24-rosen}
+
+\newpage
+\input{sections/25-cutting-plane}
+\input{sections/25a-cutting-plane-example}
+\input{sections/26-conditional-gradient}
+\input{sections/26a-conditional-gradient-example}
+
+\newpage
+\input{sections/27-griffith-stewart}
+\input{sections/28-quadratic-approximation}
+\input{sections/29-penalty-methods}
+\input{sections/30-barrier-methods}
+
+\newpage
+\input{sections/31-newton-constrained}
+\input{sections/32-reduced-gradient}
+\input{sections/33-zangwill}
+
+\newpage
+\input{sections/34-svm-qp}
+
+\end{document}

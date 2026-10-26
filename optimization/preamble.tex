@@ -1,0 +1,165 @@
+%  Преамбула конспекта «Методы оптимизации»
+%  Компилировать pdfLaTeX (кодировка utf8, шрифты T2A).
+
+% Latin Modern не имеет T2A-начертаний, поэтому кириллица идёт через cm-super:
+% семейство cmr в кодировке T2A.
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{geometry}
+\geometry{a4paper,margin=2.5cm}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,patterns,decorations.pathmorphing,decorations.pathreplacing,shapes.geometric,calc,positioning}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots,fillbetween}
+\pgfplotsset{compat=1.18}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable}
+
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={Методы оптимизации --- конспект}
+}
+
+%  Окружения для теорем
+\theoremstyle{plain}
+% Счётчики независимы: теоремы, леммы и утверждения нумеруются каждое своим рядом.
+\newtheorem{theorem}{Теорема}
+\newtheorem{proposition}{Утверждение}
+\newtheorem{corollary}{Следствие}
+\newtheorem*{corollary*}{Следствие}
+\newtheorem{lemma}{Лемма}
+\newtheorem{criterion}{Признак}
+\newtheorem*{criterion*}{Признак}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+\newtheorem{example}{Пример}
+\newtheorem{exercise}{Упражнение}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Замечание}
+\newtheorem*{reminder}{Напоминание}
+
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+%  Пометки конспекта
+%    \begin{idea} ... \end{idea} — пояснения, которых не было на лекции
+%    \begin{warn} ... \end{warn} — неразборчиво / описка / требует сверки
+\newtcolorbox{idea}[1][]{
+  breakable,
+  enhanced,
+  colback=blue!4!white,
+  colframe=blue!45!black,
+  boxrule=0.4pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  title={Пояснение},
+  fonttitle=\bfseries\small,
+  coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-2pt},
+  boxed title style={colback=blue!45!black,boxrule=0pt,arc=1pt},
+  #1
+}
+
+\newtcolorbox{warn}[1][]{
+  breakable,
+  enhanced,
+  colback=orange!6!white,
+  colframe=orange!65!black,
+  boxrule=0.4pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  title={Сверить с записью},
+  fonttitle=\bfseries\small,
+  coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-2pt},
+  boxed title style={colback=orange!65!black,boxrule=0pt,arc=1pt},
+  #1
+}
+
+%  Пошаговая запись метода: \begin{algo}[title={Метод ...}] ... \end{algo}
+\newtcolorbox{algo}[1][]{
+  breakable,
+  enhanced,
+  colback=black!3!white,
+  colframe=black!60,
+  boxrule=0.4pt,
+  left=6pt,right=6pt,top=5pt,bottom=5pt,
+  title={Алгоритм},
+  fonttitle=\bfseries\small,
+  coltitle=white,
+  attach boxed title to top left={xshift=6pt,yshift=-2pt},
+  boxed title style={colback=black!60,boxrule=0pt,arc=1pt},
+  #1
+}
+
+% Шаги внутри algo
+\newlist{steps}{enumerate}{1}
+\setlist[steps]{label=\textbf{Шаг \arabic*.}, leftmargin=*, labelsep=0.6em,
+                topsep=4pt, itemsep=3pt}
+
+% Отметка начала лекции
+\newcommand{\lecture}[2]{%
+  \bigskip
+  \noindent\hfill\textit{\small #1\ifx\relax#2\relax\else, #2\fi}\\[-0.3em]
+  \noindent\rule{\textwidth}{0.4pt}
+  \medskip
+}
+
+%  Макросы
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\T}{^{\mathsf{T}}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\sgn}{\operatorname{sign}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% Индексные множества канонической задачи.
+%   N — индексы переменных, M — индексы ограничений,
+%   N_0^+ / N_0^0 — положительные / нулевые компоненты допустимой точки,
+%   N^+ — базисное множество (пополненное до |M|).
+\newcommand{\Np}{N^{+}}
+\newcommand{\Nz}{N^{0}}
+\newcommand{\Nzp}{N_0^{+}}
+\newcommand{\Nzz}{N_0^{0}}
+
+% Сокращение «опорный вектор», как в тетради.
+\newcommand{\ov}{о/в}
+
+% Клетка транспортной таблицы: #1 — тариф c_ij (мелко, сверху),
+% #2 — объём перевозки x_ij (обычным кеглем, снизу).
+\newcommand{\tc}[2]{\shortstack[r]{\scriptsize $#1$\\ $#2$}}
+% Пустая (незаполненная) клетка таблицы.
+\newcommand{\tcx}[1]{\tc{#1}{\times}}
+
+% Маркер «++ в кружке» из тетради: доказательство будет дописано позже.
+\newcommand{\plusplus}{%
+  \tikz[baseline=(pp.base)]{%
+    \node[draw, ellipse, inner xsep=3pt, inner ysep=1pt, line width=0.4pt] (pp)
+      {\footnotesize $+\,+$};}%
+}
+
+%  Быстрая сборка: \showfiguresfalse выключает все TikZ-рисунки.
+\newif\ifshowfigures
+\showfigurestrue
+
+\newcommand{\inputfig}[1]{%
+  \ifshowfigures
+    \input{#1}%
+  \else
+    \begin{center}\fbox{\small рисунок выключен: \texttt{\detokenize{#1}}}\end{center}%
+  \fi
+}

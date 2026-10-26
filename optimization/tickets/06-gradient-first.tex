@@ -1,0 +1,154 @@
+\section{Билет 6. Градиентные методы первого порядка}
+
+\ticketq{Градиентные методы первого порядка с различными способами выбора
+шага.}
+
+\paragraph{Постановка.}
+$f(x) \to \min$, $x \in \R^n$, $f$ дифференцируема. Градиент $\nabla f(x)$ —
+направление наискорейшего возрастания, $-\nabla f(x)$ — антиградиент. Схема
+\[
+  x_{k+1} = x_k - \alpha_k \nabla f(x_k) , \qquad \alpha_k > 0 .
+\]
+Останов: $\norm{\nabla f(x_k)} < \eps$.
+
+\textbf{Направление спуска} $d_k$ в точке $x_k$: $\nabla\T f(x_k)d_k < 0$;
+тогда $f(x_k + \alpha d_k) < f(x_k)$ при достаточно малом $\alpha > 0$.
+
+\paragraph{Теорема (антиградиент — направление спуска).}
+\textit{$\nabla f(x_k) \ne 0$ $\Rightarrow$ $d_k = -\nabla f(x_k)$ —
+направление спуска.}
+
+\textsc{Док-во.}
+$\nabla\T f(x_k)d_k = -\nabla\T f(x_k)\nabla f(x_k)
+ = -\norm{\nabla f(x_k)}^2 < 0$. $\blacksquare$
+
+\paragraph{Лемма (основная оценка).}
+\textit{Пусть $\nabla f$ липшицев: $\norm{\nabla f(x) - \nabla f(y)} \le
+R\norm{x-y}$. Тогда $\forall \alpha > 0$}
+\[
+  f\big(x_k - \alpha\nabla f(x_k)\big) - f(x_k)
+  \ \le\ -\alpha(1 - \alpha R)\,\norm{\nabla f(x_k)}^2 .
+\]
+
+\textsc{Док-во.} $x = x_k - \alpha\nabla f(x_k)$, $x - x_k =
+-\alpha\nabla f(x_k)$. По формуле конечных приращений и прибавив-вычтя
+$\nabla\T f(x_k)(x-x_k)$:
+\[
+  f(x) - f(x_k)
+  = \underbrace{\nabla\T f(x_k)(x-x_k)}_{=\,-\alpha\norm{\nabla f(x_k)}^2}
+  + \big(\nabla f(x_{\text{ср}}) - \nabla f(x_k)\big)\T(x - x_k) .
+\]
+Второе слагаемое — по Коши--Буняковскому и Липшицу, с учётом
+$\norm{x_{\text{ср}} - x_k} \le \norm{x-x_k}$:
+\[
+  \le R\norm{x-x_k}^2 = R\alpha^2\norm{\nabla f(x_k)}^2
+  \ \Rightarrow\
+  f(x) - f(x_k) \le \big(R\alpha^2 - \alpha\big)\norm{\nabla f(x_k)}^2 .
+  \ \blacksquare
+\]
+
+\paragraph{Вспомогательные неравенства (сильная выпуклость).}
+При $m\norm{z}^2 \le z\T H(y)z \le M\norm{z}^2$ из
+$f(y) \ge f(x) + g\T(y-x) + \tfrac{m}{2}\norm{y-x}^2$ минимизацией правой
+части по $y$ получаем $f_* \ge f(x) - \tfrac{1}{2m}\norm{g}^2$, то есть
+\[
+  \norm{g}^2 \ \ge\ 2m\big(f(x) - f_*\big) ,
+  \qquad
+  \tfrac{m}{2}\norm{x-x_*}^2 \le f(x) - f_* \le \tfrac{M}{2}\norm{x-x_*}^2 ,
+\]
+и $\nabla f$ липшицев с $R = M$. Эти три оценки — рабочий инструмент всех
+теорем о скорости: первая переводит $\norm{g}^2$ в убывание по значению
+функции, вторая — оценку по значению в оценку по аргументу.
+
+\paragraph{1) Постоянный шаг.}
+$\alpha_k \equiv \alpha = \mathrm{const}$.
+
+\textbf{Теорема.} \textit{Пусть $m\norm{z}^2 \le z\T H(y)z \le M\norm{z}^2$,
+$0 < m \le M$, и $0 < \alpha < 2/M$. Тогда}
+\[
+  \norm{x_{k+1} - x_*} \le q\,\norm{x_k - x_*} ,
+  \qquad q = \max\{\abs{1-\alpha m},\ \abs{1-\alpha M}\} ,
+\]
+\[
+  q_{\min} = \frac{M-m}{M+m}
+  \qquad\text{при}\qquad \alpha = \frac{2}{M+m} .
+\]
+
+\textsc{Док-во.} $\nabla f(x_*) = 0$, по формуле конечных приращений
+$\nabla f(x_k) - \nabla f(x_*) = H(\bar{x}_k)(x_k - x_*)$, поэтому
+\[
+  x_{k+1} - x_* = \big(E - \alpha H(\bar{x}_k)\big)(x_k - x_*)
+  \ \Rightarrow\
+  \norm{x_{k+1} - x_*} \le \norm{E - \alpha H(\bar{x}_k)}\cdot\norm{x_k - x_*} .
+\]
+$H$ симметрична, её собственные числа в $[m,M]$ $\Rightarrow$ у
+$E - \alpha H$ они равны $1 - \alpha\mu$, $\mu \in [m,M]$, и
+\[
+  \norm{E - \alpha H} = \max_{\mu \in [m,M]}\abs{1-\alpha\mu}
+   = \max\{\abs{1-\alpha m}, \abs{1-\alpha M}\} = q
+\]
+(модуль линейной функции максимален на конце отрезка). Минимум по $\alpha$ —
+там, где ветви сравниваются: $1 - \alpha m = \alpha M - 1$ $\Rightarrow$
+$\alpha = 2/(m+M)$, $q_{\min} = 1 - \frac{2m}{m+M} = \frac{M-m}{M+m}$.
+Отсюда же оценка по значению функции:
+\[
+  f(x_k) - f(x_*) \ \le\ \tfrac{M}{2}\norm{x_k-x_*}^2 \ \le\ C q^{2k} ,
+  \qquad C = \tfrac{M}{2}\norm{x_0 - x_*}^2 . \ \blacksquare
+\]
+
+Шаг надо знать заранее; при $\alpha \ge 2/M$ метод расходится.
+
+\paragraph{2) Дробление шага (правило Армихо).}
+$\alpha_0 > 0$, $\lambda \in (0,1)$, $\eps \in (0,1)$. Шаг принимается при
+\[
+  f\big(x_k - \alpha\nabla f(x_k)\big) - f(x_k)
+  \ \le\ -\eps\,\alpha\,\norm{\nabla f(x_k)}^2 ,
+\]
+иначе $\alpha := \lambda\alpha$.
+
+\textbf{Конечность дробления.} По лемме условие заведомо выполнено, если
+\[
+  -\alpha(1-\alpha R) \le -\eps\alpha
+  \ \iff\ 1 - \alpha R \ge \eps
+  \ \iff\ \alpha \le \frac{1-\eps}{R} ,
+\]
+то есть при достаточно малом $\alpha$ $\Rightarrow$ дробление конечно и шаг
+ограничен снизу.
+
+\textbf{Теорема (сходимость).} \textit{$f \in C^1$, ограничена снизу,
+$\nabla f$ липшицев $\Rightarrow$ $\norm{\nabla f(x_k)} \to 0$ при любом
+$x_0$.} Если добавить сильную выпуклость ($m, M$ как выше), то
+$x_k \to x_*$ и
+$f(x_{k+1}) - f(x_*) \le q\big(f(x_k) - f(x_*)\big)$, $q \in (0,1)$ —
+линейная скорость.
+
+\paragraph{3) Наискорейший спуск.}
+$\alpha_k = \argmin_{\alpha > 0} f\big(x_k - \alpha\nabla f(x_k)\big)$
+(одномерная задача решается методами билета~5).
+
+\textbf{Теорема (сходимость).} При условиях предыдущей теоремы
+$\norm{\nabla f(x_k)} \to 0$: наискорейший спуск не хуже любого
+фиксированного $\alpha$, и дальше работает та же лемма.
+
+\textbf{Теорема (ортогональность соседних градиентов).}
+\textit{Если $\alpha_k$ найден точно и минимум внутренний, то}
+$\nabla\T f(x_{k+1})\nabla f(x_k) = 0$.
+
+\textsc{Док-во.} $\varphi(\alpha) = f(x_k - \alpha g_k)$, $g_k = \nabla f(x_k)$;
+внутренний минимум $\Rightarrow$ $\varphi'(\alpha_k) = 0$, а
+\[
+  \varphi'(\alpha) = \nabla\T f(x_k - \alpha g_k)(-g_k)
+  \ \Rightarrow\
+  0 = -\nabla\T f(x_{k+1})g_k . \ \blacksquare
+\]
+Отсюда траектория — зигзаг с прямыми углами; при $M \gg m$ (вытянутые линии
+уровня) $q \to 1$ и сходимость медленная.
+
+\paragraph{Сравнение.}
+Постоянный шаг — дёшево, но $\alpha$ надо подобрать заранее по $m, M$;
+дробление — не требует знания констант, шаг подстраивается; наискорейший
+спуск — лучший шаг вдоль направления ценой одномерной минимизации на каждой
+итерации. У всех трёх скорость линейная, с $q$, зависящим от
+обусловленности $m/M$.
+
+\seefull{гл.~2, \S12--\S16}

@@ -1,0 +1,130 @@
+\section{Билет 15. Метод штрафных функций}
+
+\ticketq{Метод штрафных функций.}
+
+\paragraph{Постановка.}
+\[
+  \varphi(x) \to \min , \qquad
+  x \in S = \{\, x \mid \psi_i(x) \le 0,\ i = \overline{1,m};\
+    \chi_j(x) = 0,\ j = \overline{1,p} \,\} .
+\]
+Метод \textbf{внешних} штрафов сводит задачу к последовательности задач
+\emph{безусловной} минимизации: нарушение ограничений не запрещается, а
+штрафуется. Точки при этом могут быть недопустимыми.
+
+\paragraph{Штрафная функция.}
+$\alpha(x) \ge 0$, причём $\alpha(x) = 0 \iff x \in S$. Стандартные формы
+($p > 1$, обычно $p = 2$):
+\[
+  \text{одно неравенство } \psi \le 0 :\quad
+  \alpha(x) = \begin{cases} 0, & \psi(x) \le 0 , \\
+                            \psi(x)^p, & \psi(x) > 0 ; \end{cases}
+\]
+\[
+  \text{одно равенство } \chi = 0 :\quad \alpha(x) = \abs{\chi(x)}^p ;
+\]
+\[
+  \text{общий случай:}\quad
+  \alpha(x) = \sum_{i=1}^{m}\xi_i \max\{0, \psi_i(x)\}^p
+            + \sum_{j=1}^{p}\eta_j \abs{\chi_j(x)}^p ,
+  \qquad \xi_i, \eta_j > 0 .
+\]
+
+\paragraph{Вспомогательная задача.}
+\[
+  \varphi(x) + \mu\,\alpha(x) \to \min_{x \in V} , \quad \mu > 0 ,
+  \qquad x_\mu \ \text{— решение} ,
+  \qquad P(\mu) = \varphi(x_\mu) + \mu\,\alpha(x_\mu) .
+\]
+
+\paragraph{Лемма (свойства вспомогательных задач).}
+\textit{Пусть все функции непрерывны и при каждом $\mu > 0$ решение $x_\mu$
+существует. Тогда}
+\begin{csteps}
+  \item $\min\limits_{x\in S}\varphi(x) \ \ge\ \sup\limits_{\mu>0}P(\mu)$;
+  \item $\alpha(x_\mu)$ — невозрастающая функция $\mu$;
+  \item $\varphi(x_\mu)$ — неубывающая функция $\mu$;
+  \item $P(\mu)$ — неубывающая функция $\mu$;
+  \item $\lim\limits_{\mu\to\infty}P(\mu) = \sup\limits_{\mu>0}P(\mu)$.
+\end{csteps}
+
+\textsc{Док-во.}
+\textbf{1)} Для $x \in S$ штраф нулевой, а $x_\mu$ минимизирует
+$\varphi + \mu\alpha$ на $V \supset S$:
+\[
+  P(\mu) = \min_{z\in V}\big(\varphi(z)+\mu\alpha(z)\big)
+   \le \varphi(x) + \mu\underbrace{\alpha(x)}_{=\,0} = \varphi(x) ;
+\]
+минимум по $x \in S$ и супремум по $\mu$ дают~1).
+
+\textbf{2)} Пусть $0 < \lambda < \mu$. Из минимальности $x_\lambda$ и $x_\mu$:
+\[
+  \varphi(x_\lambda) + \lambda\alpha(x_\lambda)
+    \le \varphi(x_\mu) + \lambda\alpha(x_\mu) , \qquad
+  \varphi(x_\mu) + \mu\alpha(x_\mu)
+    \le \varphi(x_\lambda) + \mu\alpha(x_\lambda) .
+\]
+Складывая: $(\mu-\lambda)\big(\alpha(x_\mu) - \alpha(x_\lambda)\big) \le 0$
+$\Rightarrow$ $\alpha(x_\mu) \le \alpha(x_\lambda)$.
+
+\textbf{3)} Из первого неравенства:
+$\varphi(x_\lambda) - \varphi(x_\mu) \le
+ \lambda\big(\alpha(x_\mu)-\alpha(x_\lambda)\big) \le 0$.
+
+\textbf{4)}
+$P(\lambda) \le \varphi(x_\mu) + \lambda\alpha(x_\mu)
+ \le \varphi(x_\mu) + \mu\alpha(x_\mu) = P(\mu)$.
+
+\textbf{5)} $P$ монотонна и ограничена сверху величиной $\min_S\varphi$ (п.~1)
+$\Rightarrow$ предел равен супремуму. $\blacksquare$
+
+\paragraph{Теорема о сходимости.}
+\textit{Пусть решение $x_*$ существует, $\mu_k \to \infty$ и $\{x_{\mu_k}\}$
+лежит в компакте. Тогда}
+\[
+  \min_{S}\varphi = \lim_k \varphi(x_{\mu_k}) , \qquad
+  x_{\mu_k} \to x_* , \qquad
+  \mu_k\,\alpha(x_{\mu_k}) \to 0 .
+\]
+
+\textsc{Док-во.} По лемме $\varphi(x_\mu) \le P(\mu) \le \varphi_*$, где
+$\varphi_* = \min_S\varphi$, поэтому
+\[
+  \mu\,\alpha(x_\mu) = P(\mu) - \varphi(x_\mu)
+   \le \varphi_* - \varphi(x_{\mu_1})
+\]
+ограничено сверху константой $\Rightarrow$ $\alpha(x_\mu) \to 0$ при
+$\mu \to \infty$. Для предельной точки $\bar{x}$ по непрерывности
+$\alpha(\bar{x}) = 0$ $\Rightarrow$ $\bar{x} \in S$ $\Rightarrow$
+$\varphi(\bar{x}) \ge \varphi_*$. С другой стороны
+$\varphi(\bar{x}) = \lim\varphi(x_{\mu_k}) \le \varphi_*$. Значит
+$\varphi(\bar{x}) = \varphi_*$ — точка $\bar{x}$ оптимальна. Отсюда же
+$P(\mu) \to \varphi_*$ и $\mu\alpha(x_\mu) = P(\mu) - \varphi(x_\mu) \to 0$.
+$\blacksquare$
+
+\paragraph{Алгоритм.}
+\begin{csteps}
+  \item Задать $\mu_1 > 0$, $\eps > 0$, $\lambda > 1$, начальную $x_1$ (может
+        быть недопустимой), $k = 1$.
+  \item Решить $\min_x\big[\varphi(x) + \mu_k\alpha(x)\big]$ любым методом
+        безусловной минимизации (билеты~6--9); получить $x_{\mu_k}$.
+  \item Если $\mu_k\alpha(x_{\mu_k}) < \eps$ — конец.
+  \item Иначе $\mu_{k+1} = \lambda\mu_k$, $k := k+1$, к~шагу~2.
+\end{csteps}
+
+\textbf{Про критерий останова.} $\mu\alpha(x_\mu) < \eps$ означает
+$\varphi_* - \varphi(x_\mu) \le \varphi_* - P(\mu) + \mu\alpha(x_\mu)$, где
+$\varphi_* - P(\mu) \to 0$; практически это малое нарушение ограничений.
+
+\paragraph{Внешние и внутренние штрафы.}
+Здесь $\mu \to +\infty$ и точки могут быть недопустимыми. Во внутреннем
+(барьерном, билет~16) методе наоборот: точки обязаны лежать строго внутри, а
+параметр $\mu \to +0$.
+
+\paragraph{Ограничения.}
+При больших $\mu$ вспомогательная функция плохо обусловлена и минимизируется
+тяжелее; её минимум лежит вне $S$; точное решение требует $\mu \to \infty$,
+что недостижимо; слишком быстрый рост $\mu$ делает счёт неустойчивым,
+слишком медленный — долгим.
+
+\seefull{гл.~3, \S3 и \S11 (численный пример в \S11)}

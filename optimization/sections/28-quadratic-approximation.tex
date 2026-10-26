@@ -1,0 +1,314 @@
+\subsection{Метод квадратичной аппроксимации}
+\label{subsec:quad-approx}
+
+\begin{idea}
+В тетради название метода пропущено. По содержанию это \textbf{метод
+квадратичной аппроксимации} — прямой аналог метода Ньютона для задач с
+ограничениями: там, где метод условного градиента (\S\ref{subsec:cond-gradient})
+минимизирует линейную модель, здесь минимизируется квадратичная. На нём же
+основано семейство методов последовательного квадратичного программирования.
+\end{idea}
+
+\[
+  \begin{cases}
+    \varphi(x) \to \min , & x \in S , \\
+    \varphi(x) \ \text{— выпуклая, дважды дифференцируемая} , \\
+    S \ \text{— выпуклый компакт} .
+  \end{cases}
+\]
+
+\begin{algo}[title={Метод квадратичной аппроксимации}]
+\textbf{I. Начальный этап.} Задать $x_0 \in S$ — начальное приближение,
+$k = 0$; итерации вида $x_{k+1} = x_k + \alpha_k s_k$, $\alpha_k > 0$.
+
+\medskip
+\textbf{II. $k$-й шаг.} Рассмотрим квадратичную аппроксимацию в окрестности
+$x_k$:
+\begin{steps}
+  \item Положим
+        \[
+          \psi_k(x) = \nabla\T\varphi(x_k)\,(x - x_k)
+            + \tfrac{1}{2}\,(x - x_k)\T H(x_k)\,(x - x_k)
+        \]
+        и решим вспомогательную задачу
+        \[
+          \psi_k \to \min , \qquad x \in S .
+        \]
+        Пусть $y_k$ — её решение; так как $x_k \in S$ и $\psi_k(x_k) = 0$,
+        \[
+          \eta_k = \psi_k(y_k) \le \psi_k(x_k) = 0 .
+        \]
+        В качестве направления берём $s_k = y_k - x_k$.
+  \item Шаг выбирается как в методе второго порядка для задач без ограничений:
+        заданы $\alpha_0 = 1$, $\eps \in (0,1)$, $\lambda \in (0,1)$, и
+        $\alpha_k = \alpha_0 \lambda^{\,i_k}$ — первое значение, удовлетворяющее
+        условию дробления
+        \begin{equation}\label{eq:qa-armijo}
+          \varphi(x_k + \alpha s_k) - \varphi(x_k) \ \le\ \alpha\,\eps\,\eta_k
+        \end{equation}
+        (либо $\varphi(x_{k+1}) \to \min_{\alpha > 0}$ — наискорейший спуск
+        вдоль $s_k$).
+\end{steps}
+\end{algo}
+
+\subsubsection*{Вспомогательные факты}
+
+\begin{lemma}\label{lem:qa-basic}
+В условиях задачи:
+\begin{enumerate}[label=$\arabic*^\circ$,left=0pt]
+  \item $x_k + \alpha s_k \in S$ при всех $\alpha \in [0,1]$;
+  \item $\nabla\T\varphi(x_k)\, s_k \le \eta_k \le 0$;
+  \item если дополнительно $\varphi$ сильно выпукла с константой $m$, то
+        \[
+          \eta_k \ \le\ -\tfrac{m}{2}\,\norm{s_k}^2 .
+        \]
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+$1^\circ$ $x_k + \alpha s_k = (1-\alpha)x_k + \alpha y_k$ — выпуклая комбинация
+точек $x_k, y_k \in S$.
+
+$2^\circ$ По определению $\eta_k = \psi_k(y_k)
+= \nabla\T\varphi(x_k)s_k + \tfrac12 s_k\T H(x_k) s_k$, а второе слагаемое
+неотрицательно в силу выпуклости $\varphi$ ($H \succeq 0$). Неравенство
+$\eta_k \le 0$ — из $\psi_k(x_k) = 0$.
+
+$3^\circ$ Функция $\psi_k$ сильно выпукла с той же константой $m$, а $y_k$ —
+её минимум на $S$, поэтому $\nabla\T\psi_k(y_k)(x_k - y_k) \ge 0$. Тогда
+\[
+  \underbrace{\psi_k(x_k)}_{=\ 0}
+  \ \ge\ \psi_k(y_k) + \underbrace{\nabla\T\psi_k(y_k)(x_k - y_k)}_{\ge\ 0}
+    + \tfrac{m}{2}\norm{x_k - y_k}^2
+  \ \ge\ \eta_k + \tfrac{m}{2}\norm{s_k}^2 . \qedhere
+\]
+\end{proof}
+
+\begin{lemma}\label{lem:qa-step}
+Дробление~\eqref{eq:qa-armijo} конечно, и принятый шаг отделён от нуля:
+существует $\bar\alpha > 0$ с $\alpha_k \ge \min\{1, \bar\alpha\,\abs{\eta_k}\}$.
+\end{lemma}
+
+\begin{proof}
+Гессиан непрерывен на компакте $S$, значит ограничен: $\norm{H(x)} \le M$.
+Тогда
+\[
+  \varphi(x_k + \alpha s_k) \ \le\ \varphi(x_k)
+    + \alpha \nabla\T\varphi(x_k) s_k + \tfrac{M}{2}\alpha^2 \norm{s_k}^2
+  \ \overset{\text{лемма }\ref{lem:qa-basic}}{\le}\
+  \varphi(x_k) + \alpha\eta_k + \tfrac{M}{2}\alpha^2\norm{s_k}^2 .
+\]
+Для выполнения~\eqref{eq:qa-armijo} достаточно
+\[
+  \alpha\eta_k + \tfrac{M}{2}\alpha^2\norm{s_k}^2 \le \alpha\eps\eta_k
+  \qquad\Longleftrightarrow\qquad
+  \alpha \ \le\ -\frac{2(1-\eps)\,\eta_k}{M \norm{s_k}^2} ,
+\]
+и правая часть положительна при $\eta_k < 0$. Значит после конечного числа
+дроблений условие выполнится. Если же принятый шаг не равен $\alpha_0$, то
+предыдущее пробное значение $\alpha_k/\lambda$ было отвергнуто, откуда
+\[
+  \alpha_k \ >\ -\frac{2\lambda(1-\eps)\,\eta_k}{M \norm{s_k}^2}
+  \ \ge\ \frac{2\lambda(1-\eps)}{M C^2}\, \abs{\eta_k} ,
+\]
+где $C = \operatorname{diam} S \ge \norm{s_k}$.
+\end{proof}
+
+\subsubsection*{Теоремы о сходимости}
+
+\begin{theorem}\label{thm:qa-1}
+Пусть $\varphi(x)$ удовлетворяет условиям постановки задачи и $\{x_k\}$
+построена по описанной схеме. Тогда независимо от выбора начального
+приближения последовательность $\varphi(x_k)$ монотонно убывает и
+\[
+  \lim_{k \to \infty} \varphi(x_k) = \varphi(x_*) = \min_{x \in S}\varphi(x) .
+\]
+\end{theorem}
+
+\begin{idea}[title={Доказательство (на лекции не приводилось)}]
+\begin{proof}
+\textbf{Шаг 1: убывание и $\eta_k \to 0$.} Из~\eqref{eq:qa-armijo}
+\[
+  \varphi(x_k) - \varphi(x_{k+1}) \ \ge\ \eps\,\alpha_k\,\abs{\eta_k} \ \ge\ 0 ,
+\]
+то есть $\varphi(x_k)$ не возрастает; она ограничена снизу ($S$ — компакт,
+$\varphi$ непрерывна), значит сходится, и $\varphi(x_k) - \varphi(x_{k+1}) \to 0$.
+По лемме~\ref{lem:qa-step}
+\[
+  \varphi(x_k) - \varphi(x_{k+1})
+  \ \ge\ \eps \min\Big\{ \abs{\eta_k},\ \tfrac{2\lambda(1-\eps)}{MC^2}\eta_k^2 \Big\} ,
+\]
+и правая часть стремится к нулю только если $\eta_k \to 0$.
+
+\medskip
+\textbf{Шаг 2: предельная точка оптимальна.} Пусть $x_{k_j} \to \bar{x}$
+(существует по компактности $S$). По определению $y_k$ как минимума $\psi_k$
+на $S$,
+\[
+  \eta_k \ \le\ \psi_k(x)
+  = \nabla\T\varphi(x_k)(x - x_k) + \tfrac12 (x - x_k)\T H(x_k)(x - x_k)
+  \qquad \forall x \in S .
+\]
+Переходя к пределу по $k_j$ и пользуясь $\eta_{k_j} \to 0$ и непрерывностью
+$\nabla\varphi$, $H$:
+\[
+  0 \ \le\ \nabla\T\varphi(\bar{x})(x - \bar{x})
+    + \tfrac12 (x - \bar{x})\T H(\bar{x})(x - \bar{x})
+  \qquad \forall x \in S .
+\]
+Подставим $x = \bar{x} + t(z - \bar{x})$, где $z \in S$, $t \in (0,1]$ (такая
+точка лежит в $S$ по выпуклости):
+\[
+  0 \ \le\ t\,\nabla\T\varphi(\bar{x})(z - \bar{x})
+    + \tfrac{t^2}{2}(z - \bar{x})\T H(\bar{x})(z - \bar{x}) .
+\]
+Разделив на $t > 0$ и устремив $t \to 0$, получаем
+\[
+  \nabla\T\varphi(\bar{x})\,(z - \bar{x}) \ \ge\ 0 \qquad \forall z \in S ,
+\]
+а это — необходимое и (в силу выпуклости $\varphi$) достаточное условие
+минимума. Значит $\bar{x}$ — точка минимума, и
+$\varphi(\bar{x}) = \varphi(x_*)$.
+
+\medskip
+\textbf{Шаг 3.} Последовательность $\varphi(x_k)$ монотонна и имеет предел;
+по шагу~2 вдоль подпоследовательности этот предел равен $\varphi(x_*)$,
+следовательно $\varphi(x_k) \to \varphi(x_*)$.
+\end{proof}
+\end{idea}
+
+\begin{theorem}\label{thm:qa-2}
+Если в дополнение к условиям теоремы~\ref{thm:qa-1} функция $\varphi(x)$
+\textbf{сильно выпукла}, то есть
+\[
+  \exists\, m, M > 0,\ m \le M : \qquad
+  m \norm{y}^2 \le y\T H(x)\, y \le M \norm{y}^2 ,
+\]
+то $\{x_k\} \to x_*$ со \textbf{сверхлинейной} скоростью.
+\end{theorem}
+
+\begin{idea}[title={Доказательство (на лекции не приводилось)}]
+\begin{proof}
+\textbf{Шаг 1: $x_k \to x_*$.} Из сильной выпуклости
+$\tfrac{m}{2}\norm{x_k - x_*}^2 \le \varphi(x_k) - \varphi(x_*) \to 0$ по
+теореме~\ref{thm:qa-1}, значит $x_k \to x_*$ (точка $x_*$ при сильной
+выпуклости единственна).
+
+\medskip
+\textbf{Шаг 2: единичный шаг в конце концов принимается.} По
+лемме~\ref{lem:qa-basic}\,$3^\circ$
+$\norm{s_k}^2 \le \tfrac{2}{m}\abs{\eta_k} \to 0$. По формуле Тейлора
+\[
+  \varphi(x_k + s_k) - \varphi(x_k)
+  = \nabla\T\varphi(x_k)s_k + \tfrac12 s_k\T H(x_k) s_k + o\big(\norm{s_k}^2\big)
+  = \eta_k + o\big(\norm{s_k}^2\big) ,
+\]
+так что условие~\eqref{eq:qa-armijo} при $\alpha = 1$ равносильно
+\[
+  (1 - \eps)\,\abs{\eta_k} \ \ge\ o\big(\norm{s_k}^2\big) .
+\]
+Но $\abs{\eta_k} \ge \tfrac{m}{2}\norm{s_k}^2$, то есть левая часть имеет
+порядок $\norm{s_k}^2$, а правая — строго меньший. Значит начиная с некоторого
+номера $\alpha_k = \alpha_0 = 1$, и
+\[
+  x_{k+1} = x_k + s_k = y_k .
+\]
+
+\medskip
+\textbf{Шаг 3: оценка расстояния.} Обозначим
+$e_k = x_k - x_*$, $d_k = y_k - x_*$. Точка $y_k$ минимизирует
+$q_k(x) = \varphi(x_k) + \psi_k(x)$ на выпуклом $S$, поэтому
+\[
+  \nabla\T q_k(y_k)\,(x - y_k) \ge 0 \quad \forall x \in S ,
+  \qquad
+  \nabla q_k(y) = \nabla\varphi(x_k) + H(x_k)(y - x_k) ,
+\]
+а точка $x_*$ минимизирует $\varphi$ на $S$:
+$\nabla\T\varphi(x_*)(x - x_*) \ge 0$ $\forall x \in S$. Подставим в первое
+неравенство $x = x_*$, во второе $x = y_k$ и сложим:
+\[
+  \big[\nabla\varphi(x_k) - \nabla\varphi(x_*) + H(x_k)(y_k - x_k)\big]\T
+  (x_* - y_k) \ \ge\ 0 .
+\]
+По формуле Ньютона--Лейбница
+$\nabla\varphi(x_k) - \nabla\varphi(x_*) = G_k e_k$, где
+$G_k = \int_0^1 H(x_* + t e_k)\,dt$. Так как $y_k - x_k = d_k - e_k$,
+последнее неравенство переписывается как
+\[
+  \big[H(x_k)\, d_k + \big(G_k - H(x_k)\big) e_k\big]\T d_k \ \le\ 0 ,
+\]
+откуда
+\[
+  m \norm{d_k}^2 \ \le\ d_k\T H(x_k)\, d_k
+  \ \le\ \norm{G_k - H(x_k)} \cdot \norm{e_k} \cdot \norm{d_k} ,
+\]
+то есть
+\begin{equation}\label{eq:qa-rate}
+  \norm{y_k - x_*} \ \le\ \frac{1}{m}\,\norm{G_k - H(x_k)}\cdot\norm{x_k - x_*} .
+\end{equation}
+
+\medskip
+\textbf{Шаг 4.} Гессиан непрерывен, а $x_k \to x_*$, поэтому
+\begin{align*}
+  \norm{G_k - H(x_k)}
+  &= \Big\| \int_0^1 \big[H(x_* + t e_k) - H(x_k)\big] dt \Big\| \\
+  &\le \sup_{t \in [0,1]} \norm{H(x_* + t e_k) - H(x_k)}
+   \ \to\ 0 , \quad k \to \infty .
+\end{align*}
+С учётом шага~2 ($x_{k+1} = y_k$) и~\eqref{eq:qa-rate}
+\[
+  \norm{x_{k+1} - x_*} = o\big(\norm{x_k - x_*}\big) ,
+\]
+то есть сходимость сверхлинейная.
+\end{proof}
+\end{idea}
+
+\begin{theorem}\label{thm:qa-3}
+Если дополнительно к условиям теоремы~\ref{thm:qa-2} гессиан $H(\cdot)$
+удовлетворяет условию Липшица,
+\[
+  \norm{H(x) - H(y)} \le R\,\norm{x - y} \qquad \forall x, y ,
+\]
+то скорость сходимости \textbf{квадратичная}:
+\[
+  \norm{x_{k+1} - x_*} \ \le\ \frac{R}{2m}\,\norm{x_k - x_*}^2 .
+\]
+\end{theorem}
+
+\begin{idea}[title={Доказательство (на лекции не приводилось)}]
+\begin{proof}
+Повторяем шаги~1--3 доказательства теоремы~\ref{thm:qa-2} вплоть
+до оценки~\eqref{eq:qa-rate}; остаётся уточнить $\norm{G_k - H(x_k)}$.
+Точка $x_* + t e_k$ отстоит от $x_k = x_* + e_k$ на $(1-t)\norm{e_k}$, поэтому
+по условию Липшица
+\[
+  \norm{G_k - H(x_k)}
+  \ \le\ \int_0^1 \norm{H(x_* + t e_k) - H(x_k)}\,dt
+  \ \le\ \int_0^1 R\,(1 - t)\,\norm{e_k}\,dt
+  = \frac{R}{2}\,\norm{e_k} .
+\]
+Подставляя в~\eqref{eq:qa-rate} и пользуясь $x_{k+1} = y_k$,
+\[
+  \norm{x_{k+1} - x_*} \ \le\ \frac{R}{2m}\,\norm{x_k - x_*}^2 . \qedhere
+\]
+\end{proof}
+\end{idea}
+
+\begin{idea}
+Три теоремы образуют лестницу, типичную для методов второго порядка:
+\begin{itemize}[nosep,left=0pt]
+  \item выпуклость $+$ дробление шага дают \emph{глобальную} сходимость по
+        значению функции, но без оценки скорости;
+  \item сильная выпуклость добавляет единственность $x_*$, сходимость самих
+        точек и \emph{сверхлинейную} скорость — за счёт того, что вблизи
+        минимума единичный шаг перестаёт отвергаться;
+  \item липшицевость гессиана превращает сверхлинейную оценку в
+        \emph{квадратичную}, в точности как в теореме~\ref{thm:newton-rate}
+        для безусловной задачи.
+\end{itemize}
+Содержательно вся разница с методом Ньютона в том, что минимум квадратичной
+модели берётся не по всему $\R^n$, а по $S$; ключевое
+неравенство~\eqref{eq:qa-rate} получается не из явной формулы
+$y_k = x_k - H^{-1}\nabla\varphi$, а из вариационного неравенства — условия
+минимума на выпуклом множестве.
+\end{idea}

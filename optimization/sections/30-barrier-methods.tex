@@ -1,0 +1,245 @@
+\subsection{Метод барьерных функций}
+\label{subsec:barrier}
+
+Рассмотрим задачу
+\[
+  \begin{cases}
+    \varphi(x) \to \min , & x \in S , \\
+    S = \{\, x \mid \psi_i(x) \le 0,\ i = \overline{1,m} \,\} .
+  \end{cases}
+\]
+
+\begin{remark}
+Метод барьерных функций \textbf{неприменим}, если в задаче есть жёсткие
+ограничения (равенства).
+\end{remark}
+
+\begin{idea}
+Причина проста: барьер должен расти к $+\infty$ при подходе к границе
+\emph{изнутри}, то есть метод всё время держится внутри допустимого множества.
+У множества, заданного равенством $\chi(x) = 0$, внутренности нет вовсе —
+«внутри» просто негде находиться. Поэтому равенства обрабатывают внешним
+штрафом (\S\ref{subsec:penalty}), а барьером — только неравенства; на практике
+их часто комбинируют.
+\end{idea}
+
+Пусть $\beta(x)$ — \textbf{барьерная функция}:
+\[
+  \beta(x) \xrightarrow[\ x \to \partial S\ ]{} +\infty , \qquad x \in S .
+\]
+На её основе строится новая функция цели
+\[
+  \varphi_0(x) = \varphi(x) + M\,\beta(x) , \qquad M > 0 , \quad x \in S ,
+\]
+и рассматривается вспомогательная задача $\varphi_0(x) \to \min$, $x \in S$.
+
+\paragraph{1) Одно неравенство.}
+Пусть $S = \{\, x \mid \psi(x) \le 0 \,\}$. Тогда
+\[
+  \beta(x) = -\frac{1}{\psi(x)} ,
+  \qquad\text{вспомогательная задача}\qquad
+  \begin{cases}
+    \varphi(x) + M\beta(x) \to \min , \\
+    M \to +0 , \\
+    x \in \mathring{S} = \{\, x \mid \psi(x) < 0 \,\} .
+  \end{cases}
+\]
+Такая форма неудобна для дифференцирования; удобнее
+\[
+  \beta(x) = -\ln\big(-\psi(x)\big) .
+\]
+
+\paragraph{2) Общая постановка.}
+\[
+  \beta(x) = -\sum_{i=1}^{m} \xi_i \cdot \frac{1}{\psi_i(x)} ,
+  \qquad \xi_i > 0 ,
+  \qquad\text{или}\qquad
+  \beta(x) = -\sum_{i=1}^{m} \xi_i \ln\big(-\psi_i(x)\big) .
+\]
+
+\begin{idea}
+Почему логарифмический барьер удобнее обратного. У $-1/\psi$ производная
+$\psi'/\psi^2$ растёт при подходе к границе как $1/\psi^2$, у
+$-\ln(-\psi)$ — только как $1/\psi$. Логарифмический барьер «мягче»: его
+градиент и гессиан ведут себя заметно лучше, вспомогательная задача
+оказывается лучше обусловленной, и именно он лежит в основе современных
+методов внутренней точки.
+
+Общий множитель $M$ играет ту же роль, что $\mu$ у внешнего штрафа, но в
+обратную сторону: там $\mu \to +\infty$ ужесточал наказание за выход, здесь
+$M \to +0$ ослабляет барьер, позволяя приближениям подходить к границе всё
+ближе.
+\end{idea}
+
+\begin{remark}
+В этих методах создаётся блок проверки выхода за границу области; в случае
+необходимости он вносит коррективы при решении задачи.
+\end{remark}
+
+\subsubsection*{Свойства вспомогательных задач и сходимость}
+
+\begin{idea}[title={Откуда этот материал}]
+Для внешнего штрафа лемма о свойствах $P(\mu)$ и теорема о сходимости
+разбирались на лекции (\S\ref{subsec:penalty}); для барьера зеркальные
+утверждения были только названы. Ниже они выписаны и доказаны — выкладки
+полностью симметричны, с заменой $\mu \to +\infty$ на $M \to +0$.
+\end{idea}
+
+Обозначим через $x_M$ решение вспомогательной задачи
+$\varphi(x) + M\beta(x) \to \min$, $x \in \mathring{S}$, и
+\[
+  \Theta(M) = \varphi(x_M) + M\,\beta(x_M) .
+\]
+Считаем $\beta \ge 0$ на $\mathring{S}$ (для $\beta = -\sum \xi_i/\psi_i$ это
+выполнено).
+
+\begin{lemma}\label{lem:barrier}
+\begin{enumerate}[label=\arabic*),left=0pt,nosep]
+  \item $\displaystyle\min_{x \in S}\varphi(x) \ \le\ \Theta(M)$ при всех $M > 0$;
+  \item $\beta(x_M)$ не убывает при $M \to 0$;
+  \item $\varphi(x_M)$ не возрастает при $M \to 0$;
+  \item $\Theta(M)$ — неубывающая функция $M$;
+  \item $\displaystyle\inf_{M>0}\Theta(M) = \lim_{M \to 0}\Theta(M)$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+Пусть $M_1 > M_2 > 0$, $x_i = x_{M_i}$.
+
+\textbf{1)} $x_M \in \mathring{S} \subset S$ и $\beta \ge 0$, поэтому
+$\Theta(M) \ge \varphi(x_M) \ge \min_S\varphi$.
+
+\textbf{2)} Из минимальности $x_1$ и $x_2$:
+\[
+  \varphi(x_1) + M_1\beta(x_1) \le \varphi(x_2) + M_1\beta(x_2) ,
+  \qquad
+  \varphi(x_2) + M_2\beta(x_2) \le \varphi(x_1) + M_2\beta(x_1) .
+\]
+Складывая, $(M_1 - M_2)\big(\beta(x_1) - \beta(x_2)\big) \le 0$, то есть
+$\beta(x_{M_1}) \le \beta(x_{M_2})$.
+
+\textbf{3)} Из второго неравенства
+$\varphi(x_2) - \varphi(x_1) \le M_2\big(\beta(x_1) - \beta(x_2)\big) \le 0$.
+
+\textbf{4)}
+$\Theta(M_2) \le \varphi(x_1) + M_2\beta(x_1) \le \varphi(x_1) + M_1\beta(x_1)
+ = \Theta(M_1)$.
+
+\textbf{5)} $\Theta$ монотонна и ограничена снизу по пункту~1), поэтому нижняя
+грань достигается в пределе.
+\end{proof}
+
+\begin{theorem}\label{thm:barrier}
+Пусть $\mathring{S} \ne \varnothing$, функции непрерывны, при каждом $M > 0$
+решение $x_M$ существует, $\{x_M\}$ лежит в компакте и всякая точка $S$
+приближается точками $\mathring{S}$. Тогда предельные точки $\{x_M\}$ —
+решения исходной задачи, причём
+\[
+  M\,\beta(x_M) \xrightarrow[M \to 0]{} 0 ,
+  \qquad
+  \min_{S}\varphi = \lim_{M \to 0}\Theta(M) .
+\]
+\end{theorem}
+
+\begin{proof}
+Обозначим $\varphi_* = \min_S\varphi$. По условию плотности для любого
+$\eps > 0$ найдётся $y \in \mathring{S}$ с $\varphi(y) < \varphi_* + \eps$.
+Тогда
+\[
+  \Theta(M) \le \varphi(y) + M\beta(y) \xrightarrow[M\to0]{} \varphi(y)
+  \quad\Longrightarrow\quad
+  \lim_{M\to0}\Theta(M) \le \varphi_* + \eps \quad \forall \eps ,
+\]
+то есть $\lim\Theta \le \varphi_*$; обратное неравенство — пункт~1) леммы.
+Значит $\lim_{M\to0}\Theta(M) = \varphi_*$, откуда
+\[
+  0 \le M\beta(x_M) = \Theta(M) - \varphi(x_M)
+    \le \Theta(M) - \varphi_* \longrightarrow 0 .
+\]
+Для предельной точки $\bar{x}$: $\bar{x} \in S$ по замкнутости, и
+$\varphi(\bar{x}) = \lim\varphi(x_M) \le \lim\Theta = \varphi_*$, то есть
+$\bar{x}$ — решение.
+\end{proof}
+
+\begin{idea}
+Условие «всякая точка $S$ приближается точками $\mathring{S}$» существенно:
+без него оптимум может лежать на изолированном куске границы, к которому
+изнутри не подойти, и барьерный метод до него не доберётся. Для выпуклого $S$
+с непустой внутренностью оно выполняется автоматически.
+\end{idea}
+
+\begin{idea}
+Формально барьер не выпускает точку из $\mathring{S}$ — но только если шаг
+достаточно мал. Любой одномерный поиск вдоль направления спуска может «перелететь»
+границу, а за ней $\ln(-\psi)$ просто не определён (или $-1/\psi$ меняет знак и
+становится притягивающим). Поэтому в реализацию добавляют явную проверку
+допустимости пробной точки и, если она нарушена, дробят шаг. У внешнего штрафа
+такой блок не нужен: там функция определена всюду.
+\end{idea}
+
+\begin{example}\label{ex:barrier}
+\[
+  \varphi(x) = x - 1 \ \to\ \min , \qquad \psi(x) = -x + 2 \le 0 ,
+\]
+то есть $S = \{x \ge 2\}$, решение $x_* = 2$, $\varphi(x_*) = 1$.
+
+Берём $\beta(x) = -1/\psi(x) = 1/(x-2)$ и вспомогательную задачу
+\[
+  \Big( (x-1) - \frac{M}{-x+2} \Big) \ \to\ \min
+  \qquad\text{то есть}\qquad
+  F_M(x) = (x - 1) + \frac{M}{x - 2} \ \to\ \min .
+\]
+Условие экстремума:
+\[
+  F_M'(x) = 1 - \frac{M}{(x-2)^2} = 0
+  \qquad\Longrightarrow\qquad
+  (x-2)^2 = M
+  \qquad\Longrightarrow\qquad
+  x = 2 \pm \sqrt{M} ,
+\]
+причём $x_1 = 2 - \sqrt{M}$ лежит вне области, а
+\[
+  x_2 = 2 + \sqrt{M} = x_M .
+\]
+Проверим все свойства:
+\[
+  \begin{array}{ll}
+    1)\ x_M = 2 + \sqrt{M} \xrightarrow[M \to +0]{} 2 = x_* ;
+    &\qquad
+    2)\ \varphi(x_M) = \sqrt{M} + 1 \ \text{— возрастает по } M ; \\[4pt]
+    3)\ \varphi(x_M) \xrightarrow[M \to +0]{} \varphi(x_*) = 1 ;
+    &\qquad
+    4)\ \beta(x_M) = \dfrac{1}{\sqrt{M}} \xrightarrow[M \to +0]{} +\infty ; \\[8pt]
+    \multicolumn{2}{l}{
+    5)\ M\,\beta(x_M) = \dfrac{M}{\sqrt{M}} = \sqrt{M}
+        \xrightarrow[M \to +0]{} 0 . }
+  \end{array}
+\]
+\end{example}
+
+\begin{idea}[title={Внешний штраф против барьера}]
+Сравним пример~\ref{ex:penalty} и пример~\ref{ex:barrier} — картины
+зеркальные:
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+ & внешний штраф & барьер \\
+\midrule
+параметр        & $\mu \to +\infty$       & $M \to +0$ \\
+приближения     & вне $S$                 & строго внутри $S$ \\
+$\varphi(x_\cdot)$ & растёт к $\min_S\varphi$ \emph{снизу}
+                & убывает к $\min_S\varphi$ \emph{сверху} \\
+штраф/барьер    & $\alpha(x_\mu) \downarrow 0$
+                & $\beta(x_M) \uparrow +\infty$ \\
+произведение    & $\mu\alpha(x_\mu) \to 0$ & $M\beta(x_M) \to 0$ \\
+равенства       & обрабатываются          & неприменим \\
+\bottomrule
+\end{tabular}
+\end{center}
+Общее у них то, что произведение «параметр $\times$ штраф» стремится к нулю —
+именно оно и служит критерием останова в обоих методах. Разница в том, с какой
+стороны приближения подходят к оптимуму, и это решает выбор метода: если вне
+$S$ модель теряет смысл (отрицательные концентрации, корень из отрицательного
+числа), берут барьер; если допустимое множество задано и равенствами —
+внешний штраф.
+\end{idea}

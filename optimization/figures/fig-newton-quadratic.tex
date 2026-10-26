@@ -1,0 +1,46 @@
+% Квадратичные аппроксимации на последовательных итерациях метода Ньютона:
+% вершина очередной параболы становится следующей точкой.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >={Stealth[length=2mm]}]
+
+\def\sx{1.0}
+\def\sy{1.0}
+
+% оси
+\draw[->] (-0.2,0) -- (6.4,0) node[right, font=\footnotesize] {$x$};
+\draw[->] (0,-0.2) -- (0,3.9) node[above, font=\footnotesize] {$f(x)$};
+
+% сама функция: несимметричная "чаша"
+\draw[blue!55!black, very thick, domain=0.35:6.0, samples=120, smooth]
+  plot (\x, {0.42*(\x-3.4)*(\x-3.4) + 0.35 + 0.9/(\x+0.3)});
+\node[blue!55!black, font=\footnotesize, anchor=west] at (5.4,3.0) {$f$};
+
+% три квадратичные аппроксимации, вершины в x_0 > x_1 > x_2 -> x_*
+% аппроксимация в x_0 = 1.0 (вершина следующей точки x_1 = 2.0)
+\draw[orange!75!black, thick, domain=0.75:3.6, samples=60, smooth]
+  plot (\x, {1.15*(\x-2.0)*(\x-2.0) + 1.05});
+% аппроксимация в x_1 = 2.0 (вершина x_2 = 2.95)
+\draw[orange!60!black, thick, domain=1.9:4.2, samples=60, smooth]
+  plot (\x, {0.80*(\x-2.95)*(\x-2.95) + 0.62});
+% аппроксимация в x_2 = 2.95 (вершина близко к x_*)
+\draw[orange!45!black, thick, domain=2.3:4.6, samples=60, smooth]
+  plot (\x, {0.55*(\x-3.35)*(\x-3.35) + 0.48});
+
+% отметки точек на оси
+\foreach \p/\lab in {1.0/{x_k}, 2.0/{x_{k+1}}, 2.95/{x_{k+2}}} {
+  \draw[gray, dashed] (\p,0) -- (\p,{0.42*(\p-3.4)*(\p-3.4) + 0.35 + 0.9/(\p+0.3)});
+  \fill[orange!75!black] (\p,0) circle (1.5pt);
+}
+\node[font=\scriptsize, anchor=north] at (1.0,-0.08) {$x_k$};
+\node[font=\scriptsize, anchor=north] at (2.05,-0.08) {$x_{k+1}$};
+\node[font=\scriptsize, anchor=north] at (3.05,-0.08) {$x_{k+2}$};
+
+\end{tikzpicture}
+\caption{Метод Ньютона как последовательность квадратичных аппроксимаций. В
+точке $x_k$ строится парабола $\psi_k$, совпадающая с $f$ по значению,
+градиенту и гессиану; её вершина даёт $x_{k+1}$, то есть единичный шаг
+$\alpha_k = 1$ вдоль ньютоновского направления. Чем ближе к минимуму, тем
+теснее парабола прилегает к $f$ — отсюда квадратичная скорость.}
+\label{fig:newton-quadratic}
+\end{figure}

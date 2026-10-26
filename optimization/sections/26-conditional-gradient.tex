@@ -1,0 +1,272 @@
+\subsection{Метод условного градиента}
+\label{subsec:cond-gradient}
+
+Это тот же метод возможных направлений, но относящийся ещё и к методам
+\emph{линейной аппроксимации}.
+
+\[
+  \begin{cases}
+    \varphi(x) \to \min , & x \in S , \\
+    S \ \text{— выпуклый компакт} ,
+  \end{cases}
+\]
+$\varphi$ — выпуклая, непрерывно дифференцируемая, с липшицевым градиентом
+(константа $R$).
+
+\subsubsection*{Алгоритм}
+
+Выбираются $\alpha_0 \in (0,1)$ (иногда $\alpha_0 = 1$), $\lambda \in (0,1)$,
+$x_0 \in S$. Строится последовательность $\{x_k\} \subset S$.
+
+Пусть выполнен $k$-й шаг и $x_k$ построена. Решается \textbf{вспомогательная
+задача}
+\[
+  \nabla\T\varphi(x_k)\, x \ \longrightarrow\ \min_{x \in S} .
+\]
+Пусть $y_k$ — её решение. Выбираем
+\[
+  s_k = y_k - x_k \quad\text{— направление спуска},
+  \qquad
+  x_{k+1} = x_k + \alpha_k s_k = x_k + \alpha_k (y_k - x_k) ,
+\]
+и обозначаем
+\[
+  \eta_k = \nabla\T\varphi(x_k)\,(y_k - x_k) .
+\]
+
+\begin{idea}
+Вспомогательная задача — это минимизация \emph{линейной} аппроксимации
+$\varphi$ (постоянное слагаемое $\varphi(x_k) - \nabla\T\varphi(x_k)x_k$ на
+точку минимума не влияет). Отсюда два практических замечания, помеченные на
+лекции стрелками:
+\begin{itemize}[nosep,left=0pt]
+  \item если $S$ задано линейными ограничениями, вспомогательная задача — это
+        задача ЛП, и решается симплекс-методом (\S4);
+  \item в любом случае минимум линейной функции на выпуклом компакте
+        достигается на границе (и, если $S$ — многогранник, в вершине).
+        Поэтому $y_k$ — всегда «крайняя» точка, и шаг $\alpha_k$ обязателен:
+        идти в $y_k$ целиком, как правило, нельзя.
+\end{itemize}
+\end{idea}
+
+\inputfig{figures/fig-frank-wolfe}
+
+Так как $y_k$ минимизирует $\nabla\T\varphi(x_k)x$ по $S$, а $x_k \in S$,
+\[
+  \nabla\T\varphi(x_k)\, y_k \ \le\ \nabla\T\varphi(x_k)\, x_k
+  \qquad\Longrightarrow\qquad
+  \eta_k \le 0 .
+\]
+Возможны два случая:
+\begin{enumerate}[label=\arabic*),left=0pt]
+  \item $\eta_k < 0$ \ $\Longrightarrow$ \
+        $\eta_k = \nabla\T\varphi(x_k)\, s_k < 0$, то есть $s_k$ — направление
+        спуска;
+  \item $\eta_k = 0$ \ $\Longrightarrow$ \ движение прекращается (см. условие
+        останова ниже).
+\end{enumerate}
+Относительно $x_{k+1}$ требуется: 2.1)~$x_{k+1}$ допустима; 2.2)~$\{x_k\}$ —
+последовательность спуска. Обоим требованиям и подчинён выбор $\alpha_k$.
+
+\subsubsection*{Допустимость}
+
+Пусть $\eta_k < 0$. Тогда
+\[
+  x_{k+1} = x_k + \alpha_k (y_k - x_k) = (1 - \alpha_k) x_k + \alpha_k y_k ,
+\]
+и так как $x_k \in S$, $y_k \in S$, при $\alpha_k \in [0,1]$ точка $x_{k+1}$
+лежит в $S$ — множество $S$ выпукло.
+
+\subsubsection*{Выбор шага}
+
+По формуле конечных приращений
+\[
+  \varphi(x_k + \alpha_k s_k)
+  = \varphi(x_k) + \alpha_k \nabla\T\varphi(\bar{x}_k)\, s_k ,
+  \qquad
+  \bar{x}_k = x_k + \theta \alpha_k s_k , \quad \theta \in [0,1] .
+\]
+Прибавляя и вычитая $\alpha_k \nabla\T\varphi(x_k) s_k$ и пользуясь
+липшицевостью градиента,
+\begin{align*}
+  \varphi(x_k + \alpha_k s_k)
+  &= \varphi(x_k) + \alpha_k \underbrace{\nabla\T\varphi(x_k) s_k}_{=\ \eta_k}
+     + \alpha_k \big(\nabla\varphi(\bar{x}_k) - \nabla\varphi(x_k)\big)\T s_k \\
+  &\le \varphi(x_k) + \alpha_k \eta_k
+     + \alpha_k \norm{\nabla\varphi(\bar{x}_k) - \nabla\varphi(x_k)}
+       \cdot \norm{s_k} \\
+  &\le \varphi(x_k) + \alpha_k \eta_k
+     + \alpha_k R \underbrace{\norm{\bar{x}_k - x_k}}_{=\ \theta\alpha_k\norm{s_k}}
+       \cdot \norm{s_k}
+   \ \le\ \varphi(x_k) + \alpha_k \eta_k + \alpha_k^2 R \norm{s_k}^2 .
+\end{align*}
+Потребуем
+\begin{equation}\label{eq:fw-req}
+  \varphi(x_k) + \alpha_k \eta_k + \alpha_k^2 R \norm{s_k}^2
+  \ \le\ \varphi(x_k) + \tfrac12 \alpha_k \eta_k ,
+\end{equation}
+то есть $\tfrac12 \alpha_k \eta_k + \alpha_k^2 R \norm{s_k}^2 \le 0$, откуда
+\begin{equation}\label{eq:fw-alpha}
+  \alpha_k \ \le\ -\frac{1}{2}\, \eta_k \cdot \frac{1}{R \norm{s_k}^2} .
+\end{equation}
+
+\begin{remark}
+Пусть $x_0$ допустима, построена $\{x_k\} \subset S$, и правило выбора шага
+привело к~\eqref{eq:fw-alpha}. Тогда
+\begin{equation}\label{eq:fw-1}
+  \varphi(x_{k+1}) \ \le\ \varphi(x_k) + \tfrac12 \alpha_k \eta_k .
+\end{equation}
+\end{remark}
+
+\begin{idea}
+При $\eta_k = 0$ правая часть~\eqref{eq:fw-alpha} равна нулю: шага не делается,
+и это корректно — именно $\eta_k = 0$ служит признаком остановки.
+
+При $\eta_k < 0$ имеем $s_k \ne 0$, и шаг $\alpha_k$ может быть выбран.
+Берём его по принципу дробления, $\alpha_k = \alpha_0 \lambda^{i_k}$: это первое
+значение, удовлетворяющее~\eqref{eq:fw-alpha}. Тогда предыдущее пробное
+значение $\alpha = \alpha_k / \lambda$ условию~\eqref{eq:fw-alpha} уже
+\emph{не} удовлетворяло (само неравенство~\eqref{eq:fw-req} от выбора $\alpha$
+не зависит по форме), то есть
+\[
+  \alpha_0 \lambda^{\,i_k - 1} \ >\ -\frac{1}{2}\,\eta_k \cdot
+  \frac{1}{R\norm{s_k}^2}
+  \qquad\Longrightarrow\qquad
+  \alpha_k \ >\ -\frac{1}{2}\,\eta_k \cdot \frac{\lambda}{R\norm{s_k}^2} .
+\]
+Наконец, $\norm{s_k} = \norm{y_k - x_k}$, где $y_k, x_k \in S$, а $S$ —
+компакт, поэтому существует $C$: $\norm{s_k} < C$. Итого
+\begin{equation}\label{eq:fw-2}
+  \alpha_k \ >\ -\frac{\lambda}{2RC^2}\, \eta_k .
+\end{equation}
+\end{idea}
+
+\subsubsection*{Основная лемма}
+
+\begin{lemma}\label{lem:fw}
+Пусть $\{x_k\}$ построена по методу условного градиента. Тогда
+\[
+  1^\circ\ \{x_k\} \subset S ;
+  \qquad
+  2^\circ\ \varphi(x_k) \ \text{монотонно убывает} ;
+  \qquad
+  3^\circ\ \eta_k \xrightarrow[k \to \infty]{} 0 .
+\]
+\end{lemma}
+
+\begin{proof}
+$1^\circ$ доказано выше (выпуклость $S$ и $\alpha_k \in [0,1]$).
+
+\medskip
+$2^\circ$--$3^\circ$. Из~\eqref{eq:fw-1} и~\eqref{eq:fw-2}, учитывая
+$\eta_k < 0$ (умножение на отрицательное число меняет знак неравенства),
+\begin{equation}\label{eq:fw-3}
+  \varphi(x_{k+1}) - \varphi(x_k)
+  = \varphi(x_k + \alpha_k s_k) - \varphi(x_k)
+  \ \le\ \tfrac12 \alpha_k \eta_k
+  \ <\ -\frac{\lambda}{4RC^2}\, \eta_k^2 \ \le\ 0 ,
+\end{equation}
+то есть $\varphi(x_k)$ убывает. Просуммируем~\eqref{eq:fw-3} по
+$k = \overline{0, m-1}$; слагаемые телескопируются:
+\[
+  \varphi(x_m) - \varphi(x_0)
+  \ <\ -\frac{\lambda}{4RC^2} \sum_{k=0}^{m-1} \eta_k^2 .
+\]
+Так как $\varphi(x_m) \ge \varphi(x_*)$,
+\[
+  \varphi(x_*) - \varphi(x_0) \ \le\ \varphi(x_m) - \varphi(x_0)
+  \ <\ -\frac{\lambda}{4RC^2} \sum_{k=0}^{m-1} \eta_k^2 ,
+\]
+откуда при $m \to +\infty$
+\[
+  \sum_{k=0}^{\infty} \eta_k^2
+  \ \le\ \frac{4RC^2}{\lambda}\big(\varphi(x_0) - \varphi(x_*)\big) < +\infty .
+\]
+Ряд из $\eta_k^2$ сходится, значит $\eta_k^2 \to 0$ и $\eta_k \to 0$.
+\end{proof}
+
+\subsubsection*{Условие останова}
+
+\begin{enumerate}[label=\arabic*),left=0pt]
+  \item за конечное число шагов получено $\eta_k = 0$;
+  \item последовательность $\{\varphi(x_k)\}$ перестала заметно убывать.
+\end{enumerate}
+
+Разберём первый случай. Пусть $\eta_k = 0$, то есть
+$\nabla\T\varphi(x_k)(y_k - x_k) = 0$, значит
+$\nabla\T\varphi(x_k) y_k = \nabla\T\varphi(x_k) x_k$. Но $y_k$ по построению
+минимизирует линейную функцию:
+\[
+  \nabla\T\varphi(x_k)\, y_k \ \le\ \nabla\T\varphi(x_k)\, x
+  \qquad \forall x \in S ,
+\]
+следовательно $\nabla\T\varphi(x_k) x \ge \nabla\T\varphi(x_k) x_k$, то есть
+\[
+  \nabla\T\varphi(x_k)\,(x - x_k) \ \ge\ 0 \qquad \forall x \in S .
+\]
+Это условие экстремума выпуклой функции на выпуклом множестве — значит $x_k$
+оптимальна.
+
+\subsubsection*{Теорема о сходимости}
+
+\begin{theorem}[о сходимости метода условного градиента]\label{thm:fw}
+Пусть выполнены условия применимости метода и $\{x_k\}$ построена по методу
+условного градиента. Тогда в любой предельной точке последовательности
+выполняется условие минимума задачи $\varphi(x) \to \min$, $x \in S$.
+\end{theorem}
+
+\begin{proof}
+Пусть $\bar{x}_*$ — предельная точка $\{x_k\}$, то есть существует
+подпоследовательность $x_{k_j} \to \bar{x}_*$. По лемме~\ref{lem:fw}
+\[
+  \eta_{k_j} = \nabla\T\varphi(x_{k_j})\,(y_{k_j} - x_{k_j})
+  \xrightarrow[j \to \infty]{} 0 .
+\]
+Последовательность $\{y_{k_j}\}$ лежит в компакте $S$, поэтому, переходя при
+необходимости к подпоследовательности, считаем $y_{k_j} \to y_*$. По
+непрерывности $\nabla\varphi$
+\begin{equation}\label{eq:fw-4}
+  \nabla\T\varphi(\bar{x}_*)\,(y_* - \bar{x}_*) = 0 .
+\end{equation}
+
+Далее — так же, как при разборе условия останова. Для всех $x \in S$
+\[
+  \nabla\T\varphi(x_{k_j})\, y_{k_j} \ \le\ \nabla\T\varphi(x_{k_j})\, x ,
+\]
+и при $k_j \to \infty$
+\[
+  \nabla\T\varphi(\bar{x}_*)\, y_* \ \le\ \nabla\T\varphi(\bar{x}_*)\, x .
+\]
+По~\eqref{eq:fw-4} левая часть равна
+$\nabla\T\varphi(\bar{x}_*)\,\bar{x}_*$, поэтому
+\[
+  \nabla\T\varphi(\bar{x}_*)\, \bar{x}_* \ \le\ \nabla\T\varphi(\bar{x}_*)\, x
+  \qquad\Longrightarrow\qquad
+  \nabla\T\varphi(\bar{x}_*)\,(x - \bar{x}_*) \ \ge\ 0 \quad \forall x \in S .
+\]
+Это условие экстремума в точке $\bar{x}_*$; в силу выпуклости $\varphi$ оно
+достаточно, значит $\bar{x}_*$ — точка минимума. Отсюда
+\[
+  \lim_{k \to \infty} \varphi(x_k) = \varphi(x_*) ,
+  \qquad \varphi(x_*) = \min_{x \in S} \varphi(x) .
+  \qedhere
+\]
+\end{proof}
+
+\begin{remark}
+Кроме того, справедлива оценка скорости
+\[
+  \varphi(x_k) - \varphi(x_*) \ \le\ \frac{D}{k} ,
+  \qquad D > 0 \ \text{— const} .
+\]
+\end{remark}
+
+\begin{idea}
+Оценка $O(1/k)$ — классический результат для метода условного градиента
+(Франка--Вульфа); на лекции она приведена без доказательства. Константа $D$
+выражается через диаметр $S$ и константу Липшица градиента:
+$D \sim R\,\operatorname{diam}^2 S$. Важно, что скорость здесь \emph{сублинейная}
+— заметно хуже геометрической сходимости методов из главы о безусловной
+минимизации. Платой за это является крайняя дешевизна итерации: вместо
+проектирования на $S$ (как в методе Розена) решается одна линейная задача.
+\end{idea}

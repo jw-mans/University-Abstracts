@@ -1,0 +1,39 @@
+% Метод золотого сечения: симметричные пробные точки lambda_k, mu_k и
+% переиспользование одной из них на следующем шаге.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Stealth[length=2.2mm]}, x=1.0cm]
+  % текущий отрезок
+  \draw[thick] (0,0) -- (9,0);
+  \foreach \p/\lab in {0/$a_k$, 3.44/$\lambda_k$, 5.56/$\mu_k$, 9/$b_k$} {
+    \draw[thick] (\p,-0.13) -- (\p,0.13);
+    \node[font=\scriptsize, anchor=north] at (\p,-0.2) {\lab};
+  }
+
+  % симметрия
+  \draw[<->, gray] (0,0.55) -- (5.56,0.55);
+  \node[font=\scriptsize, anchor=south, gray] at (2.78,0.57)
+    {$\mu_k - a_k$};
+  \draw[<->, gray] (3.44,1.15) -- (9,1.15);
+  \node[font=\scriptsize, anchor=south, gray] at (6.22,1.17)
+    {$b_k - \lambda_k$};
+
+  % случай (1): остаётся [lambda_k, b_k]
+  \draw[very thick, teal!70!black] (3.44,-0.95) -- (9,-0.95);
+  \draw[teal!70!black] (3.44,-0.82) -- (3.44,-1.08);
+  \draw[teal!70!black] (9,-0.82) -- (9,-1.08);
+  \node[font=\scriptsize, anchor=north, teal!70!black] at (6.2,-1.1)
+    {$f(\lambda_k) \ge f(\mu_k)$:\ \ остаётся $[\lambda_k, b_k]$};
+
+  % mu_k становится lambda_{k+1}
+  \fill[orange!85!black] (5.56,-0.95) circle (2.2pt);
+  \draw[->, orange!85!black] (5.56,-1.55) -- (5.56,-1.05);
+  \node[font=\scriptsize, anchor=north, orange!75!black] at (5.56,-1.55)
+    {$\mu_k$ становится $\lambda_{k+1}$ — пересчитывать не надо};
+\end{tikzpicture}
+\caption{Золотое сечение: точки $\lambda_k, \mu_k$ расположены симметрично
+относительно середины отрезка. Коэффициент $\alpha$ подбирается так, чтобы
+уцелевшая точка попала ровно на нужное место нового отрезка — тогда на каждой
+итерации нужно лишь одно новое вычисление функции.}
+\label{fig:golden-section}
+\end{figure}

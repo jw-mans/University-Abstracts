@@ -1,0 +1,42 @@
+% Рисунок к лемме о числе опорных векторов: выделение квадратной
+% подматрицы A[M,M'] из m столбцов матрицы A[M,N].
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=0.95, >={Stealth[length=2mm]}]
+
+% --- матрица A (m x n)
+\draw[blue!55!black, thick] (0,0) rectangle (6,2.4);
+\node[font=\footnotesize, blue!55!black] at (3,2.8) {$A[M,N]$};
+
+% выделенные столбцы базиса
+\foreach \x in {1.1, 3.0, 4.6} {
+  \fill[orange!25] (\x,0) rectangle (\x+0.55,2.4);
+  \draw[orange!75!black, thick] (\x,0) rectangle (\x+0.55,2.4);
+}
+\node[font=\scriptsize, orange!60!black, anchor=north] at (3.0,-1.35)
+  {$\abs{M} = m$ выбранных столбцов даёт $A[M,M']$};
+
+% размеры
+\draw[<->] (-0.45,0) -- (-0.45,2.4) node[midway,left,font=\scriptsize] {$m$};
+\draw[<->] (0,-0.95) -- (6,-0.95) node[midway,below,font=\scriptsize] {$n$};
+
+% --- вектор x (n x 1)
+\draw[blue!55!black, thick] (6.9,-0.6) rectangle (7.3,3.0);
+\node[font=\footnotesize, anchor=south] at (7.1,3.05) {$x[N]$};
+\draw[<->] (7.55,-0.6) -- (7.55,3.0) node[midway,right,font=\scriptsize] {$n$};
+
+% знак равенства
+\node[font=\large] at (8.6,1.2) {$=$};
+
+% --- вектор b (m x 1)
+\draw[blue!55!black, thick] (9.3,0) rectangle (9.7,2.4);
+\node[font=\footnotesize, anchor=south] at (9.5,2.5) {$b[M]$};
+\draw[<->] (9.95,0) -- (9.95,2.4) node[midway,right,font=\scriptsize] {$m$};
+
+\end{tikzpicture}
+\caption{Схема перебора в лемме~\ref{lem:count}. Из матрицы $A[M,N]$ выбираются
+всевозможные наборы из $m$ столбцов; наборы с $\det A[M,M'] = 0$ отбрасываются,
+для остальных решается система $A[M,M']\,x[M'] = b[M]$, и решение принимается,
+если все его компоненты неотрицательны. Число наборов равно $\binom{n}{m}$.}
+\label{fig:matrix-selection}
+\end{figure}

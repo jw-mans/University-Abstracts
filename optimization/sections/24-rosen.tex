@@ -1,0 +1,315 @@
+\subsection{Метод Розена}
+\label{subsec:rosen}
+
+\begin{idea}[title={Обозначения}]
+В тетради буквой $S$ обозначено и допустимое множество, и строящееся
+направление. Ниже допустимое множество — $S$, а направление — $s$.
+\end{idea}
+
+\subsubsection*{Активные и пассивные ограничения}
+
+Пусть $x$ — допустимая точка. Разобьём неравенства на активные и пассивные:
+\[
+  \begin{cases}
+    Cx = d , \\
+    F_1 x = g_1 & \text{— активные,} \\
+    F_2 x < g_2 & \text{— пассивные,}
+  \end{cases}
+  \qquad
+  F = \begin{pmatrix} F_1 \\ \hline F_2 \end{pmatrix} ,
+  \qquad
+  g = \begin{pmatrix} g_1 \\ \hline g_2 \end{pmatrix} .
+\]
+Объединим равенства и активные неравенства в одну систему:
+\[
+  A(x) = \begin{pmatrix} C \\ \hline F_1 \end{pmatrix} ,
+  \qquad
+  b = \begin{pmatrix} d \\ \hline g_1 \end{pmatrix} ,
+  \qquad\text{так что}\qquad
+  \begin{cases}
+    A x = b , \\
+    F_2 x < g_2
+  \end{cases}
+  \qquad \forall x \in S .
+  \tag{1}\label{eq:rosen-1}
+\]
+
+Составим матрицу проектирования
+\[
+  P = E - A\T \big(A A\T\big)^{-1} A ,
+  \qquad
+  s = -P\, \nabla\varphi(x) .
+\]
+
+\begin{idea}
+Это проектор $Q = E - \big(A\T(AA\T)^{-1}A\big)$ из леммы~\ref{lem:projector},
+то есть проектирование на ядро $A$. Направление $s$ — \textbf{проекция
+антиградиента} на подпространство, вдоль которого активные ограничения
+сохраняются как равенства. Отсюда название: метод проекции градиента.
+\end{idea}
+
+\subsubsection*{Допустимость шага}
+
+Рассмотрим точку $x + \alpha s$:
+\[
+  A(x + \alpha s) = \underbrace{Ax}_{=\,b} + \alpha A s
+  = b + \alpha A\big(-P \nabla\varphi(x)\big) = b ,
+  \tag{2}\label{eq:rosen-2}
+\]
+поскольку
+\[
+  A P = A\Big(E - A\T \big(A A\T\big)^{-1} A\Big)
+      = A - \underbrace{A A\T \big(A A\T\big)^{-1}}_{=\ E} A
+      = A - A = 0 .
+\]
+То есть активные ограничения не накладывают условия на выбор шага: при любом
+$\alpha$ точка остаётся на той же грани.
+
+Пассивные ограничения $F_2 x < g_2$ дают условие на шаг:
+\[
+  F_2(x + \alpha s) = F_2 x - \alpha\, F_2\, P \nabla\varphi(x) < g_2 .
+  \tag{3}\label{eq:rosen-3}
+\]
+
+\begin{idea}
+Разница принципиальная. Активные ограничения выполняются \emph{тождественно} по
+$\alpha$ — их и «встроили» в направление через проектор. Пассивные выполнены
+строго, значит нарушатся лишь при достаточно большом шаге; именно
+условие~\eqref{eq:rosen-3} и ограничивает $\alpha$ сверху. Поэтому в алгоритме
+шаг дробят до выполнения двух вещей: убывания $\varphi$ и
+неравенства~\eqref{eq:rosen-3}.
+\end{idea}
+
+\subsubsection*{$s$ — направление спуска}
+
+\paragraph{а) $s \ne 0$.}
+\[
+  \varphi(x + \alpha s)
+  = \varphi(x) + \alpha\,\nabla\T\varphi(x)\, s + \dots
+  = \varphi(x) - \alpha \underbrace{\nabla\T\varphi(x)\, P\, \nabla\varphi(x)}_{\ge\ 0}
+    + \dots \ \le\ \varphi(x) ,
+\]
+где неотрицательность подчёркнутого — пункт~2$^\circ$
+леммы~\ref{lem:projector}: $\nabla\T\varphi\, P\, \nabla\varphi
+= \norm{P \nabla\varphi}^2 = \norm{s}^2 > 0$ при $s \ne 0$.
+
+\paragraph{б) $s = 0$.}
+Тогда
+\[
+  0 = -\Big(E - A\T \big(A A\T\big)^{-1} A\Big)\nabla\varphi(x)
+    = -\Big(\nabla\varphi(x) - A\T \underbrace{\big(A A\T\big)^{-1} A \nabla\varphi(x)}_{=\ -\omega}\Big) ,
+\]
+то есть
+\[
+  \nabla\varphi(x) + A\T \omega = 0 ,
+  \qquad
+  \omega = -\big(A A\T\big)^{-1} A \nabla\varphi(x) .
+  \tag{4}\label{eq:rosen-4}
+\]
+Размерность $\omega$ совпадает с числом строк $A$, то есть с числом равенств
+плюс число активных ограничений в точке $x$. Расписывая по блокам
+\[
+  A = \begin{pmatrix} C \\ \hline F_1 \end{pmatrix} ,
+  \qquad
+  \omega = \begin{pmatrix} v \\ \hline u \end{pmatrix}
+  \qquad\Longrightarrow\qquad
+  \nabla\varphi(x) + C\T v + F_1\T u = 0 .
+  \tag{5}\label{eq:rosen-5}
+\]
+
+\begin{idea}[title={Что такое \eqref{eq:rosen-5}: это условия ККТ}]
+Равенство~\eqref{eq:rosen-5} — в точности \textbf{условие стационарности ККТ}
+(Каруша--Куна--Таккера) для исходной задачи:
+\[
+  \nabla\varphi(x) + \sum_{\text{равенства}} v_i \nabla(c_i\T x)
+   + \sum_{i \in I_0(x)} u_i \nabla(f_i\T x) = 0 ,
+\]
+где $v$ — множители при равенствах $Cx = d$ (знак произвольный), $u$ — множители
+при активных неравенствах $F_1 x = g_1$ (обязаны быть неотрицательными).
+Пассивные ограничения входят с нулевыми множителями — это дополняющая
+нежёсткость.
+
+\medskip
+\textbf{Почему у $v$ знак свободный.} Равенство $\varphi_i(x) = 0$
+эквивалентно паре неравенств
+\[
+  \begin{cases} \varphi_i(x) \le 0, \\ -\varphi_i(x) \le 0 , \end{cases}
+\]
+каждое со своим неотрицательным множителем; их разность и даёт один множитель
+произвольного знака.
+
+\medskip
+\textbf{Про условие Слейтера.} В общей выпуклой задаче условия ККТ необходимы
+лишь при каком-нибудь условии регулярности — например при условии Слейтера
+(существует точка со строгими неравенствами). Без него ККТ могут не
+выполняться: на лекции это иллюстрировалось примером
+\[
+  \varphi(x) \to \min , \qquad \sum_{i \in I} a_i\T x \le b^{(i)} .
+\]
+Здесь, однако, все ограничения \emph{линейны}, а линейность сама по себе —
+условие регулярности. Поэтому для задачи метода Розена условия ККТ необходимы и
+достаточны (в силу выпуклости $\varphi$) без каких-либо дополнительных
+требований, и проверка сводится ровно к знаку $u$.
+\end{idea}
+
+Отсюда разбор случая $s = 0$:
+\begin{enumerate}[label=\arabic*.,left=0pt]
+  \item $u \ge 0$ \ $\Longrightarrow$ \ $x$ — оптимальная точка (выполнены ККТ);
+  \item $\exists\, u^{(j)} < 0$ \ $\Longrightarrow$ \ перестроим направление $s$.
+\end{enumerate}
+
+\inputfig{figures/fig-rosen-step}
+
+\subsubsection*{Перестроение направления при $u^{(j)} < 0$}
+
+Пусть $u^{(j)} < 0$. Уберём из $F_1$ $j$-ю строку $f_j$ и обозначим
+\[
+  \bar{F}_1 = F_1 \ \text{без строки } f_j ,
+  \qquad
+  \bar{A} = \begin{pmatrix} C \\ \hline \bar{F}_1 \end{pmatrix} ,
+  \qquad
+  \bar{b} = \begin{pmatrix} d \\ \hline \bar{g}_1 \end{pmatrix} ,
+\]
+\[
+  \bar{P} = E - \bar{A}\T \big(\bar{A}\,\bar{A}\T\big)^{-1} \bar{A} ,
+  \qquad
+  \bar{s} = -\bar{P}\, \nabla\varphi(x) .
+\]
+
+\begin{idea}
+Смысл: множитель $u^{(j)} < 0$ означает, что $j$-е активное ограничение
+«мешает» — если его отпустить, целевую функцию можно уменьшить. Поэтому строку
+$f_j$ выбрасывают из набора активных, проектируют антиградиент на более широкое
+подпространство и получают направление $\bar{s}$, уводящее \emph{внутрь} от
+$j$-й грани.
+\end{idea}
+
+\paragraph{$\bar{s} \ne 0$.}
+Если бы было $\bar{s} = 0$, то по той же выкладке, что
+дала~\eqref{eq:rosen-4},
+\[
+  \nabla\varphi(x) + \bar{A}\T \bar\omega = 0 ,
+  \qquad
+  \bar\omega = -\big(\bar{A}\,\bar{A}\T\big)^{-1} \bar{A} \nabla\varphi(x) .
+\]
+С другой стороны, уберём из~\eqref{eq:rosen-4} вклад $j$-й строки: обозначив
+через $\tilde\omega$ вектор $\omega$ без $j$-й компоненты,
+\[
+  \nabla\varphi(x) + \bar{A}\T \tilde\omega + u^{(j)} f_j\T = 0 .
+  \tag{6}\label{eq:rosen-6}
+\]
+Вычитая, получаем
+\[
+  \bar{A}\T\big(\tilde\omega - \bar\omega\big) + u^{(j)} f_j\T = 0 ,
+  \qquad u^{(j)} \ne 0 ,
+\]
+то есть строка $f_j$ линейно выражается через строки $\bar{A}$. Это
+противоречит линейной независимости строк $A$ (без неё не существовало бы
+$\big(A A\T\big)^{-1}$). Значит $\bar{s} \ne 0$.
+
+\paragraph{Допустимость направления $\bar{s}$.}
+Так как
+\[
+  \bar{A}\,\bar{P}
+  = \bar{A}\Big(E - \bar{A}\T\big(\bar{A}\bar{A}\T\big)^{-1}\bar{A}\Big)
+  = \bar{A} - \bar{A}\,\bar{A}\T\big(\bar{A}\bar{A}\T\big)^{-1}\bar{A} = 0 ,
+\]
+получаем
+\[
+  \bar{A}\,\bar{s}
+  = \begin{pmatrix} C \\ \hline \bar{F}_1 \end{pmatrix} \bar{s}
+  = -\bar{A}\,\bar{P}\,\nabla\varphi = 0
+  \qquad\Longrightarrow\qquad
+  \begin{cases}
+    C \bar{s} = 0 , \\
+    \bar{F}_1 \bar{s} = 0 .
+  \end{cases}
+  \tag{7--8}\label{eq:rosen-78}
+\]
+
+Проверим, что точка $x + \alpha\bar{s}$ остаётся допустимой:
+\[
+  \begin{aligned}
+    &C(x + \alpha\bar{s}) = d , &&(*) \\
+    &F_1(x + \alpha\bar{s}) \le g_1 , &&(**) \\
+    &F_2(x + \alpha\bar{s}) < g_2 . &&(\!*\!*\!*)
+  \end{aligned}
+\]
+Условие $(*)$ выполнено в силу~\eqref{eq:rosen-78}. Для $(**)$:
+\[
+  F_1(x + \alpha\bar{s})
+  = \underbrace{F_1 x}_{=\ g_1} + \alpha\, F_1 \bar{s} \ \le\ g_1
+  \qquad\Longleftrightarrow\qquad
+  F_1 \bar{s} \le 0 .
+\]
+Строки $\bar{F}_1$ дают ноль по~\eqref{eq:rosen-78}, так что остаётся проверить
+единственную выброшенную строку: нужно $f_j \bar{s} \le 0$. Условие
+$(\!*\!*\!*)$ — как и раньше, ограничение на длину шага.
+
+\paragraph{Доказательство $f_j \bar{s} \le 0$.}
+Умножим~\eqref{eq:rosen-6} слева на $\bar{s}\T = -\nabla\T\varphi\,\bar{P}$:
+\[
+  \underbrace{\bar{s}\T \nabla\varphi(x)}_{=\ -\nabla\T\varphi\,\bar{P}\,\nabla\varphi}
+  + \underbrace{\bar{s}\T \bar{A}\T}_{=\ (\bar{A}\bar{s})\T\ =\ 0} \tilde\omega
+  + u^{(j)}\, \bar{s}\T f_j\T = 0 ,
+\]
+откуда
+\[
+  u^{(j)}\,\big(f_j \cdot \bar{s}\big)
+  = \underbrace{\nabla\T\varphi\,\bar{P}\,\nabla\varphi}_{\ge\ 0} ,
+  \qquad u^{(j)} < 0
+  \qquad\Longrightarrow\qquad
+  f_j \cdot \bar{s} \le 0 .
+\]
+Итак, $\bar{s}$ — допустимое направление спуска.
+
+\subsubsection*{Алгоритм}
+
+Пусть $x_0$ — начальное приближение. $k$-й шаг алгоритма:
+
+\begin{steps}
+  \item Составляем матрицу активных ограничений
+        $A_k = \begin{pmatrix} C \\ \hline F_k \end{pmatrix}$, где $F_k$ —
+        строки $F$, активные в точке $x_k$.
+  \item Вычисляем
+        \[
+          P_k = E - A_k\T \big(A_k A_k\T\big)^{-1} A_k ,
+          \qquad
+          s_k = -P_k \nabla\varphi(x_k) .
+        \]
+        \begin{itemize}[left=0pt,nosep]
+          \item[а)] $s_k \ne 0$: $\ x_{k+1} = x_k + \alpha_k s_k$, где
+                $\alpha_k$ выбирается по принципу дробления,
+                $\alpha_k = \alpha_0 \lambda^{\,i_k}$ ($\lambda$ — параметр
+                дробления, $\alpha_0$ — начальное значение), до выполнения
+                \emph{двух} условий:
+                \[
+                  \text{а.1)}\ \varphi(x_k + \alpha_k s_k) \le \varphi(x_k)
+                  \quad\text{— уменьшение;}
+                \]
+                \[
+                  \text{а.2)}\ F_2(x_k + \alpha_k s_k) \le g_2
+                  \quad\text{— за пассивные ограничения не вышли.}
+                \]
+          \item[б)] $s_k = 0$: вычисляем $\omega_k = (v_k; u_k)$
+                по~\eqref{eq:rosen-4}:
+                \[
+                  \text{б.1)}\ u_k \ge 0 \implies x_k \ \text{— оптимальная точка;}
+                \]
+                \[
+                  \text{б.2)}\ \exists\, u^{(j)}_k < 0 \implies
+                  \text{строим } \bar{F}_k,\ \bar{P}_k,\ \bar{s}_k
+                  \ \text{и продолжаем.}
+                \]
+        \end{itemize}
+\end{steps}
+
+\begin{idea}
+Структура метода: пока проекция антиградиента ненулевая — двигаемся вдоль
+текущей грани, дробя шаг так, чтобы не выскочить за пассивные ограничения.
+Когда проекция обнулилась, движение вдоль грани исчерпано, и вопрос лишь в том,
+оптимальна ли точка: ответ даёт знак множителей $u$. Отрицательный множитель —
+сигнал отпустить соответствующее ограничение, то есть перейти на грань большей
+размерности. За конечное число таких переходов набор активных ограничений
+стабилизируется, и метод либо движется, либо останавливается по $u \ge 0$.
+\end{idea}

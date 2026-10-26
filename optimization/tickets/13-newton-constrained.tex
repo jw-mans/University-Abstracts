@@ -1,0 +1,133 @@
+\section{Билет 13. Метод Ньютона решения задач с ограничениями}
+
+\ticketq{Метод Ньютона решения задач с ограничениями.}
+
+\paragraph{Постановка.}
+\[
+  \varphi(x) \to \min , \qquad x \in S ,
+\]
+$\varphi$ выпукла и дважды дифференцируема, $S$ — выпуклый компакт,
+$H(x) = \nabla^2\varphi(x)$. Итерации $x_{k+1} = x_k + \alpha_k s_k$.
+
+\textbf{Идея.} Это метод Ньютона, перенесённый на задачу с ограничениями: там,
+где метод условного градиента (билет~12) минимизирует на $S$ \emph{линейную}
+модель, здесь минимизируется \emph{квадратичная}.
+
+\paragraph{Квадратичная модель и направление.}
+\[
+  \psi_k(x) = \nabla\T\varphi(x_k)(x - x_k)
+            + \tfrac12 (x - x_k)\T H(x_k)(x - x_k) ,
+\]
+\[
+  y_k = \argmin_{x \in S}\psi_k(x) , \qquad
+  \eta_k = \psi_k(y_k) \le \psi_k(x_k) = 0 , \qquad
+  s_k = y_k - x_k .
+\]
+
+\paragraph{Лемма (вспомогательные факты).}
+\textit{1) $x_k + \alpha s_k \in S$ при $\alpha \in [0,1]$;
+2) $\nabla\T\varphi(x_k)s_k \le \eta_k \le 0$;
+3) при сильной выпуклости с константой $m$: $\eta_k \le -\tfrac{m}{2}\norm{s_k}^2$.}
+
+\textsc{Док-во.}
+1) $x_k + \alpha s_k = (1-\alpha)x_k + \alpha y_k$ — выпуклая комбинация точек
+$S$.
+
+2) $\eta_k = \nabla\T\varphi(x_k)s_k + \tfrac12 s_k\T H(x_k)s_k$, второе
+слагаемое $\ge 0$ ($H \succeq 0$ по выпуклости) $\Rightarrow$
+$\nabla\T\varphi(x_k)s_k \le \eta_k$; а $\eta_k \le \psi_k(x_k) = 0$.
+
+3) $\psi_k$ сильно выпукла с той же $m$, $y_k$ — её минимум на $S$
+$\Rightarrow$ $\nabla\T\psi_k(y_k)(x_k - y_k) \ge 0$, и
+\[
+  0 = \psi_k(x_k) \ \ge\ \psi_k(y_k)
+    + \underbrace{\nabla\T\psi_k(y_k)(x_k-y_k)}_{\ge\,0}
+    + \tfrac{m}{2}\norm{x_k - y_k}^2
+  \ \ge\ \eta_k + \tfrac{m}{2}\norm{s_k}^2 . \ \blacksquare
+\]
+
+\paragraph{Выбор шага.}
+$\alpha_0 = 1$, $\eps, \lambda \in (0,1)$; $\alpha_k = \alpha_0\lambda^{i_k}$ —
+первое значение, удовлетворяющее условию дробления
+\[
+  \varphi(x_k + \alpha s_k) - \varphi(x_k) \ \le\ \alpha\,\eps\,\eta_k
+\]
+(либо наискорейший спуск вдоль $s_k$: $\min_{\alpha>0}\varphi(x_k+\alpha s_k)$).
+
+\textbf{Лемма (дробление конечно).} $H$ непрерывен на компакте $\Rightarrow$
+$\norm{H(x)} \le M$, откуда
+\[
+  \varphi(x_k + \alpha s_k) \le \varphi(x_k) + \alpha\eta_k
+    + \tfrac{M}{2}\alpha^2\norm{s_k}^2 ,
+\]
+и условие выполнено, как только
+\[
+  \alpha\eta_k + \tfrac{M}{2}\alpha^2\norm{s_k}^2 \le \alpha\eps\eta_k
+  \iff
+  \alpha \le -\frac{2(1-\eps)\eta_k}{M\norm{s_k}^2} > 0 \quad (\eta_k < 0) .
+\]
+Значит дробление конечно, и принятый шаг отделён от нуля:
+$\alpha_k \ge \min\{1,\ \tfrac{2\lambda(1-\eps)}{MC^2}\abs{\eta_k}\}$,
+$C = \operatorname{diam}S$. $\blacksquare$
+
+\paragraph{Критерий останова.}
+$\eta_k = 0$ $\Rightarrow$ $x_k$ минимизирует $\psi_k$ на $S$, и условие
+оптимальности $\nabla\T\psi_k(x_k)(x - x_k) = \nabla\T\varphi(x_k)(x-x_k) \ge 0$
+$\forall x \in S$ для выпуклой $\varphi$ означает, что $x_k$ — решение.
+
+\paragraph{Теоремы о сходимости.}
+\textbf{Т1.} \textit{$\varphi(x_k)$ монотонно убывает и
+$\lim_k \varphi(x_k) = \varphi(x_*) = \min_{x\in S}\varphi(x)$ при любом $x_0$.}
+
+\textsc{Схема.} Из условия дробления
+$\varphi(x_k) - \varphi(x_{k+1}) \ge \eps\alpha_k\abs{\eta_k} \ge 0$:
+последовательность убывает, ограничена снизу ($S$ компакт) $\Rightarrow$
+сходится $\Rightarrow$ $\alpha_k\abs{\eta_k} \to 0$, а с оценкой шага снизу
+$\eta_k \to 0$. Далее для $x \in S$, $t \in [0,1]$ из $\psi_k(x_k+t(x-x_k)) \ge \eta_k$
+следует $t\nabla\T\varphi(x_k)(x-x_k) \ge \eta_k - \tfrac{t^2}{2}MC^2$; при
+$t = \sqrt{\abs{\eta_k}}$ получаем
+$\nabla\T\varphi(x_k)(x_* - x_k) \ge -\sqrt{\abs{\eta_k}}\big(1+\tfrac{MC^2}{2}\big)$,
+и по выпуклости
+$\varphi(x_k) - \varphi(x_*) \le \sqrt{\abs{\eta_k}}\big(1+\tfrac{MC^2}{2}\big) \to 0$.
+$\blacksquare$
+
+\textbf{Т2.} \textit{Если $m\norm{y}^2 \le y\T H(x)y \le M\norm{y}^2$,
+$0 < m \le M$, то $x_k \to x_*$ \textbf{сверхлинейно}.}
+
+\textbf{Т3.} \textit{Если дополнительно $\norm{H(x)-H(y)} \le R\norm{x-y}$, то
+скорость \textbf{квадратичная}.}
+
+\textsc{Схема Т2--Т3.} Вблизи $x_*$ при $\eps < \tfrac12$ принимается полный шаг
+$\alpha_k = 1$, то есть $x_{k+1} = y_k$. Складывая условия оптимальности
+$\big(\nabla\varphi(x_k) + H_k(y_k - x_k)\big)\T(x_* - y_k) \ge 0$ и
+$\nabla\T\varphi(x_*)(y_k - x_*) \ge 0$ и обозначая
+$r_k = \nabla\varphi(x_k) - \nabla\varphi(x_*) - H_k(x_k - x_*)$:
+\[
+  m\norm{y_k - x_*}^2 \le \norm{r_k}\,\norm{y_k - x_*}
+  \ \Rightarrow\ \norm{x_{k+1} - x_*} \le \frac{\norm{r_k}}{m} .
+\]
+Без липшицевости $H$: $\norm{r_k} = o(\norm{x_k - x_*})$ — сверхлинейная
+сходимость; при $\norm{H(x)-H(y)} \le R\norm{x-y}$:
+$\norm{r_k} \le \tfrac{R}{2}\norm{x_k-x_*}^2$ — квадратичная. $\blacksquare$
+
+\paragraph{Алгоритм.}
+\begin{csteps}
+  \item Задать $x_0 \in S$, $\eps, \lambda \in (0,1)$, $k = 0$.
+  \item Построить $\psi_k(x)$ по $\nabla\varphi(x_k)$ и $H(x_k)$.
+  \item Решить $y_k = \argmin_{x\in S}\psi_k(x)$; найти
+        $\eta_k = \psi_k(y_k)$, $s_k = y_k - x_k$.
+  \item $\eta_k = 0$ — конец, $x_k$ оптимальна.
+  \item Найти $\alpha_k$ дроблением от $\alpha_0 = 1$ (либо наискорейшим
+        спуском вдоль $s_k$).
+  \item $x_{k+1} = x_k + \alpha_k s_k$, $k := k+1$, к~шагу~2.
+\end{csteps}
+
+\textbf{Замечание.} Для задачи с ограничениями-\emph{равенствами} $h(x) = 0$
+тот же метод Ньютона записывают иначе: условия Лагранжа
+$\nabla f + J\T\lambda = 0$, $h = 0$ рассматривают как систему $F(x,\lambda) = 0$
+и применяют к ней метод Ньютона, получая на каждом шаге блочную систему ККТ
+$\big(\begin{smallmatrix} W_k & J_k\T \\ J_k & 0\end{smallmatrix}\big)
+\big(\begin{smallmatrix} p_k \\ \Delta\lambda_k\end{smallmatrix}\big)
+= -\big(\begin{smallmatrix} \nabla_x L \\ h \end{smallmatrix}\big)$.
+
+\seefull{гл.~3, \S10 (а вариант с системой ККТ — \S13)}

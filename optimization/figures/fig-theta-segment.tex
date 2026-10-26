@@ -1,0 +1,50 @@
+% Рисунок к доказательству теоремы о совпадении опорного вектора и крайней точки:
+% сдвиг вдоль ядра u не выводит из допустимого множества, пока theta достаточно мал.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >={Stealth[length=2.2mm]}]
+
+\coordinate (A) at (0,0);
+\coordinate (B) at (4.2,0);
+\coordinate (C) at (5.0,2.0);
+\coordinate (D) at (2.4,3.2);
+\coordinate (E) at (-0.5,2.0);
+
+\fill[blue!10] (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+\draw[blue!55!black, thick] (A) -- (B) -- (C) -- (D) -- (E) -- cycle;
+\node[font=\footnotesize, blue!55!black] at (3.9,2.6) {$S$};
+
+% точка x и отрезок вдоль направления u
+\coordinate (X)  at (2.1,1.4);
+\coordinate (X1) at (0.6,1.05);
+\coordinate (X2) at (3.6,1.75);
+
+\draw[orange!75!black, very thick] (X1) -- (X2);
+\fill[orange!75!black] (X) circle (2.2pt);
+\fill[orange!75!black] (X1) circle (1.8pt);
+\fill[orange!75!black] (X2) circle (1.8pt);
+
+\node[font=\footnotesize, anchor=south, orange!60!black]
+  at ($(X)+(0,0.14)$) {$x$};
+\node[font=\scriptsize, anchor=east] at ($(X1)+(-0.12,0)$)
+  {$x_1 = x - \theta u$};
+\node[font=\scriptsize, anchor=west] at ($(X2)+(0.12,0)$)
+  {$x_2 = x + \theta u$};
+
+% стрелка направления u
+\draw[->, blue!55!black, thick] (X) -- ++(0.95,0.22)
+  node[midway, below, font=\scriptsize, yshift=-2pt] {$u$};
+
+% пояснение
+\node[font=\scriptsize, anchor=north, text width=8cm, align=center] at (2.2,-0.4)
+  {$A[M,N]\,u[N] = 0 \ \Longrightarrow\ A x_1 = A x_2 = b$, \quad
+   $x = \tfrac12 (x_1 + x_2)$};
+
+\end{tikzpicture}
+\caption{Если столбцы $A[M,\Nzp]$ линейно зависимы, то существует ненулевое
+направление $u$ в ядре $A$, сосредоточенное на положительных компонентах. Сдвиг
+вдоль $u$ не меняет равенств $Ax = b$, а шаг $\theta > 0$ выбирается так, чтобы
+не нарушить $x \ge 0$. Тогда $x$ оказывается серединой отрезка
+$[x_1, x_2] \subset S$ и крайней точкой быть не может.}
+\label{fig:theta-segment}
+\end{figure}

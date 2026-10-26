@@ -1,0 +1,27 @@
+% Наискорейший спуск на вытянутых линиях уровня: соседние направления
+% ортогональны, траектория зигзагообразная. Рисунок схематический.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Stealth[length=2.0mm]}, scale=1.0]
+  \foreach \r in {0.3, 0.55, 0.8, 1.0} {
+    \draw[blue!30!black] (0,0) ellipse ({\r*3.1} and {\r*0.95});
+  }
+  \fill[blue!40!black] (0,0) circle (1.8pt);
+  \node[font=\scriptsize, blue!40!black, anchor=north] at (0,-0.14) {$x_*$};
+
+  \draw[very thick, orange!85!black, ->]
+    (2.80,0.60) -- (1.10,-0.45) -- (0.55,0.25) -- (0.22,-0.12) -- (0.09,0.05);
+  \foreach \p in {(2.80,0.60), (1.10,-0.45), (0.55,0.25), (0.22,-0.12)} {
+    \fill[orange!85!black] \p circle (1.7pt);
+  }
+  \node[font=\scriptsize, anchor=south west] at (2.82,0.62) {$x_0$};
+  \node[font=\scriptsize, anchor=north] at (1.10,-0.52) {$x_1$};
+  \node[font=\scriptsize, anchor=south] at (0.57,0.30) {$x_2$};
+\end{tikzpicture}
+\caption{Наискорейший спуск (схематично). Шаг выбирается из точной
+одномерной минимизации, поэтому в точке остановки производная вдоль
+направления равна нулю: $\nabla\T f(x_{k+1})\, p_k = 0$, то есть соседние
+направления ортогональны. На вытянутых линиях уровня это даёт характерный
+зигзаг и медленное продвижение к $x_*$.}
+\label{fig:zigzag}
+\end{figure}

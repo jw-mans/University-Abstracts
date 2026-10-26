@@ -1,0 +1,90 @@
+%  Методы оптимизации — экзаменационные билеты
+%  Компиляция: pdflatex tickets.tex  (дважды, из-за оглавления)
+%
+%  Это НЕ конспект. Каждый билет самодостаточен и рассчитан на то, чтобы его
+%  можно было переписать от руки за 40 минут: ~2 печатные страницы,
+%  12–15 выносных формул, без рисунков и численных примеров.
+%  Подробная версия — main.tex.
+
+\documentclass[12pt,a4paper]{article}
+
+\input{preamble}
+
+% Заголовки билетов не нумеруются автоматически: номер стоит в самом названии.
+\setcounter{secnumdepth}{0}
+
+% Формулировка вопроса под заголовком билета.
+\newcommand{\ticketq}[1]{%
+  \noindent\textit{\small #1}\par
+  \smallskip
+  \noindent\rule{\textwidth}{0.4pt}
+  \medskip
+}
+
+% Отсылка к подробному разбору в конспекте.
+\newcommand{\seefull}[1]{%
+  \par\medskip
+  \noindent\textit{\footnotesize Подробно: конспект, #1.}%
+}
+
+% Текст плотный и насыщен формулами в строке: даём TeX дополнительный запас
+% на растяжку, иначе строки переполняются.
+\emergencystretch=3em
+
+% Плотный список шагов алгоритма: без вертикальных зазоров.
+\newlist{csteps}{enumerate}{1}
+\setlist[csteps]{label=\textbf{\arabic*.}, leftmargin=1.5em, labelsep=0.4em,
+                 topsep=2pt, itemsep=0pt, parsep=0pt, partopsep=0pt}
+
+% Плотные заголовки-абзацы.
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{0pt}%
+  {1.2ex \@plus 0.3ex \@minus 0.2ex}%
+  {-0.6em}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\title{\textbf{Методы оптимизации}\\[0.3em]\large Ответы на экзаменационные билеты}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{idea}[title={Как этим пользоваться}]
+Каждый билет — готовый письменный ответ: постановка, определения, формулировки
+с доказательствами, алгоритм. Доказательства сжаты до несущей цепочки —
+выкладки, без которых доказательство перестаёт быть доказательством,
+сохранены; рутинные раскрытия свёрнуты.
+
+\medskip
+Численных примеров, рисунков и пояснений здесь нет — они остались в конспекте
+(\texttt{main.pdf}), на который каждый билет ссылается в конце.
+\end{idea}
+
+\tableofcontents
+\newpage
+
+\input{tickets/01-lp-canonical}
+\input{tickets/02-simplex}
+\input{tickets/03-potentials}
+\input{tickets/04-initial-plan}
+\input{tickets/05-one-dim}
+\input{tickets/06-gradient-first}
+\input{tickets/07-gradient-second}
+\input{tickets/08-hooke-jeeves}
+\input{tickets/09-quasi-newton}
+\input{tickets/10-feasible-directions}
+\input{tickets/11-rosen}
+\input{tickets/12-conditional-gradient}
+\input{tickets/13-newton-constrained}
+\input{tickets/14-cutting-plane}
+\input{tickets/15-penalty}
+\input{tickets/16-barrier}
+\input{tickets/17-reduced-gradient}
+\input{tickets/18-zangwill}
+\input{tickets/19-svm-qp}
+
+\end{document}

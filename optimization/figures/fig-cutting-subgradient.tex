@@ -1,0 +1,58 @@
+% Отсечение по субградиенту: опорная прямая к выпуклой функции phi
+% отрезает текущую точку x_k, не задевая множества {phi <= 0}.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >={Stealth[length=2mm]}]
+
+\def\sx{1.0}
+
+% оси
+\draw[->] (-0.3,0) -- (6.5,0) node[right, font=\footnotesize] {$x$};
+\draw[->] (0,-1.6) -- (0,2.6) node[above, font=\footnotesize] {$\varphi$};
+
+% выпуклая функция phi
+\draw[blue!55!black, very thick, domain=0.25:6.1, samples=120, smooth]
+  plot (\x, {0.40*(\x-2.8)*(\x-2.8) - 1.25});
+\node[blue!55!black, font=\footnotesize, anchor=south west] at (5.75,1.9)
+  {$\varphi$};
+
+% множество Omega = {phi <= 0}: корни 0.40(x-2.8)^2 = 1.25 -> x = 2.8 +- 1.7678
+\draw[orange!75!black, very thick] (1.032,0) -- (4.568,0);
+\node[orange!60!black, font=\scriptsize, anchor=north] at (2.8,-0.12)
+  {$\Omega = \{\varphi \le 0\}$};
+
+% текущая точка x_k = 5.4 (вне Omega)
+\def\xk{5.4}
+\pgfmathsetmacro{\fk}{0.40*(\xk-2.8)*(\xk-2.8) - 1.25}
+\pgfmathsetmacro{\gk}{0.80*(\xk-2.8)}
+\fill[black] (\xk,0) circle (1.6pt);
+\fill[black] (\xk,{\fk}) circle (1.6pt);
+\draw[gray, dashed] (\xk,0) -- (\xk,{\fk});
+\node[font=\scriptsize, anchor=north] at (\xk,-0.1) {$x_k$};
+\node[font=\scriptsize, anchor=west] at ({\xk+0.1},{\fk}) {$\varphi(x_k) > 0$};
+
+% опорная прямая (субградиент) в x_k
+\draw[orange!75!black, thick, domain=2.55:6.1, samples=2]
+  plot (\x, {\fk + \gk*(\x - \xk)});
+\node[orange!60!black, font=\scriptsize, anchor=north west, rotate=38]
+  at (3.9,-0.55) {$a_{k+1}\T x - b^{(k+1)}$};
+
+% точка пересечения опорной прямой с осью: x = xk - fk/gk
+\pgfmathsetmacro{\xcut}{\xk - \fk/\gk}
+\draw[gray, dashed] ({\xcut},-1.45) -- ({\xcut},0.6);
+\fill[orange!75!black] ({\xcut},0) circle (1.4pt);
+
+% отсекаемая зона
+\fill[orange!15] ({\xcut},-0.12) rectangle (6.2,0.12);
+\node[font=\scriptsize, anchor=south, text width=3.2cm, align=center]
+  at (5.5,0.18) {отсекается};
+
+\end{tikzpicture}
+\caption{Отсекающая гиперплоскость. В точке $x_k$ строится опорная прямая к
+выпуклой функции $\varphi$: $\varphi(x) \ge a_{k+1}\T x - b^{(k+1)}$. Всякая
+допустимая точка ($\varphi \le 0$) удовлетворяет и новому неравенству
+$a_{k+1}\T x - b^{(k+1)} \le 0$, а сама $x_k$ — нет, так как для неё левая
+часть равна $\varphi(x_k) > 0$. Поэтому отсечение выбрасывает $x_k$, не теряя
+ни одной точки $\Omega$.}
+\label{fig:cutting-subgradient}
+\end{figure}

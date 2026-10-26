@@ -1,0 +1,44 @@
+% Возможное направление: во внутренней точке годится любое,
+% на границе — только из конуса возможных направлений.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >={Stealth[length=2.2mm]}]
+
+% допустимое множество
+\fill[blue!8] (0,0) -- (4.3,0.2) -- (5.0,2.1) -- (2.6,3.3) -- (-0.4,1.9) -- cycle;
+\draw[blue!55!black, thick]
+  (0,0) -- (4.3,0.2) -- (5.0,2.1) -- (2.6,3.3) -- (-0.4,1.9) -- cycle;
+\node[blue!55!black, font=\footnotesize] at (1.4,2.5) {$S$};
+
+% внутренняя точка: любое направление возможно
+\coordinate (xin) at (1.8,1.3);
+\fill[black] (xin) circle (1.8pt);
+\node[font=\scriptsize, anchor=north east] at ($(xin)+(0.02,-0.08)$) {$x$};
+\foreach \a in {0,45,...,315}
+  \draw[gray, ->] (xin) -- ++(\a:0.55);
+\node[font=\scriptsize, anchor=north, text width=3.2cm, align=center]
+  at (1.8,-0.55) {внутренняя точка:\\ любое $\sigma$ возможно};
+
+% граничная точка: конус возможных направлений
+\coordinate (xb) at (4.65,1.15);
+\fill[orange!75!black] (xb) circle (2pt);
+\node[font=\scriptsize, anchor=west] at ($(xb)+(0.12,-0.12)$) {$x$};
+
+% конус (сектор, направленный внутрь множества)
+\fill[orange!20] (xb) -- ++(160:1.5) arc (160:250:1.5) -- cycle;
+\draw[orange!75!black] (xb) -- ++(160:1.5);
+\draw[orange!75!black] (xb) -- ++(250:1.5);
+\draw[orange!75!black, ->, very thick] (xb) -- ++(200:1.25)
+  node[midway, above left, font=\scriptsize, xshift=2pt] {$\sigma$};
+
+\node[font=\scriptsize, anchor=north, text width=4.2cm, align=center]
+  at (4.3,-0.55) {граничная точка: только $\sigma$ из конуса};
+
+\end{tikzpicture}
+\caption{Возможное направление (определение~\ref{def:feasible-direction}). Во
+внутренней точке сдвиг на малое $\delta$ в любую сторону остаётся в $S$. На
+границе допустимы лишь направления из конуса, «смотрящего внутрь»; метод
+возможных направлений ищет среди них то, вдоль которого убывает
+$\varphi_0$.}
+\label{fig:feasible-direction}
+\end{figure}

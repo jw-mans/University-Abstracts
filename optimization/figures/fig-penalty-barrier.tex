@@ -1,0 +1,59 @@
+% Два направления методов штрафов: внешний штраф и барьерная функция.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[scale=1.0, >={Stealth[length=2mm]}]
+
+% ---------- Левая панель: внешний штраф ----------
+\begin{scope}
+  \draw[->] (-0.3,0) -- (4.6,0) node[right, font=\footnotesize] {$x$};
+  \draw[->] (0,-0.3) -- (0,3.4) node[above, font=\footnotesize] {$\Phi_r$};
+
+  % границы допустимой области
+  \draw[gray, dashed] (1.0,-0.15) -- (1.0,3.2);
+  \draw[gray, dashed] (3.2,-0.15) -- (3.2,3.2);
+  \node[font=\scriptsize, anchor=north] at (1.0,-0.2) {$a$};
+  \node[font=\scriptsize, anchor=north] at (3.2,-0.2) {$b$};
+
+  % внутри области: сама целевая функция
+  \draw[blue!55!black, very thick, domain=1.0:3.2, samples=60, smooth]
+    plot (\x, {0.55*(\x-2.1)*(\x-2.1) + 0.5});
+  % снаружи: резкий рост штрафа
+  \draw[orange!75!black, very thick, domain=0.25:1.0, samples=60, smooth]
+    plot (\x, {0.55*(\x-2.1)*(\x-2.1) + 0.5 + 9.0*(1.0-\x)*(1.0-\x)});
+  \draw[orange!75!black, very thick, domain=3.2:3.75, samples=60, smooth]
+    plot (\x, {0.55*(\x-2.1)*(\x-2.1) + 0.5 + 9.0*(\x-3.2)*(\x-3.2)});
+
+  \node[blue!55!black, font=\scriptsize, anchor=south] at (2.1,1.0)
+    {$\equiv \varphi_0$};
+  \node[font=\footnotesize, anchor=north] at (2.1,-0.75) {внешний штраф};
+\end{scope}
+
+% ---------- Правая панель: барьер ----------
+\begin{scope}[xshift=6.3cm]
+  \draw[->] (-0.3,0) -- (4.6,0) node[right, font=\footnotesize] {$x$};
+  \draw[->] (0,-0.3) -- (0,3.4) node[above, font=\footnotesize] {$\Phi_r$};
+
+  \draw[gray, dashed] (1.0,-0.15) -- (1.0,3.2);
+  \draw[gray, dashed] (3.2,-0.15) -- (3.2,3.2);
+  \node[font=\scriptsize, anchor=north] at (1.0,-0.2) {$a$};
+  \node[font=\scriptsize, anchor=north] at (3.2,-0.2) {$b$};
+
+  % барьер: уходит в +бесконечность у границ изнутри
+  \draw[orange!75!black, very thick, domain=1.08:3.12, samples=160, smooth]
+    plot (\x, {0.45*(\x-2.1)*(\x-2.1) + 0.45
+               + 0.035/(\x-1.0) + 0.035/(3.2-\x)});
+
+  \node[orange!60!black, font=\scriptsize, anchor=west] at (3.25,2.6)
+    {$\to +\infty$};
+  \node[font=\footnotesize, anchor=north] at (2.1,-0.75)
+    {барьер (внутренний штраф)};
+\end{scope}
+
+\end{tikzpicture}
+\caption{Два направления методов штрафов. Слева внешний штраф: внутри области
+$\Phi_r$ совпадает с $\varphi_0$, снаружи резко растёт, и приближения подходят
+к $S$ снаружи. Справа барьерная функция: она обращается в $+\infty$ при подходе
+к границе изнутри, поэтому точка не может покинуть $S$, но $\varphi_0$
+искажается и внутри области — искажение снимается лишь при $r \to 0$.}
+\label{fig:penalty-barrier}
+\end{figure}

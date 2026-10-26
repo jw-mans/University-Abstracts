@@ -1,0 +1,144 @@
+\section{Билет 12. Метод условного градиента}
+
+\ticketq{Метод условного градиента (метод Франка--Вульфа).}
+
+\paragraph{Постановка.}
+\[
+  \varphi(x) \to \min_{x \in S} ,
+  \qquad S \subset \R^n \ \text{— выпуклый компакт} ,
+\]
+$\varphi$ выпукла, непрерывно дифференцируема, $\nabla\varphi$ липшицев с
+константой $R$. Метод относится к методам \textbf{линейной аппроксимации}:
+направление ищется не проектированием градиента, а решением линейной задачи
+на $S$.
+
+\paragraph{Условие оптимальности для выпуклой задачи.}
+\textbf{Теорема.} \textit{$x_* \in S$ — решение $\min_{x\in S}\varphi(x)$
+$\iff$ $\nabla\T\varphi(x_*)(x - x_*) \ge 0$ $\forall x \in S$.}
+
+\textsc{Док-во. Необходимость.} $S$ выпукло $\Rightarrow$
+$x_* + \alpha(x - x_*) \in S$ при $\alpha \in [0,1]$. Функция
+$\psi(\alpha) = \varphi\big(x_* + \alpha(x-x_*)\big)$ достигает минимума на
+$[0,1]$ при $\alpha = 0$ $\Rightarrow$ $\psi'(0) \ge 0$, а
+$\psi'(0) = \nabla\T\varphi(x_*)(x-x_*)$.
+
+\textsc{Достаточность.} Для выпуклой дифференцируемой $\varphi$ верно
+неравенство первого порядка
+$\varphi(x) \ge \varphi(x_*) + \nabla\T\varphi(x_*)(x - x_*)$; второе
+слагаемое неотрицательно $\Rightarrow$ $\varphi(x) \ge \varphi(x_*)$
+$\forall x \in S$. $\blacksquare$
+
+\paragraph{Вспомогательная задача и направление.}
+В точке $x_k$ функция заменяется линейной аппроксимацией
+$\varphi(x) \approx \varphi(x_k) + \nabla\T\varphi(x_k)(x - x_k)$; постоянные
+слагаемые на точку минимума не влияют, поэтому решается
+\[
+  \nabla\T\varphi(x_k)\,x \to \min_{x \in S} ,
+  \qquad y_k \ \text{— решение} ,
+\]
+\[
+  s_k = y_k - x_k , \qquad
+  \eta_k = \nabla\T\varphi(x_k)(y_k - x_k) ,
+  \qquad
+  x_{k+1} = x_k + \alpha_k s_k .
+\]
+Так как $y_k$ минимизирует линейную функцию, а $x_k \in S$, то
+$\nabla\T\varphi(x_k)y_k \le \nabla\T\varphi(x_k)x_k$ $\Rightarrow$
+$\eta_k \le 0$.
+
+Если $S$ задано линейными ограничениями, вспомогательная задача — задача ЛП и
+решается симплекс-методом; минимум линейной функции на выпуклом компакте
+достигается на границе, а на многограннике — в вершине, поэтому $y_k$ всегда
+«крайняя» и шаг $\alpha_k$ обязателен.
+
+\paragraph{Теорема (направление спуска).}
+\textit{$y_k \ne x_k$ и $\eta_k < 0$ $\Rightarrow$ $s_k = y_k - x_k$ —
+направление спуска.}
+
+\textsc{Док-во.} $\nabla\T\varphi(x_k)s_k = \eta_k < 0$ по определению.
+$\blacksquare$
+
+\paragraph{Теорема (критерий останова).}
+\textit{Если $\eta_k = 0$, то $x_k$ — решение задачи.}
+
+\textsc{Док-во.} $y_k$ — решение линейной задачи $\Rightarrow$
+$\forall x \in S$:
+$\nabla\T\varphi(x_k)y_k \le \nabla\T\varphi(x_k)x$. Вычитая
+$\nabla\T\varphi(x_k)x_k$:
+\[
+  \underbrace{\nabla\T\varphi(x_k)(y_k - x_k)}_{=\,\eta_k\,=\,0}
+  \ \le\ \nabla\T\varphi(x_k)(x - x_k)
+  \ \Rightarrow\ \nabla\T\varphi(x_k)(x - x_k) \ge 0 \ \ \forall x \in S ,
+\]
+а это и есть условие оптимальности для выпуклой задачи. $\blacksquare$
+
+\paragraph{Теорема (допустимость новой точки).}
+\textit{$x_k, y_k \in S$, $S$ выпукло, $\alpha_k \in [0,1]$ $\Rightarrow$
+$x_{k+1} \in S$.}
+
+\textsc{Док-во.}
+$x_{k+1} = x_k + \alpha_k(y_k - x_k) = (1-\alpha_k)x_k + \alpha_k y_k$ —
+выпуклая комбинация точек $S$ $\Rightarrow$ принадлежит $S$. $\blacksquare$
+
+Допустимость достаётся даром — никакого проектирования, в отличие от метода
+Розена; достаточно держать $\alpha_k \in [0,1]$.
+
+\paragraph{Алгоритм.}
+\begin{csteps}
+  \item Задать $x_0 \in S$, $\eps > 0$, $k = 0$.
+  \item $g_k = \nabla\varphi(x_k)$.
+  \item Решить ЛП: $y_k = \argmin_{x\in S} g_k\T x$; $s_k = y_k - x_k$,
+        $\eta_k = g_k\T s_k$.
+  \item $\eta_k \ge -\eps$ — останов, $x_k$ приближённо оптимальна.
+  \item Выбрать $\alpha_k \in [0,1]$: дроблением
+        $\alpha_k = \alpha_0\lambda^{\,j}$ с наименьшим $j$, при котором
+        $\varphi(x_k + \alpha_k s_k) - \varphi(x_k) \le
+         \tfrac12\alpha_k\eta_k$; либо точной минимизацией
+        $\argmin_{0\le\alpha\le1}\varphi(x_k+\alpha s_k)$; либо по заданной
+        последовательности $\alpha_k = \frac{2}{k+2}$.
+  \item $x_{k+1} = x_k + \alpha_k s_k$, $k := k+1$, к~шагу~2.
+\end{csteps}
+
+\paragraph{Теорема о сходимости и скорость $O(1/k)$.}
+\textit{$\varphi(x_k) \to \varphi(x_*) = \min_S\varphi$, причём
+$\varphi(x_k) - \varphi(x_*) \le D/k$, $D > 0$.}
+
+\textsc{Док-во.} Пусть $d = \operatorname{diam}S$,
+$G = \max_S\norm{\nabla\varphi}$, тогда $\abs{\eta_k} \le Gd$. По лемме о
+дроблении шаг отделён от нуля,
+$\alpha_k \ge \lambda\min\{\alpha_0,\ \abs{\eta_k}/(2Rd^2)\}$, поэтому
+\[
+  \varphi(x_k) - \varphi(x_{k+1}) \ \ge\ \tfrac12\alpha_k\abs{\eta_k}
+   \ \ge\ c\,\eta_k^2 ,
+  \qquad
+  c = \tfrac{\lambda}{2}\min\Big\{\tfrac{\alpha_0}{Gd},\ \tfrac{1}{2Rd^2}\Big\} .
+\]
+$\varphi(x_k)$ убывает и ограничена снизу $\Rightarrow$
+$\sum_k\eta_k^2 < \infty$ $\Rightarrow$ $\eta_k \to 0$. По выпуклости и
+определению $\eta_k$ как минимума:
+\[
+  \varphi(x_k) - \varphi(x_*) \le \nabla\T\varphi(x_k)(x_k - x_*)
+   \le -\eta_k = \abs{\eta_k}
+   \ \Rightarrow\ \varphi(x_k) \to \varphi(x_*) .
+\]
+Скорость: обозначив $\delta_k = \varphi(x_k) - \varphi_*$, имеем
+$\delta_k \le \abs{\eta_k}$ и $\delta_k - \delta_{k+1} \ge c\eta_k^2
+\ge c\delta_k^2$, откуда
+\[
+  \frac{1}{\delta_{k+1}} - \frac{1}{\delta_k}
+   = \frac{\delta_k - \delta_{k+1}}{\delta_k\delta_{k+1}}
+   \ \ge\ \frac{c\delta_k^2}{\delta_k\delta_{k+1}} \ \ge\ c
+  \quad (\delta_{k+1} \le \delta_k)
+  \ \Rightarrow\ \delta_k \le \frac{1}{ck + 1/\delta_0} \le \frac{D}{k} .
+  \ \blacksquare
+\]
+Скорость \textbf{сублинейная} — заметно хуже геометрической сходимости методов
+безусловной минимизации. Плата за это — крайняя дешевизна итерации: одна
+линейная задача вместо проектирования.
+
+\paragraph{Ограничения.}
+На каждой итерации решается задача ЛП на $S$; сходимость медленная около
+решения; при неограниченном $S$ линейная подзадача может не иметь конечного
+решения; для невыпуклой $\varphi$ — только стационарная точка.
+
+\seefull{гл.~3, \S8 (численный пример там же)}

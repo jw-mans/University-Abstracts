@@ -1,0 +1,125 @@
+\section{Билет 16. Метод барьерных функций}
+
+\ticketq{Метод барьерных функций.}
+
+\paragraph{Постановка.}
+\[
+  \varphi(x) \to \min , \qquad
+  S = \{\, x \mid \psi_i(x) \le 0,\ i = \overline{1,m} \,\} ,
+  \qquad
+  T = \{\, x \mid \psi_i(x) < 0 \,\} \ne \varnothing
+\]
+($T$ — внутренность $S$). Метод внутренних штрафов: итерации всё время
+остаются строго внутри $S$, а к цели добавляется барьер, растущий до
+бесконечности у границы.
+
+\textbf{Важно:} метод неприменим к ограничениям-\emph{равенствам} — у
+множества $\chi(x) = 0$ внутренности нет вовсе. Равенства обрабатывают внешним
+штрафом (билет~15), барьером — только неравенства.
+
+\paragraph{Барьерная функция.}
+$B(x) \to +\infty$ при $x \to \partial S$ изнутри. Два стандартных вида
+($\xi_i > 0$):
+\[
+  B(x) = -\sum_{i=1}^{m}\xi_i\,\frac{1}{\psi_i(x)} ,
+  \qquad
+  B(x) = -\sum_{i=1}^{m}\xi_i\,\ln\big(-\psi_i(x)\big) .
+\]
+Обратный барьер неудобен для дифференцирования, логарифмический удобнее.
+
+\textbf{Почему барьер работает.} $\psi_i(x) \to 0-$ $\Rightarrow$
+$-\psi_i(x) \to 0+$ $\Rightarrow$ $\ln(-\psi_i) \to -\infty$ $\Rightarrow$
+$-\ln(-\psi_i) \to +\infty$ (аналогично $-1/\psi_i \to +\infty$). Кроме того,
+$B$ определена \emph{только} на $T$, поэтому всякая точка с конечным
+значением $\varphi + \mu B$ автоматически строго допустима — проверять
+допустимость отдельно не нужно.
+
+\paragraph{Вспомогательная задача.}
+\[
+  \varphi(x) + \mu B(x) \to \min_{x \in T} , \quad \mu > 0 ,
+  \qquad x_\mu \ \text{— решение} ,
+  \qquad \Theta(\mu) = \varphi(x_\mu) + \mu B(x_\mu) ,
+\]
+причём $\mu \to +0$ (в отличие от внешнего штрафа, где $\mu \to +\infty$).
+Точки $x_\mu$ образуют \textbf{центральную траекторию}.
+
+\paragraph{Лемма (свойства вспомогательных задач).}
+\textit{Считаем $B \ge 0$ на $T$. Тогда}
+\begin{csteps}
+  \item $\min\limits_{S}\varphi \ \le\ \Theta(\mu)$ при всех $\mu > 0$;
+  \item $B(x_\mu)$ не убывает при $\mu \to 0$
+        ($\mu_1 > \mu_2 \Rightarrow B(x_{\mu_1}) \le B(x_{\mu_2})$);
+  \item $\varphi(x_\mu)$ не возрастает при $\mu \to 0$;
+  \item $\Theta(\mu)$ — неубывающая функция $\mu$;
+  \item $\inf\limits_{\mu>0}\Theta(\mu) = \lim\limits_{\mu\to0}\Theta(\mu)$.
+\end{csteps}
+
+\textsc{Док-во.} Пусть $\mu_1 > \mu_2 > 0$, $x_i = x_{\mu_i}$.
+
+\textbf{1)} $x_\mu \in T \subset S$ и $B \ge 0$ $\Rightarrow$
+$\Theta(\mu) \ge \varphi(x_\mu) \ge \min_S\varphi$.
+
+\textbf{2)} Из минимальности $x_1$ и $x_2$:
+\[
+  \varphi(x_1) + \mu_1 B(x_1) \le \varphi(x_2) + \mu_1 B(x_2) , \qquad
+  \varphi(x_2) + \mu_2 B(x_2) \le \varphi(x_1) + \mu_2 B(x_1) .
+\]
+Складывая: $(\mu_1 - \mu_2)\big(B(x_1) - B(x_2)\big) \le 0$ $\Rightarrow$
+$B(x_1) \le B(x_2)$.
+
+\textbf{3)} Из второго неравенства:
+$\varphi(x_2) - \varphi(x_1) \le \mu_2\big(B(x_1)-B(x_2)\big) \le 0$.
+
+\textbf{4)}
+$\Theta(\mu_2) \le \varphi(x_1) + \mu_2 B(x_1)
+ \le \varphi(x_1) + \mu_1 B(x_1) = \Theta(\mu_1)$.
+
+\textbf{5)} $\Theta$ монотонна и ограничена снизу (п.~1) $\Rightarrow$
+нижняя грань достигается в пределе. $\blacksquare$
+
+\paragraph{Теорема о сходимости.}
+\textit{Пусть $T \ne \varnothing$, функции непрерывны на $T$, при каждом
+$\mu > 0$ решение $x_\mu$ существует, $\{x_\mu\}$ лежит в компакте и всякая
+точка $S$ приближается точками $T$ (то есть $\forall x \in S$,
+$\forall\eps > 0$ $\exists y \in T$: $\norm{y - x} < \eps$). Тогда предельные
+точки $\{x_\mu\}$ — решения задачи, причём}
+\[
+  \mu B(x_\mu) \to 0 , \qquad
+  \min_S \varphi = \lim_{\mu\to0}\Theta(\mu) .
+\]
+
+\textsc{Док-во.} По условию для любого $\eps$ найдётся $y \in T$ с
+$\varphi(y) < \varphi_* + \eps$, где $\varphi_* = \min_S\varphi$. Тогда
+\[
+  \Theta(\mu) \le \varphi(y) + \mu B(y) \xrightarrow[\mu\to0]{} \varphi(y)
+  \ \Rightarrow\ \lim_{\mu\to0}\Theta(\mu) \le \varphi_* + \eps
+  \quad \forall\eps
+  \ \Rightarrow\ \lim\Theta \le \varphi_* ,
+\]
+а по п.~1 леммы $\lim\Theta \ge \varphi_*$. Значит
+$\lim_{\mu\to0}\Theta(\mu) = \varphi_*$. Далее
+\[
+  0 \le \mu B(x_\mu) = \Theta(\mu) - \varphi(x_\mu)
+    \le \Theta(\mu) - \varphi_* \to 0 .
+\]
+Для предельной точки $\bar{x}$: $\bar{x} \in S$ (замкнутость) и
+$\varphi(\bar{x}) = \lim\varphi(x_\mu) \le \lim\Theta = \varphi_*$, то есть
+$\bar{x}$ — решение. $\blacksquare$
+
+\paragraph{Алгоритм.}
+\begin{csteps}
+  \item Задать $x_1 \in T$ (строго допустимую), $\mu_1 > 0$, $\eps > 0$,
+        $\beta \in (0,1)$, $k = 1$.
+  \item Найти $x_{\mu_k} = \argmin_{x\in T}\big[\varphi(x) + \mu_k B(x)\big]$,
+        стартуя с предыдущей точки.
+  \item Если $\mu_k B(x_{\mu_k}) < \eps$ — конец.
+  \item Иначе $\mu_{k+1} = \beta\mu_k$, $k := k+1$, к~шагу~2.
+\end{csteps}
+
+\paragraph{Ограничения.}
+Нужна строго допустимая $x_1$; метод неприменим при $T = \varnothing$; точки
+не могут лежать на границе, где барьер не определён, — а оптимум, как правило,
+именно там; при малых $\mu$ функция $\varphi + \mu B$ плохо обусловлена у
+границы; равенства напрямую не поддерживаются.
+
+\seefull{гл.~3, \S3 и \S12 (численный пример в \S12)}

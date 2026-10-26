@@ -1,0 +1,356 @@
+\lecture{Лекция 8}{}
+
+\subsection{Метод отсекающей гиперплоскости}
+\label{subsec:cutting-plane}
+
+\begin{idea}[title={Обозначения}]
+В этом параграфе $\Omega$ — допустимое множество \emph{исходной} задачи,
+а $S_k$ — аппроксимирующие его многогранники. В тетради оба обозначены одной
+буквой, что мешает читать выкладки.
+\end{idea}
+
+Рассматривается задача
+\[
+  \begin{cases}
+    \varphi_0(x) \to \min , & x \in \Omega , \\
+    \Omega = \{\, x \in \R^n \mid \varphi(x) \le 0 \,\} ,
+  \end{cases}
+\]
+где $\varphi$ — выпуклая дифференцируемая, а целевая функция линейна:
+$\varphi_0(x) = c\T x$, $c \in \R^n$.
+
+\subsubsection*{Приведение задачи к этому виду}
+
+\begin{enumerate}[label=\arabic*),left=0pt]
+  \item Если допустимое множество задано системой
+        $\Omega = \{\, x \mid \varphi_i(x) \le 0,\ i = \overline{1,m} \,\}$,
+        то достаточно взять
+        \[
+          \varphi(x) = \max_{i = \overline{1,m}} \varphi_i(x)
+        \]
+        — одно ограничение вместо $m$.
+  \item Если $\varphi_0(x)$ не является линейной (но выпукла), вводим
+        вспомогательную переменную $x^{(n+1)}$ и задачу
+        \[
+          \begin{cases}
+            x^{(n+1)} \to \min , \\
+            \varphi(x) \le 0 , \\
+            \varphi_0(x) - x^{(n+1)} \le 0 .
+          \end{cases}
+        \]
+  \item Объединяя 1) и 2) — сначала реализуется 2), потом 1):
+        \[
+          \begin{cases}
+            x^{(n+1)} \to \min , \\
+            \varphi_i\big(x, x^{(n+1)}\big) \le 0 , \quad i = \overline{1,m} , \\
+            \varphi_{m+1}\big(x, x^{(n+1)}\big) = \varphi_0(x) - x^{(n+1)} ,
+          \end{cases}
+          \qquad
+          \varphi(x) = \max_{i} \varphi_i\big(x, x^{(n+1)}\big) ,
+        \]
+        то есть
+        \[
+          \begin{cases}
+            x^{(n+1)} \to \min , \\
+            \varphi\big(x, x^{(n+1)}\big) \le 0 .
+          \end{cases}
+        \]
+\end{enumerate}
+
+\begin{idea}
+Зачем эти преобразования. Весь метод построен на том, что на каждой итерации
+решается \emph{линейная} задача на многограннике — иначе никакого выигрыша от
+аппроксимации нет. Пункт~2) — стандартный приём «эпиграфной» переформулировки:
+минимизировать выпуклую $\varphi_0$ — то же самое, что минимизировать новую
+координату $x^{(n+1)}$ при условии $\varphi_0(x) \le x^{(n+1)}$. Пункт~1)
+сворачивает систему неравенств в одно, пользуясь тем, что максимум конечного
+числа выпуклых функций выпуклен. После обоих шагов задача имеет ровно тот вид,
+для которого описан алгоритм.
+\end{idea}
+
+\subsubsection*{Алгоритм}
+
+Считаем, что $\Omega \ne \varnothing$ и $\Omega$ — компакт.
+
+\begin{algo}[title={Метод отсекающей гиперплоскости}]
+\textbf{I. Начальный этап.} Построим объемлющий многогранник
+\[
+  S = \big\{\, x \mid a_i\T x - b^{(i)} \le 0,\ i = \overline{-1,0} \,\big\} ,
+  \qquad S \ \text{— компакт}, \quad \Omega \subset S .
+\]
+Положим $S_0 = S$, $k = 0$, решим вспомогательную задачу
+$\varphi_0 \to \min$, $x \in S_0$; пусть $x_0$ — её решение.
+
+\medskip
+\textbf{II. Основной этап ($k$-й шаг).} Пусть $S_k$ построено; решаем
+$\varphi_0(x) \to \min$, $x \in S_k$, и получаем $x_k$.
+
+Строим \textbf{субградиент} $a_{k+1}$ функции $\varphi$ в точке $x_k$:
+\[
+  \varphi(x) \ \ge\ \varphi(x_k) + a_{k+1}\T (x - x_k) \qquad \forall x .
+\]
+Обозначив $b^{(k+1)} = -\varphi(x_k) + a_{k+1}\T x_k$, получаем
+\[
+  \varphi(x) \ \ge\ a_{k+1}\T x - b^{(k+1)} ,
+\]
+и определяем
+\[
+  S_{k+1} = S_k \cap \big\{\, a_{k+1}\T x - b^{(k+1)} \le 0 \,\big\}
+          = \big\{\, x \in S_k \ \big|\ a_{k+1}\T x - b^{(k+1)} \le 0 \,\big\} .
+\]
+
+\medskip
+\textbf{III. Итерационный переход:} $k \to k+1$.
+
+\medskip
+\textbf{IV. Условие останова:} $\norm{x_{k+1} - x_k} < \eps$.
+\end{algo}
+
+\inputfig{figures/fig-cutting-subgradient}
+
+\begin{idea}
+Почему отсечение корректно, то есть не задевает $\Omega$. Для любой допустимой
+точки $x \in \Omega$ выполнено $\varphi(x) \le 0$, а неравенство субградиента
+даёт $a_{k+1}\T x - b^{(k+1)} \le \varphi(x) \le 0$ — новое ограничение
+выполняется автоматически. Текущая же точка $x_k$ отсекается: для неё
+$a_{k+1}\T x_k - b^{(k+1)} = \varphi(x_k) > 0$, если $x_k \notin \Omega$. То
+есть каждая итерация выбрасывает заведомо недопустимую точку, не теряя ни одной
+допустимой. Это и доказывается ниже в лемме~\ref{lem:cut-nested}.
+\end{idea}
+
+\subsubsection*{Особенности алгоритма}
+
+\paragraph{I. Линейная подзадача.}
+На каждом итерационном шаге решается
+\[
+  \begin{cases}
+    c\T x \to \min , \\
+    a_i\T x - b^{(i)} \le 0 , \quad i = \overline{-1, k} ,
+  \end{cases}
+  \tag{$*$}\label{eq:cut-lp}
+\]
+то есть от шага к шагу меняется \emph{только число ограничений} — значит
+применим симплекс-метод (\S4).
+
+\paragraph{II. Двойственная задача.}
+Задача~\eqref{eq:cut-lp} равносильна
+\[
+  \begin{cases}
+    c\T x \to \min , \\
+    -a_i\T x \ge -b^{(i)} , \quad i = \overline{-1,k} ,
+  \end{cases}
+\]
+двойственная к которой —
+\[
+  \begin{cases}
+    \displaystyle -\sum_{i = -1}^{k} b^{(i)} y^{(i)} \ \to\ \max
+      \qquad\text{то есть}\qquad -b\T y \to \max , \\[8pt]
+    \displaystyle -\sum_{i = -1}^{k} y^{(i)} a_i = c ,
+    \qquad y^{(i)} \ge 0 , \quad i = \overline{-1,k} .
+  \end{cases}
+\]
+
+\begin{idea}
+Здесь и прячется главный вычислительный выигрыш. Добавление одного ограничения
+к прямой задаче — это добавление одной \emph{переменной} к двойственной.
+Поэтому предыдущее двойственное решение, дополненное нулевой компонентой,
+остаётся допустимым для новой двойственной задачи и служит готовым начальным
+приближением: симплекс-метод продолжает работу с того места, где остановился,
+а не стартует заново. Это и есть смысл фразы «в качестве начального приближения
+даёт $y$ текущей итерации, дополненное нулевой компонентой».
+\end{idea}
+
+\paragraph{III. Построение субградиента.}
+Для построения $S_{k+1}$ ищется субградиент $\varphi(x)$ в точке $x_k$:
+\[
+  \varphi(x) \ \ge\ \varphi(x_k) + a_{k+1}\T (x - x_k) .
+\]
+Возможны два случая.
+
+\begin{enumerate}[label=\arabic*),left=0pt]
+  \item Задача пришла в исходной постановке с \emph{дифференцируемой}
+        $\varphi(x)$ — тогда градиент совпадает с субградиентом,
+        $a_{k+1} = \nabla\varphi(x_k)$.
+  \item Задача сведена к максимуму,
+        $\varphi(x) = \max\limits_{i=\overline{1,m}} \varphi_i(x)$. Обозначим
+        \[
+          I(x_k) = \Big\{\, i \ \Big|\ \varphi_i(x_k)
+            = \max_{i=\overline{1,m}} \varphi_i(x_k) \,\Big\}
+        \]
+        — набор индексов, на которых максимум достигается. По этим ограничениям
+        строится субградиент (все $\varphi_i$ дифференцируемы):
+        \begin{equation}\label{eq:subgrad-max}
+          a_{k+1} = \sum_{i \in I(x_k)} \lambda_i \nabla\varphi_i(x_k) ,
+          \qquad
+          \lambda_i \ge 0 \ \ \forall i \in I(x_k) ,
+          \qquad
+          \sum_{i \in I(x_k)} \lambda_i = 1 .
+        \end{equation}
+\end{enumerate}
+
+\begin{lemma}\label{lem:subgrad-max}
+Пусть $\varphi_i$, $i = \overline{1,m}$, выпуклы и дифференцируемы,
+$\varphi(x) = \max_i \varphi_i(x)$, и
+$I(x) = \{\, i \mid \varphi_i(x) = \varphi(x) \,\}$. Тогда всякий вектор вида
+\[
+  a = \sum_{i \in I(x)} \lambda_i \nabla\varphi_i(x) ,
+  \qquad \lambda_i \ge 0 , \qquad \sum_{i \in I(x)} \lambda_i = 1 ,
+\]
+является субградиентом $\varphi$ в точке $x$.
+\end{lemma}
+
+\begin{idea}[title={Доказательство (на лекции не приводилось)}]
+\begin{proof}
+Возьмём произвольную точку $z \in \R^n$ и любой индекс $j \in I(x)$. Так как
+$\varphi$ — максимум, а $\varphi_j$ выпукла и дифференцируема,
+\[
+  \varphi(z) \ \ge\ \varphi_j(z)
+  \ \ge\ \varphi_j(x) + \nabla\T\varphi_j(x)\,(z - x) .
+\]
+Но $j \in I(x)$ означает $\varphi_j(x) = \varphi(x)$, поэтому
+\[
+  \varphi(z) \ \ge\ \varphi(x) + \nabla\T\varphi_j(x)\,(z - x)
+  \qquad \forall j \in I(x) .
+\]
+Умножим неравенство с номером $j$ на $\lambda_j \ge 0$ и просуммируем по
+$j \in I(x)$, пользуясь $\sum_j \lambda_j = 1$:
+\[
+  \varphi(z) = \sum_{j \in I(x)} \lambda_j\, \varphi(z)
+  \ \ge\ \sum_{j \in I(x)} \lambda_j
+         \Big( \varphi(x) + \nabla\T\varphi_j(x)(z-x) \Big)
+  = \varphi(x) + a\T (z - x) .
+\]
+Это и есть определение субградиента. \qedhere
+\end{proof}
+
+\medskip
+Обратное утверждение (всякий субградиент максимума имеет вид~\eqref{eq:subgrad-max},
+то есть $\partial\varphi(x) = \operatorname{conv}\{\nabla\varphi_i(x)\}_{i \in I(x)}$)
+тоже верно, но его доказательство существенно длиннее и на лекции не нужно: для
+алгоритма достаточно уметь \emph{предъявить} хотя бы один субградиент, а проще
+всего взять $\lambda_{i_0} = 1$ для какого-нибудь одного $i_0 \in I(x_k)$, то
+есть $a_{k+1} = \nabla\varphi_{i_0}(x_k)$.
+\end{idea}
+
+\subsubsection*{Сходимость}
+
+\begin{lemma}\label{lem:cut-nested}
+$\Omega \subset S_k$ для всех $k \ge 1$.
+\end{lemma}
+
+\begin{proof}
+Возьмём произвольный элемент $x \in \Omega$ и покажем, что он лежит в $S_k$.
+По определению $x \in \Omega \iff \varphi(x) \le 0$. С другой стороны, по
+неравенству субградиента для каждого $j = \overline{1,k}$
+\[
+  \underbrace{\varphi(x)}_{\le\ 0}
+  \ \ge\ \varphi(x_{j-1}) + a_j\T (x - x_{j-1})
+  = a_j\T x - b^{(j)} ,
+\]
+откуда $a_j\T x - b^{(j)} \le 0$ для всех $j = \overline{1,k}$, то есть
+$x \in S_k$.
+\end{proof}
+
+\begin{remark}
+Целевая функция вдоль итераций \emph{не убывает}:
+\[
+  \varphi_0(x_0) \le \varphi_0(x_1) \le \dots \le \varphi_0(x_k) \le \dots ,
+\]
+поскольку $S_{k+1} \subset S_k$, а минимум по меньшему множеству не меньше. При
+этом по лемме~\ref{lem:cut-nested} $\Omega \subset S_k$, значит
+\[
+  \varphi_0(x_*) \ \ge\ \dots \ \ge\ \varphi_0(x_k) \ \ge\ \dots ,
+\]
+где $x_*$ — оптимальное решение исходной задачи. То есть $\varphi_0(x_k)$ —
+возрастающая последовательность \emph{нижних} оценок оптимума.
+\end{remark}
+
+\begin{theorem}\label{thm:cutting-plane}
+Пусть $\varphi(x)$ непрерывна и выпукла, $\Omega$ — компакт, исходная
+аппроксимация $S$ — тоже компакт, и субградиенты ограничены:
+\[
+  \norm{a(x)} \le R , \quad x \in S , \qquad \exists R > 0 .
+\]
+Тогда любая предельная точка последовательности $\{x_k\}$ является оптимальной,
+причём $\varphi(x_k) \to 0$.
+\end{theorem}
+
+\begin{proof}
+\textbf{1) Предельные точки существуют.} $S_0 = S$ и $S_{k+1} \subset S_k$,
+значит вся последовательность $\{x_k\}$ лежит в компакте $S$, и у неё есть
+сходящиеся подпоследовательности.
+
+\medskip
+\textbf{2) Если ограничение выполнено на каком-то шаге.} Пусть
+$\exists k \in \NN$: $\varphi(x_k) \le 0$. Тогда $x_k \in \Omega$, и потому
+$\varphi_0(x_k) \ge \varphi_0(x_*)$. С другой стороны, по
+лемме~\ref{lem:cut-nested} $\Omega \subset S_k$, а $x_k$ минимизирует
+$\varphi_0$ на $S_k$, поэтому
+\[
+  \varphi_0(x_k) = \min_{x \in S_k} \varphi_0(x)
+  \ \le\ \min_{x \in \Omega} \varphi_0(x) = \varphi_0(x_*) .
+\]
+Следовательно $\varphi_0(x_k) = \varphi_0(x_*)$, то есть $x_k$ — оптимальное
+решение, и алгоритм закончил работу.
+
+\medskip
+\textbf{3) Общий случай: $\varphi(x_k) > 0$ для всех $k$.} Покажем, что тогда
+существует подпоследовательность с $\varphi(x_{k_j}) \to 0$.
+
+От противного: пусть существуют $\beta > 0$ и бесконечное множество индексов
+$J$ такие, что $\varphi(x_k) \ge \beta$ при $k \in J$. Последовательность
+$\{x_k\}_{k \in J}$ лежит в компакте $S$, значит содержит фундаментальную
+подпоследовательность: для любого $\delta > 0$ найдутся индексы $p < q$ из $J$ с
+$\norm{x_p - x_q} \le \delta$.
+
+Возьмём $p < q$. Так как $x_q \in S_q \subset S_{p+1}$, точка $x_q$
+удовлетворяет $(p{+}1)$-му отсечению:
+\[
+  0 \ \ge\ a_{p+1}\T x_q - b^{(p+1)}
+  = a_{p+1}\T x_q + \varphi(x_p) - a_{p+1}\T x_p
+  = \varphi(x_p) + a_{p+1}\T (x_q - x_p) ,
+\]
+откуда
+\[
+  \varphi(x_p) \ \le\ a_{p+1}\T (x_p - x_q)
+  \ \le\ \norm{a_{p+1}} \cdot \norm{x_p - x_q}
+  \ \le\ R\,\norm{x_p - x_q} .
+\]
+Выберем теперь $p < q$ из $J$ так, чтобы $\norm{x_p - x_q} \le \beta/(2R)$.
+Получаем $\varphi(x_p) \le \beta/2 < \beta$ — противоречие с $p \in J$.
+
+Значит предположение неверно, и существует подпоследовательность $\{x_{k_j}\}$,
+вдоль которой $\varphi(x_{k_j}) \to 0$.
+
+\medskip
+\textbf{4) Предельная точка оптимальна.} Переходя при необходимости к
+подпоследовательности, считаем $x_{k_j} \to \bar{x}$. По непрерывности
+$\varphi$
+\[
+  \lim_{j \to \infty} \varphi(x_{k_j}) = \varphi(\bar{x}) = 0
+  \qquad\Longrightarrow\qquad \bar{x} \in \Omega
+  \qquad\Longrightarrow\qquad \varphi_0(\bar{x}) \ge \varphi_0(x_*) .
+\]
+С другой стороны, как в пункте~2), $\varphi_0(x_{k_j}) \le \varphi_0(x_*)$ для
+всех $j$, и по непрерывности $\varphi_0(\bar{x}) \le \varphi_0(x_*)$. Сравнивая
+два неравенства,
+\[
+  \varphi_0(\bar{x}) = \varphi_0(x_*) ,
+\]
+то есть $\bar{x}$ — оптимальное решение исходной задачи.
+\end{proof}
+
+\begin{idea}
+Две оценки на $\varphi_0(\bar{x})$ приходят из разных мест, и именно это стоит
+держать в голове:
+\begin{itemize}[nosep,left=0pt]
+  \item $\varphi_0(\bar{x}) \ge \varphi_0(x_*)$ — потому что $\bar{x}$
+        \emph{допустима} ($\varphi(\bar x) = 0$), а $x_*$ — минимум по всем
+        допустимым точкам;
+  \item $\varphi_0(\bar{x}) \le \varphi_0(x_*)$ — потому что каждая $x_{k_j}$
+        минимизирует $\varphi_0$ по \emph{более широкому} множеству
+        $S_{k_j} \supset \Omega$.
+\end{itemize}
+Метод зажимает оптимум с двух сторон: снизу — значениями на релаксациях,
+сверху — допустимостью предельной точки.
+\end{idea}
