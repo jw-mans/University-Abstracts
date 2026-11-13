@@ -1,0 +1,135 @@
+\subsection{Вспомогательные утверждения: конечномерный случай}
+
+Прежде чем разбирать интегральное уравнение, соберём нужные факты для
+конечномерного аналога — обычной системы линейных алгебраических уравнений
+того же вида $\vec u - A\vec u = \vec f$.
+
+\medskip
+Обозначения: $\vec u = (u_1,\dots,u_m) \in \CC^m$ — вектор-столбец,
+$\vec f = (f_1,\dots,f_m) \in \CC^m$, матрица $A \in \CC^{m\times m}$, и
+\[
+  A^* = \overline{A}^{\,\mathsf{T}}
+  \qquad\text{— сопряжённая матрица} .
+\]
+Скалярное произведение в $\CC^m$:
+$(\vec u, \vec v) = \sum_k u_k \overline{v_k}$, так что
+$(A\vec u, \vec v) = (\vec u, A^*\vec v)$.
+
+\begin{warn}
+В тетради здесь написано «$A : \CC^n \to \CC^m$», $\vec u \in \CC^n$,
+$\vec f \in \CC^m$, $A \in \CC^{m\times n}$. Но запись $\vec u - A\vec u$ имеет
+смысл только при $n = m$, и все дальнейшие выкладки (определитель, ранг,
+$\ker(E-A)$) тоже квадратные. Поэтому здесь всюду $n = m$.
+\end{warn}
+
+Рассматриваются три уравнения:
+\[
+  \vec u - A\vec u = \vec f \qquad (1)
+\]
+\[
+  \vec u - A\vec u = \vec 0 \qquad (1_0)
+\]
+\[
+  \vec v - A^*\vec v = \vec 0 \qquad (1_0^*)
+\]
+Обозначим
+\[
+  B = E - A , \qquad B^* = E - A^* .
+\]
+
+\subsubsection*{Условие разрешимости}
+
+\begin{proposition}\label{prop:fin-solvable}
+Система~(1) разрешима тогда и только тогда, когда $\vec f$ ортогонален всем
+решениям сопряжённого однородного уравнения~$(1_0^*)$:
+\[
+  \vec f \in \big[\ker (E - A^*)\big]^{\perp} .
+\]
+\end{proposition}
+
+\begin{proof}
+Пусть $\vec b_1, \dots, \vec b_m$ — столбцы матрицы $B$. Тогда
+\[
+  \operatorname{Im} B = \operatorname{span}\{\vec b_1, \dots, \vec b_m\} ,
+  \qquad
+  \CC^m = \operatorname{span}\{\vec b_k\}
+       \ \oplus\ \big(\operatorname{span}\{\vec b_k\}\big)^{\perp} ,
+\]
+и система~(1) разрешима в точности тогда, когда
+$\vec f \in \operatorname{Im} B$.
+
+\medskip
+Осталось понять, что такое $(\operatorname{Im} B)^{\perp}$. Вектор $\vec v$
+ортогонален образу тогда и только тогда, когда
+\[
+  (B\vec u, \vec v) = 0 \quad \forall\, \vec u
+  \quad\Longleftrightarrow\quad
+  (\vec u, B^*\vec v) = 0 \quad \forall\, \vec u
+  \quad\Longleftrightarrow\quad
+  B^*\vec v = \vec 0 ,
+\]
+то есть $(\operatorname{Im} B)^{\perp} = \ker B^*$. Значит
+$\operatorname{Im} B = (\ker B^*)^{\perp}$, что и требовалось.
+\end{proof}
+
+\begin{idea}
+Покоординатно последнее равносильно $(\vec b_k, \vec v) = 0$ для всех $k$ —
+именно так это и записано в тетради: $\vec v$ ортогонален каждому столбцу
+матрицы $B$. Условие $B^*\vec v = 0$ — компактная форма того же набора
+равенств.
+\end{idea}
+
+\subsubsection*{Число решений однородных уравнений}
+
+\begin{proposition}\label{prop:fin-dims}
+Числа линейно независимых решений уравнений $(1_0)$ и $(1_0^*)$ совпадают:
+\[
+  \dim \ker (E - A) = \dim \ker (E - A^*) .
+\]
+\end{proposition}
+
+\begin{proof}
+Пусть $r = \operatorname{rank} B = \dim \operatorname{Im} B$. Ранг не меняется
+ни при транспонировании, ни при комплексном сопряжении, поэтому
+$\operatorname{rank} B^* = r$. По теореме о ранге и дефекте
+\[
+  \dim \ker B = m - r = \dim \ker B^* .
+\]
+\end{proof}
+
+\subsubsection*{Альтернатива}
+
+\begin{theorem}[альтернатива в конечномерном случае]\label{thm:fin-alternative}
+Возможен ровно один из двух случаев.
+\begin{enumerate}[label=\arabic*), leftmargin=2em]
+  \item $\det(E - A) \ne 0$. Тогда $(1_0)$ имеет только тривиальное решение,
+        и система~(1) однозначно разрешима при \emph{любой} правой части
+        $\vec f$.
+  \item $\det(E - A) = 0$. Тогда $(1_0)$ и $(1_0^*)$ имеют одно и то же
+        число $m - r > 0$ линейно независимых решений, система~(1) разрешима
+        в точности при $\vec f \perp \ker(E - A^*)$, и её решение определено
+        с точностью до прибавления произвольного решения $(1_0)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Случаи взаимно исключают друг друга по определению. В первом случае $B$
+обратима — это и есть однозначная разрешимость. Во втором работают
+утверждения~\ref{prop:fin-solvable} и~\ref{prop:fin-dims}.
+
+\medskip
+Остаётся заметить, что оба однородных уравнения вырождаются одновременно:
+\[
+  \det B^* = \det\big(\overline{B}^{\,\mathsf{T}}\big)
+           = \det \overline{B}
+           = \overline{\det B} ,
+\]
+поэтому $\det B = 0 \iff \det B^* = 0$.
+\end{proof}
+
+\begin{idea}
+Это и есть \textbf{альтернатива Фредгольма}, только в конечномерном виде, где
+она сводится к обычной линейной алгебре. Весь смысл следующего параграфа в
+том, чтобы для вырожденного ядра свести интегральное уравнение ровно к такой
+системе — и тем самым перенести альтернативу на бесконечномерный случай.
+\end{idea}

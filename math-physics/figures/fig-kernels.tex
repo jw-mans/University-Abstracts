@@ -1,0 +1,58 @@
+% (а) Ядро краевой задачи из примера 3 -- функция Грина, своя формула по разные
+% стороны диагонали. (б) Носитель ядра Вольтерра: выше диагонали ядро нулевое.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=0.92]
+  % --- (а)
+  \begin{scope}
+    \draw[->] (-0.3,0) -- (4.6,0) node[anchor=north east] {$x$};
+    \draw[->] (0,-0.3) -- (0,4.6) node[anchor=south east] {$y$};
+
+    \fill[blue!10] (0,0) -- (4,4) -- (0,4) -- cycle;
+    \fill[teal!12] (0,0) -- (4,0) -- (4,4) -- cycle;
+    \draw[thick, gray] (0,0) -- (4,4);
+    \draw[thick] (0,4) -- (4,4) -- (4,0);
+
+    \node[blue!60!black, font=\scriptsize, align=center] at (1.25,3.0)
+      {$x \le y$\\[2pt] $K = \dfrac{x(\ell-y)}{\ell}$};
+    \node[teal!60!black, font=\scriptsize, align=center] at (2.85,1.1)
+      {$y \le x$\\[2pt] $K = \dfrac{y(\ell-x)}{\ell}$};
+    \node[gray, font=\scriptsize, anchor=west, rotate=45] at (3.0,3.05)
+      {$y = x$};
+
+    \node[font=\scriptsize, anchor=north east] at (0,0) {$0$};
+    \node[font=\scriptsize, anchor=north] at (4,-0.05) {$\ell$};
+    \node[font=\scriptsize, anchor=east] at (-0.05,4) {$\ell$};
+    \node[font=\footnotesize, anchor=north] at (2,-0.75)
+      {(а) ядро краевой задачи};
+  \end{scope}
+
+  % --- (б)
+  \begin{scope}[xshift=7.2cm]
+    \draw[->] (-0.3,0) -- (4.6,0) node[anchor=north east] {$x$};
+    \draw[->] (0,-0.3) -- (0,4.6) node[anchor=south east] {$y$};
+
+    \fill[pattern=north east lines, pattern color=blue!30]
+      (0,0) -- (4,0) -- (4,4) -- cycle;
+    \draw[thick, gray] (0,0) -- (4,4);
+    \draw[thick] (0,4) -- (4,4) -- (4,0);
+
+    \node[blue!60!black, font=\scriptsize, align=center] at (2.95,1.1)
+      {$y \le x$\\[2pt] интегрируем};
+    \node[font=\scriptsize, align=center] at (1.25,3.0)
+      {$y > x$\\[2pt] $K(x,y) = 0$};
+    \node[gray, font=\scriptsize, anchor=west, rotate=45] at (3.0,3.05)
+      {$y = x$};
+
+    \node[font=\scriptsize, anchor=north east] at (0,0) {$a$};
+    \node[font=\footnotesize, anchor=north] at (2,-0.75)
+      {(б) ядро Вольтерра};
+  \end{scope}
+\end{tikzpicture}
+\caption{(а) Ядро $K(x,y)$ из примера~\ref{ex:dirichlet-kernel} задаётся двумя
+формулами по разные стороны диагонали, но симметрично: $K(x,y) = K(y,x)$ и
+$K \ge 0$. (б) Уравнение Вольтерра — частный случай уравнения Фредгольма, у
+которого ядро обращается в нуль выше диагонали, так что интегрирование идёт
+только до текущей точки $x$.}
+\label{fig:kernels}
+\end{figure}

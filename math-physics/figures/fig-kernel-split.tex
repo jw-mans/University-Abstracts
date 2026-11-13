@@ -1,0 +1,42 @@
+% Разбиение компактного оператора: A = A_1 + A_2, где A_1 отвечает угловому
+% блоку N x N коэффициентов ядра (конечномерный), а A_2 -- остатку ряда,
+% норма которого мала.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, scale=0.95]
+  \def\S{5.2}
+  \def\N{2.0}
+
+  % весь квадрат коэффициентов
+  \fill[orange!12] (0,0) rectangle (\S,\S);
+  % угловой блок
+  \fill[blue!18] (0,{\S-\N}) rectangle (\N,\S);
+
+  \draw[thick] (0,0) rectangle (\S,\S);
+  \draw[thick, blue!60!black] (0,{\S-\N}) rectangle (\N,\S);
+
+  % сетка
+  \foreach \k in {1,...,6} {
+    \draw[gray!35] ({\k*\S/7},0) -- ({\k*\S/7},\S);
+    \draw[gray!35] (0,{\k*\S/7}) -- (\S,{\k*\S/7});
+  }
+
+  \node[blue!60!black, font=\footnotesize] at (1.0,{\S-1.0}) {$A_1$};
+  \node[orange!70!black, font=\footnotesize] at (3.7,1.3) {$A_2$};
+
+  \node[font=\scriptsize, anchor=south] at ({\N/2},{\S+0.1})
+    {$i,j \le N$};
+  \node[font=\scriptsize, anchor=west] at ({\S+0.2},{\S-\N/2})
+    {конечномерный: $\operatorname{rank} A_1 \le N$};
+  \node[font=\scriptsize, anchor=west] at ({\S+0.2},1.3)
+    {остаток ряда: $\norm{A_2} \le \norm{K - K_N} < 1$};
+
+  \node[font=\footnotesize, anchor=north] at ({\S/2},-0.35)
+    {коэффициенты $k_{ij}$ разложения ядра};
+\end{tikzpicture}
+\caption{Разбиение компактного оператора $A = A_1 + A_2$. Угловой блок
+коэффициентов даёт конечномерный оператор $A_1$, к которому применима теория
+\S4; остаток ряда даёт $A_2$, и при достаточно большом $N$ его норма меньше
+единицы, так что к $I - A_2$ применима теория \S5.}
+\label{fig:kernel-split}
+\end{figure}

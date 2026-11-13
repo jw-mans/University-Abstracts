@@ -1,0 +1,279 @@
+\subsection{Уравнение второго рода с конечномерным оператором}
+
+Рассматривается уравнение
+
+\stepcounter{equation}
+\begin{equation}\tag{I}\label{eq:deg-main}
+  u(x) - \int\limits_{0}^{\ell} K(x,y)\, u(y)\, dy = f(x) ,
+  \qquad\text{или}\qquad
+  u - Au = f \ \text{ в } H ,
+\end{equation}
+причём ядро \textbf{вырождено}:
+\[
+  K(x,y) = \sum_{i=1}^{m} \varphi_i(x)\, \overline{\psi_i(y)} ,
+\]
+где системы $\{\varphi_i\}$ и $\{\psi_i\}$ линейно независимы.
+
+\subsubsection*{Оператор конечномерен}
+
+\[
+  (Au)(x)
+  = \int\limits_{0}^{\ell} \sum_{i=1}^{m} \varphi_i(x)\overline{\psi_i(y)}\,
+    u(y)\, dy
+  = \sum_{i=1}^{m} \left[\ \int\limits_{0}^{\ell} u(y)\,\overline{\psi_i(y)}\,
+    dy \right] \varphi_i(x) ,
+\]
+то есть
+
+\stepcounter{equation}
+\begin{equation}\tag{2}\label{eq:deg-A}
+  Au = \sum_{i=1}^{m} (u, \psi_i)\, \varphi_i ,
+  \qquad \varphi_i, \psi_i \in H .
+\end{equation}
+Образ $A$ лежит в линейной оболочке $\varphi_1,\dots,\varphi_m$, значит $A$ —
+конечномерный оператор.
+
+\subsubsection*{Сведение к системе}
+
+Подставляя~\eqref{eq:deg-A} в~\eqref{eq:deg-main}:
+\[
+  u = \sum_{i=1}^{m} \underbrace{(u, \psi_i)}_{=:\ u_i}\, \varphi_i + f .
+\]
+Домножим это равенство скалярно на $\psi_i$ — получим замкнутую систему
+относительно чисел $u_i$:
+\[
+  u_i = (u, \psi_i)
+      = \left(\sum_{j=1}^{m} u_j \varphi_j + f,\ \psi_i\right)
+      = \sum_{j=1}^{m} a_{ij}\, u_j + f_i ,
+\]
+где
+\[
+  a_{ij} = (\varphi_j, \psi_i) , \qquad f_i = (f, \psi_i) .
+\]
+В матричной записи
+
+\stepcounter{equation}
+\begin{equation}\tag{I$'$}\label{eq:deg-sys}
+  \vec u - \mathfrak{A}\, \vec u = \vec f ,
+  \qquad \mathfrak{A} = [a_{ij}] \in \CC^{m\times m} .
+\end{equation}
+
+\inputfig{figures/fig-correspondence}
+
+\begin{proposition}\label{prop:deg-correspondence}
+Решения~\eqref{eq:deg-main} и решения~\eqref{eq:deg-sys} находятся во взаимно
+однозначном соответствии:
+\[
+  u \ \longmapsto\ \vec u = \big((u,\psi_1), \dots, (u,\psi_m)\big) ,
+  \qquad
+  \vec u \ \longmapsto\ u = \sum_{i=1}^{m} u_i \varphi_i + f .
+\]
+\end{proposition}
+
+\begin{proof}
+В одну сторону переход уже проделан выше: если $u$ решает~\eqref{eq:deg-main},
+то числа $u_i = (u,\psi_i)$ удовлетворяют~\eqref{eq:deg-sys}.
+
+\medskip
+Обратно, пусть $\vec u$ решает~\eqref{eq:deg-sys}. Положим
+$u = \sum_j u_j \varphi_j + f$. Тогда
+\[
+  (u, \psi_i) = \sum_{j} u_j (\varphi_j, \psi_i) + (f,\psi_i)
+              = \sum_{j} a_{ij} u_j + f_i = u_i ,
+\]
+где последнее равенство — это в точности~\eqref{eq:deg-sys}. Поэтому
+\[
+  Au = \sum_{i} (u,\psi_i)\,\varphi_i = \sum_{i} u_i \varphi_i = u - f ,
+\]
+то есть $u$ решает~\eqref{eq:deg-main}. Построенные отображения взаимно
+обратны по построению.
+\end{proof}
+
+\subsubsection*{Сопряжённое уравнение}
+
+Наряду с~\eqref{eq:deg-main} рассматривается сопряжённое уравнение
+
+\stepcounter{equation}
+\begin{equation}\tag{I$^*$}\label{eq:deg-adj}
+  v - A^* v = g .
+\end{equation}
+Найдём $A^*$ явно:
+\[
+  (Au, v)
+  = \left(\sum_{i=1}^{m} (u,\psi_i)\,\varphi_i,\ v\right)
+  = \sum_{i=1}^{m} (u,\psi_i)\,(\varphi_i, v)
+  = \left(u,\ \sum_{i=1}^{m} (v, \varphi_i)\,\psi_i \right) ,
+\]
+поскольку скаляр выносится из второго аргумента с сопряжением:
+$(u,\psi_i)(\varphi_i,v) = \big(u,\ \overline{(\varphi_i,v)}\,\psi_i\big)$ и
+$\overline{(\varphi_i,v)} = (v,\varphi_i)$. Итак,
+
+\stepcounter{equation}
+\begin{equation}\tag{3}\label{eq:deg-Astar}
+  A^* v = \sum_{i=1}^{m} (v, \varphi_i)\, \psi_i .
+\end{equation}
+
+\begin{idea}
+Обратите внимание на симметрию: у $A$ роли $\varphi$ и $\psi$ одни, у $A^*$ —
+ровно обратные. Поэтому сопряжённое уравнение — это уравнение того же типа с
+вырожденным ядром $\overline{K(y,x)}$, и к нему применимо всё сказанное выше.
+\end{idea}
+
+Повторяя выкладку, подставим~\eqref{eq:deg-Astar} в~\eqref{eq:deg-adj}:
+\[
+  v = \sum_{i=1}^{m} (v, \varphi_i)\,\psi_i + g ,
+  \qquad v_i := (v, \varphi_i) ,
+\]
+\[
+  v_i = \left(\sum_{j=1}^{m} v_j \psi_j + g,\ \varphi_i\right)
+      = \sum_{j=1}^{m} v_j\, (\psi_j, \varphi_i) + (g, \varphi_i)
+      = \sum_{j=1}^{m} \overline{a_{ji}}\, v_j + g_i ,
+\]
+так как $(\psi_j, \varphi_i) = \overline{(\varphi_i,\psi_j)}
+= \overline{a_{ji}}$. В матричной записи
+
+\stepcounter{equation}
+\begin{equation}\tag{I$^{*\prime}$}\label{eq:deg-adj-sys}
+  \vec v - \mathfrak{A}^*\, \vec v = \vec g ,
+  \qquad \mathfrak{A}^* = \overline{\mathfrak{A}}^{\,\mathsf{T}} ,
+\end{equation}
+и соответствие между решениями~\eqref{eq:deg-adj} и~\eqref{eq:deg-adj-sys}
+такое же, как в утверждении~\ref{prop:deg-correspondence}.
+
+\subsubsection*{Однородные уравнения и условие ортогональности}
+
+Полагая $f = 0$ и $g = 0$, получаем
+\[
+  u - Au = 0 \ \ (\mathrm{I}_0)
+  \quad\Longleftrightarrow\quad
+  \vec u - \mathfrak{A}\vec u = \vec 0 \ \ (\mathrm{I}_0') ,
+\]
+\[
+  v - A^* v = 0 \ \ (\mathrm{I}_0^*)
+  \quad\Longleftrightarrow\quad
+  \vec v - \mathfrak{A}^*\vec v = \vec 0 \ \ (\mathrm{I}_0^{*\prime}) .
+\]
+
+Остаётся согласовать условия ортогональности в $H$ и в $\CC^m$.
+
+\begin{lemma}\label{lem:deg-ortho}
+Пусть $v$ — решение однородного сопряжённого уравнения
+$(\mathrm{I}_0^*)$, а $\vec v$ — отвечающий ему вектор. Тогда
+\[
+  (f, v)_H = (\vec f, \vec v)_{\CC^m} .
+\]
+\end{lemma}
+
+\begin{proof}
+Так как $v$ решает $(\mathrm{I}_0^*)$, то по~\eqref{eq:deg-Astar}
+$v = \sum_i (v,\varphi_i)\psi_i = \sum_i v_i \psi_i$. Поэтому
+\[
+  (f, v)_H
+  = \left(f,\ \sum_{i=1}^{m} v_i \psi_i\right)
+  = \sum_{i=1}^{m} \overline{v_i}\,(f, \psi_i)
+  = \sum_{i=1}^{m} f_i\, \overline{v_i}
+  = (\vec f, \vec v)_{\CC^m} .
+\]
+\end{proof}
+
+\subsubsection*{Альтернатива для вырожденного ядра}
+
+Теперь всё готово, чтобы перенести конечномерную
+теорему~\ref{thm:fin-alternative} на интегральное уравнение.
+
+\begin{theorem}\label{thm:deg-alternative}
+Пусть ядро уравнения~\eqref{eq:deg-main} вырождено. Тогда:
+\begin{enumerate}[label=\arabic*), leftmargin=2em]
+  \item уравнение~\eqref{eq:deg-main} разрешимо тогда и только тогда, когда
+        $f$ ортогонален всем решениям сопряжённого однородного уравнения
+        $(\mathrm{I}_0^*)$, то есть $f \in \big[\ker(I - A^*)\big]^{\perp}$;
+  \item \emph{(альтернатива)} либо уравнение~\eqref{eq:deg-main} однозначно
+        разрешимо при любой правой части — и тогда оператор $(I-A)^{-1}$
+        определён на всём $H$ и \textbf{ограничен}, — либо однородное
+        уравнение $(\mathrm{I}_0)$ имеет нетривиальные решения;
+  \item уравнения $(\mathrm{I}_0)$ и $(\mathrm{I}_0^*)$ имеют одинаковое
+        \emph{конечное} число линейно независимых решений:
+        \[
+          \dim \ker (I - A) = \dim \ker (I - A^*) < \infty .
+        \]
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Доказательство пунктов 1 и 2]
+По утверждению~\ref{prop:deg-correspondence} решения~\eqref{eq:deg-main} и
+решения~\eqref{eq:deg-sys} соответствуют друг другу, и то же верно для
+сопряжённой пары. По лемме~\ref{lem:deg-ortho} условие $f \perp v$ в $H$
+равносильно условию $\vec f \perp \vec v$ в $\CC^m$. Остаётся применить
+утверждение~\ref{prop:fin-solvable} и теорему~\ref{thm:fin-alternative} к
+системе~\eqref{eq:deg-sys}.
+\end{proof}
+
+\begin{proof}[Ограниченность $(I-A)^{-1}$]
+Пусть $\det(E - \mathfrak{A}) \ne 0$. Тогда
+$\vec u = (E - \mathfrak{A})^{-1}\vec f$, откуда
+\[
+  \abs{\vec u} \le C_1 \abs{\vec f},
+  \qquad C_1 = \norm{(E-\mathfrak{A})^{-1}} .
+\]
+Далее, по неравенству Коши—Буняковского $\abs{f_i} = \abs{(f,\psi_i)} \le
+\norm{\psi_i}\,\norm{f}$, поэтому
+\[
+  \abs{\vec f} \le C_2 \norm{f},
+  \qquad C_2 = \Big(\sum_{i=1}^{m}\norm{\psi_i}^2\Big)^{1/2} .
+\]
+Наконец, из $u = \sum_i u_i \varphi_i + f$
+\[
+  \norm{u} \le \sum_{i=1}^{m} \norm{\varphi_i}\,\abs{u_i} + \norm{f}
+  \le C_3 \abs{\vec u} + \norm{f} ,
+  \qquad C_3 = \Big(\sum_{i=1}^{m}\norm{\varphi_i}^2\Big)^{1/2} ,
+\]
+и, собирая всё вместе,
+\[
+  \norm{(I-A)^{-1} f} = \norm{u} \le \big(C_1 C_2 C_3 + 1\big)\,\norm{f} .
+\]
+Константа зависит от систем $\{\varphi_i\}, \{\psi_i\}$ и от матрицы
+$\mathfrak{A}$, но \textbf{не зависит от $f$}. Значит $(I-A)^{-1}$ ограничен.
+\end{proof}
+
+\begin{proof}[Доказательство пункта 3]
+Надо проверить, что соответствие $\vec v \mapsto v = \sum_i v_i \psi_i$
+сохраняет линейную независимость.
+
+\medskip
+Пусть $\vec v^{\,(1)}, \dots, \vec v^{\,(m-r)}$ — базис
+$\ker(E - \mathfrak{A}^*)$, а $v^{(j)} = \sum_{i=1}^{m} v_i^{(j)} \psi_i$ —
+отвечающие им решения $(\mathrm{I}_0^*)$. Пусть
+\[
+  \sum_{j=1}^{m-r} c_j\, v^{(j)} = 0 .
+\]
+Тогда
+\[
+  0 = \sum_{j=1}^{m-r} c_j \sum_{i=1}^{m} v_i^{(j)} \psi_i
+    = \sum_{i=1}^{m} \Bigg( \sum_{j=1}^{m-r} c_j\, v_i^{(j)} \Bigg) \psi_i ,
+\]
+и, поскольку система $\{\psi_i\}$ линейно независима, все коэффициенты
+обращаются в нуль:
+\[
+  \sum_{j=1}^{m-r} c_j\, v_i^{(j)} = 0, \quad i = \overline{1,m}
+  \qquad\Longleftrightarrow\qquad
+  \sum_{j=1}^{m-r} c_j\, \vec v^{\,(j)} = \vec 0 ,
+\]
+откуда $c_j = 0$ по линейной независимости $\vec v^{\,(j)}$. Значит
+$v^{(1)},\dots,v^{(m-r)}$ линейно независимы, и
+$\dim \ker(I - A^*) = \dim\ker(E - \mathfrak{A}^*) = m - r$.
+
+\medskip
+Точно так же — с системой $\{\varphi_i\}$ вместо $\{\psi_i\}$ — получается
+\[
+  \dim \ker(I - A) = \dim \ker(E - \mathfrak{A}) = m - r .
+\]
+Остаётся сослаться на утверждение~\ref{prop:fin-dims}.
+\end{proof}
+
+\begin{idea}
+Конечность размерности здесь — не отдельное усилие, а следствие вырожденности:
+все решения однородного уравнения лежат в линейной оболочке $m$ функций, так
+что их не может быть больше $m$ линейно независимых. Для произвольного
+компактного оператора это уже содержательное утверждение — им занимается
+\S6.
+\end{idea}

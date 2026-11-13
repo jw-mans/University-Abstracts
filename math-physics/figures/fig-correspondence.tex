@@ -1,0 +1,32 @@
+% Взаимно однозначное соответствие между решениями интегрального уравнения с
+% вырожденным ядром и решениями конечной системы в C^m.
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>={Latex[length=4pt]}, node distance=0pt]
+  \node[draw, rounded corners, align=center, inner sep=8pt,
+        fill=blue!5, draw=blue!50!black, font=\footnotesize]
+    (H) at (0,0)
+    {решения уравнения\\[2pt] $u - Au = f$\\[2pt] в $H = \Lp{2}(D)$};
+
+  \node[draw, rounded corners, align=center, inner sep=8pt,
+        fill=teal!6, draw=teal!55!black, font=\footnotesize]
+    (C) at (7.6,0)
+    {решения системы\\[2pt] $\vec u - \mathfrak{A}\vec u = \vec f$\\[2pt]
+     в $\CC^m$};
+
+  \draw[->, thick, blue!55!black] ($(H.north east)+(0,-0.25)$)
+    to[bend left=22] node[above, font=\scriptsize, align=center, yshift=2pt]
+    {$u \ \longmapsto\ \vec u = \big((u,\psi_1),\dots,(u,\psi_m)\big)$}
+    ($(C.north west)+(0,-0.25)$);
+
+  \draw[->, thick, teal!55!black] ($(C.south west)+(0,0.25)$)
+    to[bend left=22] node[below, font=\scriptsize, align=center, yshift=-2pt]
+    {$\vec u \ \longmapsto\ u = \sum\limits_{i=1}^{m} u_i \varphi_i + f$}
+    ($(H.south east)+(0,0.25)$);
+\end{tikzpicture}
+\caption{Вырожденное ядро сводит интегральное уравнение к конечной системе
+линейных алгебраических уравнений: указанные отображения взаимно обратны, так
+что множества решений находятся во взаимно однозначном соответствии. То же
+верно и для однородных уравнений, и для сопряжённых.}
+\label{fig:correspondence}
+\end{figure}
